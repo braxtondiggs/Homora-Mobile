@@ -1,0 +1,8 @@
+{
+  "name": "Homora",
+  "app_id": "85c7661f",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
