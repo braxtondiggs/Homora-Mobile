@@ -1,1 +1,27 @@
-page-intro {}
+page-intro {
+  .logo-container {
+    color: #606c76;
+    font-size: 24px;
+    font-weight: 400;
+    left: 50%;
+    line-height: 32px;
+    position: absolute;
+    top: 50px;
+    transform: translate(-50%, 0);
+
+    img {
+      height: 50px;
+      vertical-align: middle;
+    }
+  }
+
+  .slide-zoom {
+    p {
+      margin: 0 36px;
+    }
+
+    img {
+      margin-bottom: 36px;
+    }
+  }
+}

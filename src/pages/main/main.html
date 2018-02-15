@@ -1,14 +1,28 @@
 <ion-header>
 	<ion-navbar hideBackButton>
+		<button #sidenav ion-button menuToggle icon-only>
+			<ion-icon name='menu'></ion-icon>
+		</button>
 		<ion-title>
-			Ionic Blank
+			Homora
 		</ion-title>
 	</ion-navbar>
 </ion-header>
-
 <ion-content padding>
 	The world is your oyster.
 	<p>
 		If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
 	</p>
+	<ion-fab right bottom>
+		<button ion-fab (click)="openMaps()" mini>
+			<ion-icon name="add"></ion-icon>
+		</button>
+	</ion-fab>
 </ion-content>
+<ion-menu [content]="sidenav">
+	<ion-content>
+		<ion-list>
+			<p>some menu content, could be list items</p>
+		</ion-list>
+	</ion-content>
+</ion-menu>

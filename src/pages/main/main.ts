@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { ModalController } from 'ionic-angular';
+import { MapsComponent } from '../../components/maps/maps';
 
 @Component({
   selector: 'main-home',
@@ -7,8 +8,8 @@ import { NavController } from 'ionic-angular';
 })
 export class MainPage {
 
-  constructor(public navCtrl: NavController) {
-
+  constructor(public modal: ModalController) { }
+  openMaps() {
+    this.modal.create(MapsComponent).present();
   }
-
 }
