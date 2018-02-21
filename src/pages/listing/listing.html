@@ -1,0 +1,20 @@
+<ion-header>
+	<ion-navbar>
+		<ion-buttons end>
+			<button ion-button icon-only clear>
+        <ion-icon name="share"></ion-icon>
+      </button>
+			<button ion-button icon-only clear>
+        <ion-icon name="heart-outline"></ion-icon>
+      </button>
+		</ion-buttons>
+	</ion-navbar>
+</ion-header>
+<ion-content>
+	<ion-slides centeredSlides="false" autoplay>
+		<ion-slide *ngFor="let image of (listing | async)?.images">
+			<img [src]="image.src" alt="{{(listing | async)?.title}}" />
+		</ion-slide>
+	</ion-slides>
+	{{(listing | async)?.title}}
+</ion-content>

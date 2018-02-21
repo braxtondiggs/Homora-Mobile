@@ -1,0 +1,19 @@
+page-listing {
+  ion-header {
+    .toolbar {
+      position: absolute;
+
+      .toolbar-background {
+        background: transparent;
+      }
+
+      .toolbar-title {
+        color: black;
+      }
+    }
+  }
+
+  .slides {
+    height: 320px;
+  }
+}

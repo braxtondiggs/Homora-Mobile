@@ -1,18 +1,20 @@
 import { NgModule } from '@angular/core';
 import { MainPage } from './main/main';
 import { IntroPage } from './intro/intro';
+import { ListingPage } from './listing/listing';
 import { IonicModule } from 'ionic-angular'
 
 @NgModule({
   imports: [IonicModule],
   declarations: [
     MainPage,
-    IntroPage
+    IntroPage,
+    ListingPage
   ],
   entryComponents: [
     MainPage,
-    IntroPage
-
+    IntroPage,
+    ListingPage
   ],
 })
 export class PagesModule { }

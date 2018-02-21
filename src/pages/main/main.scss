@@ -1,3 +1,76 @@
-page-home {
+main-home {
+  .card {
+    .title {
+      font-size: 18px;
+      font-weight: bold;
+    }
 
+    .profile.card-header {
+      position: absolute;
+      right: 20px;
+      top: -38px;
+      z-index: 1;
+
+      .avatar {
+        width: 75px;
+
+        img {
+          border: 3px solid white;
+        }
+      }
+    }
+
+    .slides {
+      height: 240px;
+    }
+  }
+}
+
+.avatar {
+  img {
+    border-radius: 50%;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+ion-menu .header {
+  background: url('../assets/backgrounds/sidenav-backdrop.jpg') no-repeat 100% 100%;
+  background-size: cover;
+  padding: 16px;
+
+  .avatar {
+    width: 50px;
+  }
+
+  h2.title {
+    text-shadow: 2px 4px 3px rgba(0,0,0,.3);
+  }
+}
+
+.card-content,
+.slide-container {
+  position: relative;
+}
+
+.favorite {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
+}
+
+.price-container {
+  background: rgba(0,0,0, .4);
+  bottom: 40px;
+  left: 0;
+  padding: 8px;
+  position: absolute;
+  z-index: 1;
+
+  .price {
+    font-size: 20px;
+    line-height: normal;
+    margin: 0;
+  }
 }

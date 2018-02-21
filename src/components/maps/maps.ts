@@ -9,7 +9,7 @@ import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 export class MapsComponent {
   map: GoogleMap;
 
-  constructor(private googleMaps: GoogleMaps, private geolocation: Geolocation) { }
+  constructor(private geolocation: Geolocation) { }
 
   ionViewDidLoad() {
     this.geolocation.getCurrentPosition().then((resp: Geoposition) => {
@@ -31,7 +31,7 @@ export class MapsComponent {
       }
     };
 
-    this.map = this.googleMaps.create('map_canvas', mapOptions);
+    this.map = GoogleMaps.create('map_canvas', mapOptions);
 
     // Wait the MAP_READY before using any methods.
     this.map.one(GoogleMapsEvent.MAP_READY)
