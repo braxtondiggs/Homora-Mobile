@@ -1,3 +1,45 @@
+body {
+  color: #606c76;
+  font-size: 1.6em;
+  font-weight: 300;
+  letter-spacing: .01em;
+  line-height: 1.6;
+}
+
+.content {
+  color: #606c76;
+}
+
+.md-display-1 {
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 40px;
+}
+
+.md-body-1,
+.md-subhead {
+  font-weight: 400;
+  letter-spacing: .01em;
+}
+
+.md-subhead {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.md-title {
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: .005em;
+
+}
+
+.md-headline {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+}
+
 main-home {
   .card {
     .card-title {
@@ -16,8 +58,8 @@ main-home {
       z-index: 1;
 
       .avatar {
-        width: 75px;
         height: 75px;
+        width: 75px;
 
         img {
           border: 3px solid white;
@@ -78,5 +120,23 @@ ion-menu .header {
     font-size: 20px;
     line-height: normal;
     margin: 0;
+  }
+}
+
+ion-header.transparent {
+  .toolbar {
+    position: absolute;
+
+    .toolbar-background {
+      background: transparent;
+    }
+
+    .toolbar-title {
+      color: black;
+    }
+  }
+
+  .header-md::after {
+    visibility: hidden;
   }
 }

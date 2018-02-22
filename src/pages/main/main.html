@@ -26,8 +26,8 @@
 			</div>
 			<ion-card-content>
 				<ion-card-header class="profile" no-padding>
-					<ion-avatar class="avatar">
-						<img [attr.src]="(listing.createdBy | async)?.images[0].src" alt="{{(listing.createdBy | async)?.firstName}} {{(listing.createdBy | async)?.lastName}}">
+					<ion-avatar class="avatar" (click)="viewProfile(createdBy.$key, $event)" *ngIf="(listing.createdBy$ | async) as createdBy;">
+						<img [attr.src]="createdBy.images[0].src" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
 					</ion-avatar>
 				</ion-card-header>
 				<ion-card-title>{{listing.title}}</ion-card-title>
@@ -42,7 +42,7 @@
 	</div>
 </ion-content>
 <ion-menu [content]="sidenav">
-	<ion-header>
+	<ion-header (click)="viewProfile('r6KAzYWuJQTuOGfztCFm', $event)">
 		<ion-avatar class="avatar">
 			<img src="http://via.placeholder.com/150x150" alt="Braxton Diggs">
 		</ion-avatar>
@@ -50,7 +50,7 @@
 	</ion-header>
 	<ion-content>
 		<ion-list>
-			<ion-item (click)="viewListing()">
+			<ion-item (click)="viewProfile('r6KAzYWuJQTuOGfztCFm', $event)">
 				<ion-icon name="person" item-start></ion-icon>
 				Profile
 			</ion-item>

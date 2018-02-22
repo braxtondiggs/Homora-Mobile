@@ -1,0 +1,13 @@
+<ion-header class="transparent">
+	<ion-navbar></ion-navbar>
+</ion-header>
+<ion-content>
+	<div *ngIf="(user$ | async) as user;">
+		<ion-slides centeredSlides="false">
+			<ion-slide *ngFor="let image of user.images">
+				<img [attr.src]="image.src" alt="{{user.firstName}}" />
+			</ion-slide>
+		</ion-slides>
+		{{user.firstName}}
+	</div>
+</ion-content>

@@ -1,19 +1,68 @@
 page-listing {
-  ion-header {
-    .toolbar {
-      position: absolute;
+  .slides {
+    height: 320px;
+  }
 
-      .toolbar-background {
-        background: transparent;
+  .price {
+    font-size: 3rem;
+    margin-bottom: 4px;
+
+    span {
+      color: #7f8c8d;
+      font-size: 2rem;
+    }
+  }
+
+  .avatar {
+    height: 75px;
+    margin: 0 auto;
+    width: 75px;
+  }
+
+  .listing-createdby {
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .more-info {
+    border-bottom: solid 1px #7f8c8d;
+    border-top: solid 1px #7f8c8d;
+
+    .col {
+      border-right: solid 1px #7f8c8d;
+      padding: 4px 0 !important;
+      text-align: center;
+
+      &:last-child {
+        border-right: 0;
       }
 
-      .toolbar-title {
-        color: black;
+      p {
+        font-size: 18px;
+        font-weight: bold;
       }
     }
   }
 
-  .slides {
-    height: 320px;
+  p {
+    .button {
+      height: auto;
+      vertical-align: middle;
+    }
+  }
+
+  .interested::after {
+    background: white;
+    border-radius: 5px;
+    box-shadow: 2px 2px 3px 3px #ccc;
+    content: 'Interested? ';
+    font-weight: 500;
+    left: -90px;
+    letter-spacing: .01em;
+    letter-spacing: .01em;
+    padding: 4px;
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
   }
 }

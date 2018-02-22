@@ -1,4 +1,4 @@
-<ion-header>
+<ion-header class="transparent">
 	<ion-navbar>
 		<ion-buttons end>
 			<button ion-button icon-only clear>
@@ -12,27 +12,47 @@
 </ion-header>
 <ion-content>
 	<div *ngIf="(listing$ | async) as listing;">
-		<ion-slides centeredSlides="false" autoplay>
+		<ion-slides centeredSlides="false" autoplay="5000">
 			<ion-slide *ngFor="let image of listing.images">
 				<img [attr.src]="image.src" alt="{{listing.title}}" />
 			</ion-slide>
 		</ion-slides>
-		<div class="listing-header">
-			<h2 class="title">{{listing.title}}</h2>
-			<ion-grid>
-				<ion-row>
+		<div class="listing-header" padding-vertical>
+			<h2 class="title md-display-1" padding-horizontal no-margin>{{listing.title}}</h2>
+			<ion-grid no-padding>
+				<ion-row align-items-center padding-horizontal>
 					<ion-col>
-						<h3 class="price">{{listing.price | currency:'USD':true:'1.0-3'}}<span>/month</span></h3>
-						<h4 class="location">{{listing.location.city}}, {{listing.location.state}}</h4>
+						<h3 class="price md-display-1" no-margin>{{listing.price | currency:'USD':true:'1.0-3'}}<span>/&nbsp;month</span></h3>
+						<h4 class="location md-subhead" no-margin><ion-icon name="pin"></ion-icon> {{listing.location.city}}, {{listing.location.state}}</h4>
+					</ion-col>
+					<ion-col (click)="viewProfile(createdBy.$key)" *ngIf="(listing.createdBy$ | async) as createdBy;" col-auto>
+						<ion-avatar class="avatar">
+							<img [attr.src]="createdBy.images[0].src" alt="{{createdBy.firstName}}">
+						</ion-avatar>
+						<p class="listing-createdby md-subhead">{{createdBy.firstName}}, 27</p>
+					</ion-col>
+				</ion-row>
+				<ion-row class="more-info" align-items-center>
+					<ion-col>
+						<h3 class="md-subhead" no-margin><ion-icon name="home"></ion-icon>&nbsp;Move-in</h3>
+						<p no-margin>Available Now</p>
 					</ion-col>
 					<ion-col>
-						<ion-avatar class="avatar">
-							<img [attr.src]="(listing.createdBy | async)?.images[0].src" alt="{{(listing.createdBy | async)?.firstName}}">
-						</ion-avatar>
-						<p class="listing-createdby">{{(listing.createdBy | async)?.firstName}}, 27</p>
+						<h3 class="md-subhead" no-margin><ion-icon name="calendar"></ion-icon>&nbsp;Duration</h3>
+						<p no-margin>1-12 months</p>
+					</ion-col>
+					<ion-col>
+						<h3 class="md-subhead" no-margin><ion-icon name="cash"></ion-icon>&nbsp;Deposit</h3>
+						<p no-margin>$1,075</p>
 					</ion-col>
 				</ion-row>
 			</ion-grid>
+			<p class="md-subhead" (click)="readMore(listing.summary)" padding-horizontal>{{listing.summaryTruncated}}<button ion-button clear no-padding>Read More</button></p>
 		</div>
 	</div>
+	<ion-fab class="interested" right bottom>
+		<button ion-fab (click)="contact()">
+			<ion-icon name="chatbubbles"></ion-icon>
+		</button>
+	</ion-fab>
 </ion-content>
