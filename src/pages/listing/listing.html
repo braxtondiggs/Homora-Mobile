@@ -2,19 +2,37 @@
 	<ion-navbar>
 		<ion-buttons end>
 			<button ion-button icon-only clear>
-        <ion-icon name="share"></ion-icon>
-      </button>
+				<ion-icon name="share"></ion-icon>
+			</button>
 			<button ion-button icon-only clear>
-        <ion-icon name="heart-outline"></ion-icon>
-      </button>
+				<ion-icon name="heart-outline"></ion-icon>
+			</button>
 		</ion-buttons>
 	</ion-navbar>
 </ion-header>
 <ion-content>
-	<ion-slides centeredSlides="false" autoplay>
-		<ion-slide *ngFor="let image of (listing | async)?.images">
-			<img [src]="image.src" alt="{{(listing | async)?.title}}" />
-		</ion-slide>
-	</ion-slides>
-	{{(listing | async)?.title}}
+	<div *ngIf="(listing$ | async) as listing;">
+		<ion-slides centeredSlides="false" autoplay>
+			<ion-slide *ngFor="let image of listing.images">
+				<img [attr.src]="image.src" alt="{{listing.title}}" />
+			</ion-slide>
+		</ion-slides>
+		<div class="listing-header">
+			<h2 class="title">{{listing.title}}</h2>
+			<ion-grid>
+				<ion-row>
+					<ion-col>
+						<h3 class="price">{{listing.price | currency:'USD':true:'1.0-3'}}<span>/month</span></h3>
+						<h4 class="location">{{listing.location.city}}, {{listing.location.state}}</h4>
+					</ion-col>
+					<ion-col>
+						<ion-avatar class="avatar">
+							<img [attr.src]="(listing.createdBy | async)?.images[0].src" alt="{{(listing.createdBy | async)?.firstName}}">
+						</ion-avatar>
+						<p class="listing-createdby">{{(listing.createdBy | async)?.firstName}}, 27</p>
+					</ion-col>
+				</ion-row>
+			</ion-grid>
+		</div>
+	</div>
 </ion-content>
