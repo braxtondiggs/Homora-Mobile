@@ -1,4 +1,4 @@
-<ion-header class="transparent">
+<ion-header class="transparent clear-btns">
 	<ion-navbar>
 		<ion-buttons end>
 			<button ion-button icon-only clear>
@@ -20,7 +20,7 @@
 		<div class="listing-header" padding-vertical>
 			<h2 class="title md-display-1" padding-horizontal no-margin>{{listing.title}}</h2>
 			<ion-grid no-padding>
-				<ion-row align-items-center padding-horizontal>
+				<ion-row align-items-start padding-horizontal>
 					<ion-col>
 						<h3 class="price md-display-1" no-margin>{{listing.price | currency:'USD':true:'1.0-3'}}<span>/&nbsp;month</span></h3>
 						<h4 class="location md-subhead" no-margin><ion-icon name="pin"></ion-icon> {{listing.location.city}}, {{listing.location.state}}</h4>

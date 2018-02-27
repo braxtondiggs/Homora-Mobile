@@ -1,4 +1,4 @@
-<ion-header class="transparent">
+<ion-header class="transparent clear-btns">
 	<ion-navbar></ion-navbar>
 </ion-header>
 <ion-content>
@@ -8,6 +8,20 @@
 				<img [attr.src]="image.src" alt="{{user.firstName}}" />
 			</ion-slide>
 		</ion-slides>
-		{{user.firstName}}
+		<div padding>
+			<h2 class="md-headline">{{user.firstName}}</h2>
+			<h3 class="md-subhead">{{user.location.city}}, {{user.location.state}}</h3>
+			<hr />
+			<p class="md-body">{{(user.summary) ? user.summary : user.firstName + " hasn't filled out a profile yet."}}</p>
+			<hr />
+			<p class="md-body">Member since {{user.created | amUtc | amDateFormat: 'MMM YYYY'}}</p>
+			<hr />
+			<div class="related-listings" *ngIf="false">
+				<h2 class="md-title">2 Listings</h2>
+				<div class="" *ngFor="">
+
+				</div>
+			</div>
+		</div>
 	</div>
 </ion-content>

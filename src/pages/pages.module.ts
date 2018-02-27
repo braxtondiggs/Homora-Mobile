@@ -1,25 +1,35 @@
 import { NgModule } from '@angular/core';
-import { MainPage } from './main/main';
+import { FavoriteTab, ListingTab, MainPage } from './main';
 import { IntroPage } from './intro/intro';
 import { ListingPage, ListingReadMore } from './listing/listing';
 import { ProfilePage } from './profile/profile';
+import { MessagesPage, MessagePage } from './messages';
+import { MomentModule } from 'angular2-moment';
 import { IonicModule } from 'ionic-angular'
 
 @NgModule({
-  imports: [IonicModule],
+  imports: [IonicModule, MomentModule],
   declarations: [
     MainPage,
+    ListingTab,
+    FavoriteTab,
     IntroPage,
     ListingPage,
     ListingReadMore,
-    ProfilePage
+    ProfilePage,
+    MessagesPage,
+    MessagePage
   ],
   entryComponents: [
     MainPage,
+    ListingTab,
+    FavoriteTab,
     IntroPage,
     ListingPage,
     ListingReadMore,
-    ProfilePage
+    ProfilePage,
+    MessagesPage,
+    MessagePage
   ],
 })
 export class PagesModule { }

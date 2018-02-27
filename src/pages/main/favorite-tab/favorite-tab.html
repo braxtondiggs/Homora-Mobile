@@ -1,0 +1,15 @@
+<ion-content>
+	<div *ngIf="(favorites$ | async) as favorites; else loading">
+	</div>
+	<ng-template #loading>
+		<ion-grid class="empty-favorite">
+			<ion-row justify-content-center align-items-center>
+				<div>
+					<h1 class="md-headline">No Favorites Yet!</h1>
+					<h3 class="md-subhead">Add Some Favorites</h3>
+					<button (click)="nav.parent.select(0)" ion-button round>Browse Listings</button>
+				</div>
+			</ion-row>
+		</ion-grid>
+	</ng-template>
+</ion-content>

@@ -136,6 +136,11 @@ ion-header.transparent {
     }
   }
 
+  &.clear-btns .bar-button-md {
+    color: white;
+
+  }
+
   .header-md::after {
     visibility: hidden;
   }

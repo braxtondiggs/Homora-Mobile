@@ -5,7 +5,7 @@ page-listing {
 
   .price {
     font-size: 3rem;
-    margin-bottom: 4px;
+    margin: 8px 0 4px;
 
     span {
       color: #7f8c8d;
@@ -25,11 +25,11 @@ page-listing {
   }
 
   .more-info {
-    border-bottom: solid 1px #7f8c8d;
-    border-top: solid 1px #7f8c8d;
+    border-bottom: solid 1px rgba(127, 140, 141, .4);
+    border-top: solid 1px rgba(127, 140, 141, .4);
 
     .col {
-      border-right: solid 1px #7f8c8d;
+      border-right: solid 1px rgba(127, 140, 141, .4);
       padding: 4px 0 !important;
       text-align: center;
 
@@ -39,7 +39,7 @@ page-listing {
 
       p {
         font-size: 18px;
-        font-weight: bold;
+        font-weight: 400;
       }
     }
   }
