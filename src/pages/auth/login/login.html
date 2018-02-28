@@ -1,0 +1,27 @@
+<ion-header class="transparent clear-btns">
+	<ion-navbar>
+		<ion-buttons end>
+			<button ion-button color="light" (click)="forgotPassword()" clear>
+				Forgot Password?
+			</button>
+		</ion-buttons>
+	</ion-navbar>
+</ion-header>
+<ion-content padding>
+	<h1 color="light" ion-text>Log In</h1>
+	<form [formGroup]="login" (ngSubmit)="doLogin()" novalidate>
+		<ion-item>
+			<ion-label color="light" stacked text-uppercase>Email Address</ion-label>
+			<ion-input formControlName="email" type="email" color="light" required></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label color="light" stacked text-uppercase>Password</ion-label>
+			<ion-input formControlName="password" type="password" required></ion-input>
+		</ion-item>
+		<ion-fab right bottom>
+			<button type="submit" ion-fab>
+				<ion-icon name="arrow-forward"></ion-icon>
+			</button>
+		</ion-fab>
+	</form>
+</ion-content>

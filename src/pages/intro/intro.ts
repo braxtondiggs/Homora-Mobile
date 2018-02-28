@@ -1,9 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
-import { ModalController, NavController, Slides } from 'ionic-angular';
-import { LoginModal } from '../../components/login/login';
+import { NavController, Slides, IonicPage } from 'ionic-angular';
+import { AuthPage } from '../auth';
 import { MainPage } from '../main/main';
 import { AuthProvider } from '../../providers/auth/auth';
 
+@IonicPage()
 @Component({
   selector: 'page-intro',
   templateUrl: 'intro.html',
@@ -11,15 +12,16 @@ import { AuthProvider } from '../../providers/auth/auth';
 
 export class IntroPage {
   @ViewChild(Slides) slides: Slides;
-  constructor(private nav: NavController, private modal: ModalController, private auth: AuthProvider) { }
+  constructor(private nav: NavController, private auth: AuthProvider) { }
 
   gotoMainPage() {
     this.auth.skipIntro();
-    this.nav.push(MainPage).then(() => {
+    this.nav.push(MainPage, {}, { animate: false }).then(() => {
       this.nav.remove(0, this.nav.getActive().index);
     });
   }
-  openLogin() {
-    this.modal.create(LoginModal).present();
+
+  openAuthPage() {
+    this.nav.push(AuthPage);
   }
 }

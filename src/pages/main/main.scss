@@ -136,4 +136,12 @@ ion-header.transparent {
   .header-md::after {
     visibility: hidden;
   }
+
+  &.header-ios .toolbar-background-ios {
+    border: 0;
+  }
+}
+
+.content-ios hr {
+  height: 1px;
 }

@@ -10,6 +10,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
+import { NativePageTransitions } from '@ionic-native/native-page-transitions';
 
 import { MyApp } from './app.component';
 import { PagesModule } from '../pages/pages.module';
@@ -36,6 +37,7 @@ import { AuthProvider } from '../providers/auth/auth';
     SplashScreen,
     GoogleMaps,
     Geolocation,
+    NativePageTransitions,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthProvider
   ]

@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { ModalController, NavController } from 'ionic-angular';
-import { ProfilePage } from '../profile/profile';
 import { FavoritesPage } from '../favorites/favorites';
 import { ListingsPage } from '../listings';
 import { MessagesPage } from '../messages';

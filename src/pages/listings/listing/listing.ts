@@ -46,7 +46,7 @@ export class ListingPage {
 export class ListingReadMore {
   summary: string;
   constructor(private params: NavParams, private view: ViewController) {
-    this.summary = params.get('summary');
+    this.summary = this.params.get('summary');
   }
 
   dismiss() {

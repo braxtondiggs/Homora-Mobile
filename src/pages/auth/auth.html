@@ -1,0 +1,22 @@
+<ion-header class="transparent clear-btns">
+	<ion-navbar>
+		<ion-buttons end>
+			<button ion-button color="light" (click)="login()" clear>
+				Login
+			</button>
+		</ion-buttons>
+	</ion-navbar>
+</ion-header>
+<ion-content padding>
+	<img src="assets/imgs/logo.png" alt="Logo" class="logo">
+	<h1 ion-text color="light">Welcome to Homora</h1>
+	<button (click)="facebook()" ion-button full round margin-vertical icon-start>
+		<ion-icon name="logo-facebook" float-left></ion-icon>&nbsp;Continue with Facebook
+	</button>
+	<button (click)="google()" color="light" ion-button full round margin-vertical icon-start>
+		<ion-icon name="logo-google"></ion-icon>&nbsp;Continue with Google
+	</button>
+	<button (click)="signup()" color="light" ion-button round margin-vertical outline block>
+		Create Account
+	</button>
+</ion-content>

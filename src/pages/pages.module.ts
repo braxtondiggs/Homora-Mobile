@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
+import { MomentModule } from 'angular2-moment';
+import { IonicModule } from 'ionic-angular';
 import { MainPage } from './main/main';
 import { IntroPage } from './intro/intro';
 import { ListingsPage, ListingPage, ListingReadMore } from './listings';
 import { FavoritesPage } from './favorites/favorites';
 import { ProfilePage } from './profile/profile';
 import { MessagesPage, MessagePage } from './messages';
-import { MomentModule } from 'angular2-moment';
-import { IonicModule } from 'ionic-angular'
+import { AuthPage, SignupPage, LoginPage, ResetPage } from './auth';
 
 @NgModule({
   imports: [IonicModule, MomentModule],
@@ -19,7 +20,11 @@ import { IonicModule } from 'ionic-angular'
     ListingReadMore,
     ProfilePage,
     MessagesPage,
-    MessagePage
+    MessagePage,
+    AuthPage,
+    SignupPage,
+    LoginPage,
+    ResetPage
   ],
   entryComponents: [
     MainPage,
@@ -30,7 +35,11 @@ import { IonicModule } from 'ionic-angular'
     ListingReadMore,
     ProfilePage,
     MessagesPage,
-    MessagePage
+    MessagePage,
+    AuthPage,
+    SignupPage,
+    LoginPage,
+    ResetPage
   ],
 })
 export class PagesModule { }
