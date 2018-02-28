@@ -1,49 +1,8 @@
-<ion-header>
-	<ion-navbar hideBackButton>
-		<button #sidenav ion-button menuToggle icon-only>
-			<ion-icon name='menu'></ion-icon>
-		</button>
-		<ion-title>
-			Homora
-		</ion-title>
-	</ion-navbar>
-</ion-header>
 <ion-content>
-	<ion-tabs tabsPlacement="top" tabsHighlight="true">
-		<ion-tab tabTitle="Listings" [root]="ListingTab" tabsHideOnSubPages="true"></ion-tab>
-		<ion-tab tabTitle="Favorites" [root]="FavoriteTab" tabsHideOnSubPages="true"></ion-tab>
+	<ion-tabs>
+		<ion-tab tabTitle="EXPLORE" [root]="ListingTab" tabIcon="search" tabsHideOnSubPages="true"></ion-tab>
+		<ion-tab tabTitle="SAVED" [root]="FavoriteTab" tabIcon="heart-outline" tabsHideOnSubPages="true"></ion-tab>
+		<ion-tab tabTitle="INBOX" [root]="MessageTab" tabIcon="chatbubbles" tabsHideOnSubPages="true"></ion-tab>
+		<ion-tab tabTitle="PROFILE" tabIcon="person" tabsHideOnSubPages="true"></ion-tab>
 	</ion-tabs>
-	<ion-fab right bottom>
-		<button ion-fab (click)="openMaps()">
-			<ion-icon name="map"></ion-icon>
-		</button>
-	</ion-fab>
 </ion-content>
-<ion-menu [content]="sidenav">
-	<ion-header (click)="viewProfile('r6KAzYWuJQTuOGfztCFm', $event)">
-		<ion-avatar class="avatar">
-			<img src="http://via.placeholder.com/150x150" alt="Braxton Diggs">
-		</ion-avatar>
-		<h2 ion-text color="light" class="title">Braxton Diggs</h2>
-	</ion-header>
-	<ion-content>
-		<ion-list>
-			<ion-item (click)="viewProfile('r6KAzYWuJQTuOGfztCFm', $event)">
-				<ion-icon name="person" item-start></ion-icon>
-				Profile
-			</ion-item>
-			<ion-item (click)="viewMessages()">
-				<ion-icon name="chatbubbles" item-start></ion-icon>
-				Inbox
-			</ion-item>
-			<ion-item>
-				<ion-icon name="ios-add-circle" item-start></ion-icon>
-				Create Listing
-			</ion-item>
-			<ion-item>
-				<ion-icon name="cog" item-start></ion-icon>
-				Settings
-			</ion-item>
-		</ion-list>
-	</ion-content>
-</ion-menu>

@@ -1,18 +1,20 @@
 import { Component } from '@angular/core';
-import { LoadingController, App } from 'ionic-angular';
+import { LoadingController, ModalController, App } from 'ionic-angular';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { ListingPage } from '../../listing/listing';
-import { ProfilePage } from '../../profile/profile';
+import { ListingPage } from './listing/listing';
+import { ProfilePage } from '../profile/profile';
+import { FilterComponent, MapsComponent } from '../../components';
 import { Observable } from 'rxjs/Observable';
-import { Listing, User } from '../../../models';
+import { Listing, User } from '../../models';
+
 @Component({
-  selector: 'listing-tab',
-  templateUrl: 'listing-tab.html'
+  selector: 'listings',
+  templateUrl: 'listings.html'
 })
-export class ListingTab {
+export class ListingsPage {
   listings$: Observable<Listing[]>;
   private listingsCollection: AngularFirestoreCollection<Listing[]>;
-  constructor(private afs: AngularFirestore, private loading: LoadingController, private app: App) {
+  constructor(private afs: AngularFirestore, private loading: LoadingController, private modal: ModalController, private app: App) {
     const loader = this.loading.create({ content: 'Finding Listings...' });
     loader.present();
     this.listingsCollection = this.afs.collection<Listing[]>('Listings');
@@ -32,5 +34,11 @@ export class ListingTab {
   viewProfile(key: string, event: Event): void {
     event.stopPropagation();
     this.app.getRootNav().push(ProfilePage, { key });
+  }
+  openMaps(): void {
+    this.modal.create(MapsComponent).present();
+  }
+  openFilter(): void {
+    this.modal.create(FilterComponent).present();
   }
 }
