@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, Content } from 'ionic-angular';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { UserProvider } from '../../providers/user/user';
 
 @IonicPage({
   name: 'main',
@@ -14,8 +14,9 @@ export class MainPage {
   user: any;
   loading: boolean = true;
   @ViewChild(Content) content: Content;
-  constructor(afAuth: AngularFireAuth, private nav: NavController, ) {
-    afAuth.authState.subscribe((user) => {
+  constructor(private nav: NavController, userProvider: UserProvider) {
+    userProvider.getAuth().subscribe((user) => {
+      userProvider.set(user);
       this.user = user;
       this.loading = false;
       this.content.resize();

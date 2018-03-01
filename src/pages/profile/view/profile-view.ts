@@ -3,6 +3,7 @@ import { IonicPage, NavParams } from 'ionic-angular';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { User } from '../../../models/';
+import { isEmpty } from 'lodash';
 
 @IonicPage({
   name: 'profileView',
@@ -24,5 +25,9 @@ export class ProfileViewPage {
         return ({ $key: action.payload.id, ...action.payload.data() });
       });
     }
+  }
+
+  ionViewCanEnter() {
+    return !isEmpty(this.navParams.get('key'));
   }
 }

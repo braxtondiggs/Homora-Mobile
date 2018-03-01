@@ -1,3 +1,37 @@
 page-profile {
+  .header_container {
+    height: 100px;
 
+    .header_btn {
+      height: 100%;
+    }
+
+    .button-inner {
+      display: initial;
+
+      .container {
+        display: inline-block;
+        float: left;
+        height: 75px;
+        margin-top: 16px;
+      }
+
+      h2,
+      p {
+        margin: 0 0 4px;
+        text-align: left;
+      }
+
+      .avatar {
+        display: inline-block;
+        float: right;
+        height: 75px;
+        width: 75px;
+      }
+    }
+  }
+
+  .list-md[inset] .item-md {
+    padding: 0;
+  }
 }

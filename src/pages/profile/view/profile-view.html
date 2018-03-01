@@ -10,7 +10,7 @@
 		</ion-slides>
 		<div padding>
 			<h2 class="md-headline">{{user.firstName}}</h2>
-			<h3 class="md-subhead">{{user.location.city}}, {{user.location.state}}</h3>
+			<h3 class="md-subhead" *ngIf="user.location">{{user.location.city}}, {{user.location.state}}</h3>
 			<hr />
 			<p class="md-body">{{(user.summary) ? user.summary : user.firstName + " hasn't filled out a profile yet."}}</p>
 			<hr />

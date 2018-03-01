@@ -1,1 +1,27 @@
-<ion-content padding></ion-content>
+<ion-content>
+	<div class="header_container">
+		<button class="header_btn" color="dark" *ngIf="(user$ | async) as user;" (click)="viewProfile(user.$key)" full clear ion-button>
+			<div class="container">
+				<h2><b>{{user.firstName}}</b></h2>
+				<p>View and edit profile</p>
+			</div>
+			<ion-avatar class="avatar">
+				<img [attr.src]="user.images[0].src" alt="{{user.firstName}} {{user.lastName}}">
+			</ion-avatar>
+	</button>
+	</div>
+	<ion-list inset>
+		<button (click)="navSelected('notifications')" ion-item>
+			Notifications
+			<ion-icon name="notifications" item-end></ion-icon>
+		</button>
+		<button (click)="switchAccount()" ion-item>
+			Switch to Lister Mode
+			<ion-icon name="swap" item-end></ion-icon>
+		</button>
+		<button (click)="navSelected('settings')" ion-item>
+			Settings
+			<ion-icon name="settings" item-end></ion-icon>
+		</button>
+	</ion-list>
+</ion-content>

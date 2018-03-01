@@ -19,6 +19,7 @@ import { ListingReadMore } from '../pages/listings/listing/listing';
 import { ComponentsModule } from '../components/components.module';
 import { environment } from './app.environment';
 import { AuthProvider } from '../providers/auth/auth';
+import { UserProvider } from '../providers/user/user';
 
 @NgModule({
   declarations: [MyApp, ListingReadMore],
@@ -42,7 +43,8 @@ import { AuthProvider } from '../providers/auth/auth';
     Facebook,
     NativePageTransitions,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    AuthProvider
+    AuthProvider,
+    UserProvider
   ]
 })
 export class AppModule { }

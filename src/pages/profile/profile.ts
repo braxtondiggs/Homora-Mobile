@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the ProfilePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { IonicPage, NavController } from 'ionic-angular';
+import { UserProvider } from '../../providers/user/user';
+import { Observable } from 'rxjs/Observable';
+import { User } from '../../models';
 
 @IonicPage({
   name: 'profile'
@@ -16,12 +12,16 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'profile.html',
 })
 export class ProfilePage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  user$: Observable<User>;
+  constructor(private nav: NavController, userProvider: UserProvider) {
+    this.user$ = userProvider.get$();
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad ProfilePage');
+  viewProfile(key: string): void {
+    this.nav.push('profileView', { key })
   }
 
+  navSelected(page: string): void {
+    this.nav.push(page);
+  }
 }
