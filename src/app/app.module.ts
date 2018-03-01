@@ -11,18 +11,18 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { GoogleMaps } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Facebook } from '@ionic-native/facebook';
 import { NativePageTransitions } from '@ionic-native/native-page-transitions';
 
 import { MyApp } from './app.component';
-import { PagesModule } from '../pages/pages.module';
+import { ListingReadMore } from '../pages/listings/listing/listing';
 import { ComponentsModule } from '../components/components.module';
 import { environment } from './app.environment';
 import { AuthProvider } from '../providers/auth/auth';
 
 @NgModule({
-  declarations: [MyApp],
+  declarations: [MyApp, ListingReadMore],
   imports: [
-    PagesModule,
     ComponentsModule,
     ReactiveFormsModule,
     BrowserModule,
@@ -33,12 +33,13 @@ import { AuthProvider } from '../providers/auth/auth';
     AngularFireModule.initializeApp(environment.firebase)
   ],
   bootstrap: [IonicApp],
-  entryComponents: [MyApp],
+  entryComponents: [MyApp, ListingReadMore],
   providers: [
     StatusBar,
     SplashScreen,
     GoogleMaps,
     Geolocation,
+    Facebook,
     NativePageTransitions,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthProvider

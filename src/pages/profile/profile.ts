@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
-import { NavParams } from 'ionic-angular';
+import { IonicPage, NavParams } from 'ionic-angular';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { User } from '../../models/';
 
+@IonicPage({
+  name: 'profile',
+  segment: 'profile/:key'
+})
 @Component({
   selector: 'page-profile',
   templateUrl: 'profile.html',

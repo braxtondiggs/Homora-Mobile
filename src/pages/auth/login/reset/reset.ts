@@ -3,7 +3,10 @@ import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angu
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
-@IonicPage()
+@IonicPage({
+  name: 'reset',
+  defaultHistory: ['main', 'auth', 'login']
+})
 @Component({
   selector: 'reset-page',
   templateUrl: 'reset.html',
@@ -18,6 +21,7 @@ export class ResetPage {
       email: [this.email, Validators.required], // TODO: Add Custom Email Validators
     });
   }
+
   doReset(): void {
     if (this.reset.valid) {
       this.loading = true;
@@ -25,7 +29,7 @@ export class ResetPage {
         this.showToast(`A password reset link has been sent to: ${this.reset.value.email}`);
         this.nav.pop();
       }).catch(() => {
-        this.showToast('No account exist for the request email address.');
+        this.showToast(`No account exists for ${this.reset.value.email}. Maybe you signed up using a different/incorrect e-mail address.`);
       });
     } else {
       this.showToast('Invaild Email. Please check if your email has been entered correctly.');

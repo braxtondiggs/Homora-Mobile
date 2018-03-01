@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { LoadingController, ModalController, App } from 'ionic-angular';
+import { IonicPage, LoadingController, ModalController, NavController } from 'ionic-angular';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { ListingPage } from './listing/listing';
-import { ProfilePage } from '../profile/profile';
 import { FilterComponent, MapsComponent } from '../../components';
 import { Observable } from 'rxjs/Observable';
 import { Listing, User } from '../../models';
 
+@IonicPage({
+  name: 'listings'
+})
 @Component({
   selector: 'listings',
   templateUrl: 'listings.html'
@@ -14,7 +15,7 @@ import { Listing, User } from '../../models';
 export class ListingsPage {
   listings$: Observable<Listing[]>;
   private listingsCollection: AngularFirestoreCollection<Listing[]>;
-  constructor(private afs: AngularFirestore, private loading: LoadingController, private modal: ModalController, private app: App) {
+  constructor(private afs: AngularFirestore, private loading: LoadingController, private modal: ModalController, private nav: NavController) {
     const loader = this.loading.create({ content: 'Finding Listings...' });
     loader.present();
     this.listingsCollection = this.afs.collection<Listing[]>('Listings');
@@ -28,12 +29,12 @@ export class ListingsPage {
     this.listings$.subscribe(() => loader.dismiss());
   }
   viewListing(key: string): void {
-    this.app.getRootNav().push(ListingPage, { key });
+    this.nav.push('listing', { key });
   }
 
   viewProfile(key: string, event: Event): void {
     event.stopPropagation();
-    this.app.getRootNav().push(ProfilePage, { key });
+    this.nav.push('profile', { key });
   }
   openMaps(): void {
     this.modal.create(MapsComponent).present();

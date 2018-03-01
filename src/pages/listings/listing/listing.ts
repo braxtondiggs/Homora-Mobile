@@ -1,17 +1,20 @@
 import { Component } from '@angular/core';
-import { NavParams, NavController, ModalController, ViewController } from 'ionic-angular';
+import { IonicPage, NavParams, NavController, ModalController, ViewController } from 'ionic-angular';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { Listing, User } from '../../../models';
-import { ProfilePage } from '../../profile/profile';
 import { truncate } from 'lodash';
 
+@IonicPage({
+  name: 'listing',
+  segment: 'listing/:key'
+})
 @Component({
   selector: 'page-listing',
   templateUrl: 'listing.html',
 })
 export class ListingPage {
-  key: string; // = 'rex3S2miHT8VrVHas3Jr';
+  key: string;
   listing$: Observable<Listing>;
   private listingDoc: AngularFirestoreDocument<Listing>;
   constructor(private afs: AngularFirestore, private nav: NavController, private navParams: NavParams, private modal: ModalController) {
@@ -20,7 +23,7 @@ export class ListingPage {
       this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
       this.listing$ = this.listingDoc.snapshotChanges().map((action: any) => {
         const data = action.payload.data();
-        data.createdBy$ = afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
+        if (data.createdBy) data.createdBy$ = afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
         data.summaryTruncated = truncate(data.summary, { length: 150, separator: ' ' });
         return ({ $key: action.payload.id, ...data });
       });
@@ -32,7 +35,7 @@ export class ListingPage {
   }
 
   viewProfile(key: string): void {
-    this.nav.push(ProfilePage, { key });
+    this.nav.push('profile', { key });
   }
 
   contact(key: any): void {

@@ -5,14 +5,16 @@ import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firesto
 import { HttpClient } from '@angular/common/http';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AuthProvider } from '../../../providers/auth/auth';
-import { MainPage } from '../../main/main';
 import { User } from '../../../models'
 import { AppSettings } from '../../../app/app.constants';
 import { merge } from 'lodash';
 import * as  moment from 'moment';
 import * as firebase from 'firebase';
 
-@IonicPage()
+@IonicPage({
+  name: 'signup',
+  defaultHistory: ['main', 'auth']
+})
 @Component({
   selector: 'signup-page',
   templateUrl: 'signup.html'
@@ -50,7 +52,7 @@ export class SignupPage {
             firebase.auth().currentUser.sendEmailVerification();
             this.http.post('http://dev.homora.com/api/users/signup', merge(user, { image: AppSettings.DEFAULT_USER_IMAGE }));
             this.auth.skipIntro();
-            this.nav.push(MainPage, {}, { animate: false }).then(() => {
+            this.nav.push('main', {}, { animate: false }).then(() => {
               this.nav.remove(0, this.nav.getActive().index);
             });
           });

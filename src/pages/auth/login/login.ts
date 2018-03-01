@@ -3,10 +3,11 @@ import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AuthProvider } from '../../../providers/auth/auth';
-import { ResetPage } from './reset/reset';
-import { MainPage } from '../../main/main';
 
-@IonicPage()
+@IonicPage({
+  name: 'login',
+  defaultHistory: ['main', 'auth']
+})
 @Component({
   selector: 'login-page',
   templateUrl: 'login.html'
@@ -26,7 +27,7 @@ export class LoginPage {
       this.loading = true;
       this.afAuth.auth.signInWithEmailAndPassword(this.login.value.email, this.login.value.password).then(() => {
         this.auth.skipIntro();
-        this.nav.push(MainPage, {}, { animate: false }).then(() => {
+        this.nav.push('main', {}, { animate: false }).then(() => {
           this.nav.remove(0, this.nav.getActive().index);
         });
       }).catch(() => {
@@ -38,7 +39,7 @@ export class LoginPage {
   }
 
   forgotPassword() {
-    this.nav.push(ResetPage, { email: this.login.value.email }, { animate: true, direction: 'forward' });
+    this.nav.push('reset', { email: this.login.value.email }, { animate: true, direction: 'forward' });
   }
 
   showToast(message: string): void {

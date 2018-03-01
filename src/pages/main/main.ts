@@ -1,19 +1,18 @@
 import { Component } from '@angular/core';
-import { FavoritesPage } from '../favorites/favorites';
-import { ListingsPage } from '../listings';
-import { MessagesPage } from '../messages';
+import { IonicPage, NavParams } from 'ionic-angular';
 
+@IonicPage({
+  name: 'main',
+  segment: 'home'
+})
 @Component({
   selector: 'main-home',
   templateUrl: 'main.html'
 })
 export class MainPage {
-  public FavoriteTab: any;
-  public ListingTab: any;
-  public MessageTab: any;
-  constructor() {
-    this.FavoriteTab = FavoritesPage;
-    this.ListingTab = ListingsPage;
-    this.MessageTab = MessagesPage;
+  title = 'listings';
+  constructor(params: NavParams) {
+    console.log(params); // returns NavParams {data: Object}
+    // this.fooId = params.user;
   }
 }
