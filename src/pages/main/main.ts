@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavParams } from 'ionic-angular';
+import { IonicPage, NavController } from 'ionic-angular';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @IonicPage({
   name: 'main',
@@ -10,9 +11,14 @@ import { IonicPage, NavParams } from 'ionic-angular';
   templateUrl: 'main.html'
 })
 export class MainPage {
-  title = 'listings';
-  constructor(params: NavParams) {
-    console.log(params); // returns NavParams {data: Object}
-    // this.fooId = params.user;
+  user: any;
+  constructor(afAuth: AngularFireAuth, private nav: NavController, ) {
+    afAuth.authState.subscribe((user) => {
+      this.user = user;
+    })
+  }
+
+  openAuthPage() {
+    this.nav.push('auth');
   }
 }
