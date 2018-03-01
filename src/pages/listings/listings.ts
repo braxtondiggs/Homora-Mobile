@@ -34,7 +34,7 @@ export class ListingsPage {
 
   viewProfile(key: string, event: Event): void {
     event.stopPropagation();
-    this.nav.push('profile', { key });
+    this.nav.push('profileView', { key });
   }
   openMaps(): void {
     this.modal.create(MapsComponent).present();

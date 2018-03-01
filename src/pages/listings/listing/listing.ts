@@ -35,7 +35,7 @@ export class ListingPage {
   }
 
   viewProfile(key: string): void {
-    this.nav.push('profile', { key });
+    this.nav.push('profileView', { key });
   }
 
   contact(key: any): void {

@@ -3,10 +3,10 @@
 		<ion-tab tabTitle="EXPLORE" root="listings" tabUrlPath="explore" tabIcon="search" tabsHideOnSubPages="true"></ion-tab>
 		<ion-tab tabTitle="SAVED" root="favorites" tabUrlPath="user" tabIcon="heart-outline" tabsHideOnSubPages="true"></ion-tab>
 		<ion-tab tabTitle="INBOX" root="messages" tabUrlPath="user" tabIcon="chatbubbles" tabsHideOnSubPages="true"></ion-tab>
-		<ion-tab tabTitle="PROFILE" root="messages" tabUrlPath="user" tabIcon="person" tabsHideOnSubPages="true"></ion-tab>
+		<ion-tab tabTitle="PROFILE" root="profile" tabUrlPath="user" tabIcon="person" tabsHideOnSubPages="true"></ion-tab>
 	</ion-tabs>
 	<ion-nav root="listings" *ngIf="!user"></ion-nav>
 </ion-content>
-<ion-footer *ngIf="!user">
+<ion-footer *ngIf="!user && !loading">
 	<button color="dark" (click)="openAuthPage()" ion-button full>Log in to access more features</button>
 </ion-footer>

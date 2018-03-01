@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, Content } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 
 @IonicPage({
@@ -12,9 +12,13 @@ import { AngularFireAuth } from 'angularfire2/auth';
 })
 export class MainPage {
   user: any;
+  loading: boolean = true;
+  @ViewChild(Content) content: Content;
   constructor(afAuth: AngularFireAuth, private nav: NavController, ) {
     afAuth.authState.subscribe((user) => {
       this.user = user;
+      this.loading = false;
+      this.content.resize();
     })
   }
 

@@ -1,28 +1,27 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavParams } from 'ionic-angular';
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
-import { Observable } from 'rxjs/Observable';
-import { User } from '../../models/';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
+/**
+ * Generated class for the ProfilePage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
 
 @IonicPage({
-  name: 'profile',
-  segment: 'profile/:key'
+  name: 'profile'
 })
 @Component({
   selector: 'page-profile',
   templateUrl: 'profile.html',
 })
 export class ProfilePage {
-  key: string;
-  user$: Observable<User>;
-  private userDoc: AngularFirestoreDocument<User>;
-  constructor(private afs: AngularFirestore, private navParams: NavParams) {
-    this.key = this.navParams.get('key');
-    if (this.key) {
-      this.userDoc = this.afs.doc<User>(`Users/${this.key}`);
-      this.user$ = this.userDoc.snapshotChanges().map((action: any) => {
-        return ({ $key: action.payload.id, ...action.payload.data() });
-      });
-    }
+
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
+
+  ionViewDidLoad() {
+    console.log('ionViewDidLoad ProfilePage');
+  }
+
 }

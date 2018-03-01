@@ -3,8 +3,6 @@ import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthProvider } from '../providers/auth/auth';
-import { Observable } from 'rxjs/Observable';
-import { User } from '../models';
 
 @Component({
   templateUrl: 'app.html'
