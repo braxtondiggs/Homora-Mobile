@@ -11,8 +11,9 @@
 			<ion-input formControlName="email" type="email" color="light" required></ion-input>
 		</ion-item>
 		<ion-fab right bottom>
-			<button type="submit" ion-fab>
-				<ion-icon name="arrow-forward"></ion-icon>
+			<button type="submit" [disabled]="!reset.valid" ion-fab>
+				<ion-icon name="arrow-forward" *ngIf="!loading"></ion-icon>
+				<ion-spinner color="light" *ngIf="loading"></ion-spinner>
 			</button>
 		</ion-fab>
 	</form>

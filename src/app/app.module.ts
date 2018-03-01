@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { AngularFireModule } from 'angularfire2';
@@ -27,6 +28,7 @@ import { AuthProvider } from '../providers/auth/auth';
     BrowserModule,
     AngularFirestoreModule,
     AngularFireAuthModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(environment.firebase)
   ],

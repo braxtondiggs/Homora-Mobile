@@ -2,12 +2,11 @@ import { Image } from './image.model';
 import { Location } from './location.model';
 
 export interface User {
-  birthdate?: Date;
+  birthdate: Date;
   description?: string;
-  email?: string;
-  firstName?: string;
-  $key?: string;
+  email: string;
+  firstName: string;
   images?: Image[];
-  lastName?: string;
+  lastName: string;
   location?: Location;
 }

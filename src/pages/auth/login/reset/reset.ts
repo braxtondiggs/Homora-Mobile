@@ -10,6 +10,7 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 })
 export class ResetPage {
   public reset: FormGroup;
+  public loading: boolean = false;
   private email: string;
   constructor(private afAuth: AngularFireAuth, private formBuilder: FormBuilder, private nav: NavController, private navParams: NavParams, private toast: ToastController) {
     this.email = this.navParams.get('email');
@@ -17,28 +18,26 @@ export class ResetPage {
       email: [this.email, Validators.required], // TODO: Add Custom Email Validators
     });
   }
-  doReset() {
+  doReset(): void {
     if (this.reset.valid) {
+      this.loading = true;
       this.afAuth.auth.sendPasswordResetEmail(this.reset.value.email).then(() => {
-        this.toast.create({
-          message: `A password reset link has been sent to: ${this.reset.value.email}`,
-          duration: 3000,
-          showCloseButton: true
-        }).present();
+        this.showToast(`A password reset link has been sent to: ${this.reset.value.email}`);
         this.nav.pop();
       }).catch(() => {
-        this.toast.create({
-          message: 'No account exist for the request email address.',
-          duration: 3000,
-          showCloseButton: true
-        }).present();
+        this.showToast('No account exist for the request email address.');
       });
     } else {
-      this.toast.create({
-        message: 'Invaild Email. Please check if your email has been entered correctly.',
-        duration: 3000,
-        showCloseButton: true
-      }).present();
+      this.showToast('Invaild Email. Please check if your email has been entered correctly.');
     }
+  }
+
+  showToast(message: string): void {
+    this.loading = false;
+    this.toast.create({
+      message,
+      duration: 3000,
+      showCloseButton: true
+    }).present();
   }
 }

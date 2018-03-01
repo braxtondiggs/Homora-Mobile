@@ -3,4 +3,33 @@
 	</ion-navbar>
 </ion-header>
 <ion-content padding>
+	<h1 color="light" ion-text>Sign Up</h1>
+	<form [formGroup]="signup" (ngSubmit)="doSignup()" novalidate>
+		<ion-item>
+			<ion-label color="light" stacked text-uppercase>First Name</ion-label>
+			<ion-input formControlName="firstName" type="text" required></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label color="light" stacked text-uppercase>Last Name</ion-label>
+			<ion-input formControlName="lastName" type="text" required></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label color="light" stacked text-uppercase>Email Address</ion-label>
+			<ion-input formControlName="email" type="email" required></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label color="light" stacked text-uppercase>Password</ion-label>
+			<ion-input formControlName="password" type="password" min="8" required></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label color="light" stacked text-uppercase>Birthday</ion-label>
+			<ion-datetime displayFormat="MM/DD/YYYY" [max]="maxBirthDate" formControlName="birthday" required></ion-datetime>
+		</ion-item>
+		<ion-fab right bottom>
+			<button type="submit" [disabled]="!signup.valid" ion-fab>
+				<ion-icon name="arrow-forward" *ngIf="!loading"></ion-icon>
+				<ion-spinner color="light" *ngIf="loading"></ion-spinner>
+			</button>
+		</ion-fab>
+	</form>
 </ion-content>

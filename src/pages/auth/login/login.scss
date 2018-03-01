@@ -1,5 +1,6 @@
 login-page,
-reset-page {
+reset-page,
+signup-page {
   .item {
     background-color: transparent !important;
     margin-bottom: 16px;
@@ -16,6 +17,7 @@ reset-page {
       letter-spacing: .75px;
     }
 
+    ion-datetime,
     ion-input {
       color: #f4f4f4;
       font-size: 2rem;
