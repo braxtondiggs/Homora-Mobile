@@ -15,19 +15,8 @@ import { Listing, User } from '../../models';
 export class ListingsPage {
   listings$: Observable<Listing[]>;
   private listingsCollection: AngularFirestoreCollection<Listing[]>;
-  constructor(private afs: AngularFirestore, private loading: LoadingController, private modal: ModalController, private nav: NavController) {
-    const loader = this.loading.create({ content: 'Finding Listings...' });
-    loader.present();
-    this.listingsCollection = this.afs.collection<Listing[]>('Listings');
-    this.listings$ = this.listingsCollection.snapshotChanges().map((actions: any) => {
-      return actions.map((action: any) => {
-        const data = action.payload.doc.data();
-        data.createdBy$ = afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
-        return ({ $key: action.payload.doc.id, ...data })
-      });
-    })
-    this.listings$.subscribe(() => loader.dismiss());
-  }
+  constructor(private afs: AngularFirestore, private loading: LoadingController, private modal: ModalController, private nav: NavController) { }
+
   viewListing(key: string): void {
     this.nav.push('listing', { key });
   }
@@ -41,5 +30,19 @@ export class ListingsPage {
   }
   openFilter(): void {
     this.modal.create(FilterComponent).present();
+  }
+
+  ionViewDidLoad() {
+    const loader = this.loading.create({ content: 'Finding Listings...' });
+    loader.present();
+    this.listingsCollection = this.afs.collection<Listing[]>('Listings');
+    this.listings$ = this.listingsCollection.snapshotChanges().map((actions: any) => {
+      return actions.map((action: any) => {
+        const data = action.payload.doc.data();
+        data.createdBy$ = this.afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
+        return ({ $key: action.payload.doc.id, ...data })
+      });
+    })
+    this.listings$.subscribe(() => loader.dismiss());
   }
 }

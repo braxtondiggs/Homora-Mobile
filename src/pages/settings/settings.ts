@@ -10,7 +10,9 @@ import { User } from '../../models';
 import { findIndex } from 'lodash';
 
 @IonicPage({
-  name: 'settings'
+  name: 'settings',
+  segment: 'settings',
+  defaultHistory: ['profile']
 })
 @Component({
   selector: 'page-settings',
@@ -21,8 +23,6 @@ export class SettingsPage {
   verify: FormGroup;
   authData: any;
   constructor(private afAuth: AngularFireAuth, private alert: AlertController, private toast: ToastController, public nav: NavController, private userProvider: UserProvider, private auth: AuthProvider, private formBuilder: FormBuilder) {
-    this.user$ = userProvider.get$();
-    this.authData = userProvider.getAuthData();
     this.verify = this.formBuilder.group({
       phone: ['', Validators.required],
     });
@@ -82,9 +82,7 @@ export class SettingsPage {
                   this.authData.signOut(),
                   this.userProvider.getDoc().delete()
                 ]).subscribe(() => {
-                  this.nav.push('main', {}, { animate: false }).then(() => {
-                    this.nav.remove(0, this.nav.getActive().index);
-                  });
+                  this.nav.setRoot('listings');
                   this.showToast('Account has been deleted successfully!');
                 });
               });
@@ -97,9 +95,7 @@ export class SettingsPage {
 
   logout(): void {
     this.afAuth.auth.signOut().then(() => {
-      this.nav.push('main', {}, { animate: false }).then(() => {
-        this.nav.remove(0, this.nav.getActive().index);
-      });
+      this.nav.setRoot('listings');
       this.showToast('Log out Successful!');
     });
   }
@@ -108,8 +104,8 @@ export class SettingsPage {
     //TODO: Add Contact
   }
 
-  hasProvider(provider) {
-    return findIndex(this.authData.providerData, ['providerId', provider]) > -1;
+  hasProvider(provider: string): boolean {
+    return this.authData && findIndex(this.authData.providerData, ['providerId', provider]) > -1;
   }
 
   showToast(message: string) {
@@ -118,5 +114,10 @@ export class SettingsPage {
       duration: 3000,
       position: 'bottom'
     }).present();
+  }
+
+  ionViewDidLoad() {
+    this.user$ = this.userProvider.get$();
+    this.authData = this.userProvider.getAuthData();
   }
 }

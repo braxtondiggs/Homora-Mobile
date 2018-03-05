@@ -5,7 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import { User } from '../../models';
 
 @IonicPage({
-  name: 'profile'
+  name: 'profile',
+  segment: 'profile'
 })
 @Component({
   selector: 'page-profile',
@@ -13,15 +14,17 @@ import { User } from '../../models';
 })
 export class ProfilePage {
   user$: Observable<User>;
-  constructor(private nav: NavController, userProvider: UserProvider) {
-    this.user$ = userProvider.get$();
-  }
+  constructor(private nav: NavController, private userProvider: UserProvider) { }
 
   viewProfile(key: string): void {
     this.nav.push('profileView', { key })
   }
 
   navSelected(page: string): void {
-    this.nav.push(page);
+    this.nav.push(page, {});
+  }
+
+  ionViewDidLoad() {
+    this.user$ = this.userProvider.get$();
   }
 }

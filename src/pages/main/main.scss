@@ -120,7 +120,7 @@ ion-header.transparent {
     position: absolute;
 
     .toolbar-background {
-      background: transparent;
+      background-color: rgba(0, 0, 0, .05);
     }
 
     .toolbar-title {

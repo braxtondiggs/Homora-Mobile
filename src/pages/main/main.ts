@@ -14,16 +14,18 @@ export class MainPage {
   user: any;
   loading: boolean = true;
   @ViewChild(Content) content: Content;
-  constructor(private nav: NavController, userProvider: UserProvider) {
-    userProvider.getAuth().subscribe((user) => {
-      userProvider.set(user);
-      this.user = user;
-      this.loading = false;
-      this.content.resize();
-    })
-  }
+  constructor(private nav: NavController, private userProvider: UserProvider) { }
 
   openAuthPage() {
     this.nav.push('auth');
+  }
+
+  ionViewDidLoad() {
+    this.userProvider.getAuth().subscribe((user) => {
+      this.userProvider.set(user);
+      this.user = user;
+      this.loading = false;
+      this.content.resize();
+    });
   }
 }

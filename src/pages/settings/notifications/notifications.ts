@@ -5,7 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import { User } from '../../../models';
 
 @IonicPage({
-  name: 'notifications'
+  name: 'notifications',
+  defaultHistory: ['profile']
 })
 @Component({
   selector: 'page-notifications',

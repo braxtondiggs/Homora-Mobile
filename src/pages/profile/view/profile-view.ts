@@ -17,7 +17,13 @@ export class ProfileViewPage {
   key: string;
   user$: Observable<User>;
   private userDoc: AngularFirestoreDocument<User>;
-  constructor(private afs: AngularFirestore, private navParams: NavParams) {
+  constructor(private afs: AngularFirestore, private navParams: NavParams) { }
+
+  ionViewCanEnter() {
+    return !isEmpty(this.navParams.get('key'));
+  }
+
+  ionViewDidLoad() {
     this.key = this.navParams.get('key');
     if (this.key) {
       this.userDoc = this.afs.doc<User>(`Users/${this.key}`);
@@ -25,9 +31,5 @@ export class ProfileViewPage {
         return ({ $key: action.payload.id, ...action.payload.data() });
       });
     }
-  }
-
-  ionViewCanEnter() {
-    return !isEmpty(this.navParams.get('key'));
   }
 }

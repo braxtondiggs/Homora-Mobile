@@ -17,18 +17,7 @@ export class ListingPage {
   key: string;
   listing$: Observable<Listing>;
   private listingDoc: AngularFirestoreDocument<Listing>;
-  constructor(private afs: AngularFirestore, private nav: NavController, private navParams: NavParams, private modal: ModalController) {
-    this.key = this.navParams.get('key');
-    if (this.key) {
-      this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
-      this.listing$ = this.listingDoc.snapshotChanges().map((action: any) => {
-        const data = action.payload.data();
-        if (data.createdBy) data.createdBy$ = afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
-        data.summaryTruncated = truncate(data.summary, { length: 150, separator: ' ' });
-        return ({ $key: action.payload.id, ...data });
-      });
-    }
-  }
+  constructor(private afs: AngularFirestore, private nav: NavController, private navParams: NavParams, private modal: ModalController) { }
 
   readMore(summary: string): void {
     this.modal.create(ListingReadMore, { summary }).present();
@@ -40,6 +29,19 @@ export class ListingPage {
 
   contact(key: any): void {
     console.log(key);
+  }
+
+  ionViewDidLoad() {
+    this.key = this.navParams.get('key');
+    if (this.key) {
+      this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
+      this.listing$ = this.listingDoc.snapshotChanges().map((action: any) => {
+        const data = action.payload.data();
+        if (data.createdBy) data.createdBy$ = this.afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
+        data.summaryTruncated = truncate(data.summary, { length: 150, separator: ' ' });
+        return ({ $key: action.payload.id, ...data });
+      });
+    }
   }
 }
 

@@ -10,4 +10,4 @@ import { SettingsPage } from './settings';
     IonicPageModule.forChild(SettingsPage),
   ],
 })
-export class SettingsPageModule {}
+export class SettingsPageModule { }
