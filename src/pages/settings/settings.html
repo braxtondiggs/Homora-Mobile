@@ -28,7 +28,7 @@
 				<button (click)="connect('facebook', user)" *ngIf="!hasProvider('facebook')" item-end ion-button clear>Connect</button>
 				<button (click)="disconnect('facebook', user)" *ngIf="hasProvider('facebook')" item-end ion-button clear>Disconnect</button>
 			</ion-item>
-			<ion-item class="overflow">
+			<ion-item class="overflow verify-phone">
 				<div item-content>
 					<h2>Phone number</h2>
 					<p>Make it easier to communicate with a verified phone number. We’ll send you a code by SMS or read it to you over the phone. Enter the code below to confirm that you’re the person on the other end.</p>

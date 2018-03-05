@@ -30,7 +30,9 @@ import { UserProvider } from '../providers/user/user';
     AngularFirestoreModule,
     AngularFireAuthModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      preloadModules: true
+    }),
     AngularFireModule.initializeApp(environment.firebase)
   ],
   bootstrap: [IonicApp],

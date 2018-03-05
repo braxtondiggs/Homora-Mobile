@@ -4,7 +4,8 @@ import { UserProvider } from '../../providers/user/user';
 
 @IonicPage({
   name: 'main',
-  segment: 'home'
+  segment: 'home',
+  priority: 'high'
 })
 @Component({
   selector: 'main-home',
