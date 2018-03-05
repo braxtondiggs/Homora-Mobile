@@ -1,18 +1,70 @@
-<!--
-  Generated template for the SettingsPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>settings</ion-title>
-  </ion-navbar>
-
+	<ion-navbar>
+		<ion-title>Settings</ion-title>
+	</ion-navbar>
 </ion-header>
-
-
-<ion-content padding>
-
+<ion-content>
+	<div *ngIf="(user$ | async) as user;">
+		<ion-list>
+			<ion-list-header>
+				Verification
+			</ion-list-header>
+			<ion-item *ngIf="authData && !authData.emailVerified" class="overflow">
+				<h2>Email address</h2>
+				<p>Please verify your email address by clicking the link in the message we just sent to: {{user.email}}</p>
+				<button (click)="verifyEmail()" item-end ion-button clear>
+					Resend
+				</button>
+			</ion-item>
+			<ion-item class="overflow">
+				<h2>Google</h2>
+				<p>Connect your Homora account to your Google account for simplicity and ease.</p>
+				<button (click)="connect('google', user)" *ngIf="!hasProvider('google')" item-end ion-button clear>Connect</button>
+				<button (click)="disconnect('google', user)" *ngIf="hasProvider('google')" item-end ion-button clear>Disconnect</button>
+			</ion-item>
+			<ion-item class="overflow" item-content>
+				<h2>Facebook</h2>
+				<p>Sign in with Facebook and discover your trusted connections to hosts and guests all over the world.</p>
+				<button (click)="connect('facebook', user)" *ngIf="!hasProvider('facebook')" item-end ion-button clear>Connect</button>
+				<button (click)="disconnect('facebook', user)" *ngIf="hasProvider('facebook')" item-end ion-button clear>Disconnect</button>
+			</ion-item>
+			<ion-item class="overflow">
+				<div item-content>
+					<h2>Phone number</h2>
+					<p>Make it easier to communicate with a verified phone number. We’ll send you a code by SMS or read it to you over the phone. Enter the code below to confirm that you’re the person on the other end.</p>
+					<form [formGroup]="verify" (ngSubmit)="verifyPhone()" novalidate>
+						<ion-item>
+							<ion-label stacked text-uppercase>Phone Number</ion-label>
+							<ion-input formControlName="phone" type="text"></ion-input>
+						</ion-item>
+						<button type="submit" (click)="action='sms'" ion-button>
+							Verify via SMS
+						</button>
+						<button type="submit" (click)="action='call'" ion-button>
+							Verify via Call
+						</button>
+					</form>
+				</div>
+			</ion-item>
+		</ion-list>
+		<ion-list>
+			<ion-list-header>
+				Other
+			</ion-list-header>
+			<button ion-item (click)="logout()">
+	      Log Out
+	    </button>
+			<button ion-item (click)="closeAccount(user)">
+	      Deactivate Account
+	    </button>
+		</ion-list>
+		<ion-list>
+			<ion-list-header>
+				Feedback
+			</ion-list-header>
+			<button ion-item (click)="contact()">
+	      Email Us
+	    </button>
+		</ion-list>
+	</div>
 </ion-content>

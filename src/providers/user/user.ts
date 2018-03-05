@@ -17,7 +17,7 @@ export class UserProvider {
 
   set(user: any): void {
     this.userData = user;
-    this.set$(user);
+    if (user) this.set$(user);
   }
 
   getAuthData(): any {
@@ -33,5 +33,9 @@ export class UserProvider {
 
   get$(): Observable<User> {
     return this.user$;
+  }
+
+  getDoc(): AngularFirestoreDocument<User> {
+    return this.userDoc;
   }
 }

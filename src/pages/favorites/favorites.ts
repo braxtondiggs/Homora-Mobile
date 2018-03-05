@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController } from 'ionic-angular';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 @IonicPage({
   name: 'favorites'
@@ -9,5 +10,11 @@ import { IonicPage, NavController } from 'ionic-angular';
   templateUrl: 'favorites.html'
 })
 export class FavoritesPage {
-  constructor(public nav: NavController) { }
+  constructor(public nav: NavController, afAuth: AngularFireAuth) {
+    afAuth.authState.subscribe((user: any) => {
+      if (user) {
+        console.log(user);
+      }
+    });
+  }
 }

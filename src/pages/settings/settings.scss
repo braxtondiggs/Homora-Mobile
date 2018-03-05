@@ -1,3 +1,11 @@
 page-settings {
+  .item-block.overflow {
+    ion-label {
+      white-space: initial;
+    }
 
+    p {
+      text-overflow: initial;
+    }
+  }
 }

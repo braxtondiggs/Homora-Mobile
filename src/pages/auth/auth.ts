@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, ToastController } from 'ionic-angular';
 import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions';
-import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase/app';
 import { AuthProvider } from '../../providers/auth/auth';
 
 @IonicPage({
@@ -14,7 +12,7 @@ import { AuthProvider } from '../../providers/auth/auth';
   templateUrl: 'auth.html'
 })
 export class AuthPage {
-  constructor(private nav: NavController, private afAuth: AngularFireAuth, private nativePageTransitions: NativePageTransitions, private toast: ToastController, private auth: AuthProvider) { }
+  constructor(private nav: NavController, private nativePageTransitions: NativePageTransitions, private toast: ToastController, public auth: AuthProvider) { }
 
   login() {
     this.nav.push('login', {}, { animate: true, direction: 'forward' });
@@ -22,14 +20,6 @@ export class AuthPage {
 
   signup() {
     this.nav.push('signup', {}, { animate: true, direction: 'forward' });
-  }
-
-  facebook() {
-    this.authPromise(this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider()));
-  }
-
-  google() {
-    this.authPromise(this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()));
   }
 
   authPromise(action: Promise<any>) {

@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
+import { UserProvider } from '../../../providers/user/user';
+import { Observable } from 'rxjs/Observable';
+import { User } from '../../../models';
 
 @IonicPage({
   name: 'notifications'
@@ -9,12 +12,31 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'notifications.html',
 })
 export class NotificationsPage {
+  user$: Observable<User>;
+  constructor(private userProvider: UserProvider) { }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  save(user: User): void {
+    this.userProvider.getDoc().update(user);
+  }
+
+  defaultCheckbox(): object {
+    return {
+      email: true,
+      push: true,
+      text: false
+    }
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad NotificationsPage');
+    if (this.userProvider.getDoc()) {
+      this.user$ = this.userProvider.getDoc().snapshotChanges().map((action: any) => {
+        const data = action.payload.data();
+        data.notifications = {
+          messages: data.notifications && data.notifications.messages ? data.notifications.messages : this.defaultCheckbox(),
+          policy: data.notifications && data.notifications.policy ? data.notifications.policy : this.defaultCheckbox()
+        };
+        return ({ $key: action.payload.id, ...data });
+      });
+    }
   }
-
 }
