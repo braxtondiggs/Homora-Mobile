@@ -1,5 +1,10 @@
 <ion-header class="transparent clear-btns">
 	<ion-navbar></ion-navbar>
+	<ion-buttons *ngIf="canEditProfile()" end>
+		<button (click)="editProfile()" ion-button icon-only clear>
+			<ion-icon name="create"></ion-icon>
+		</button>
+	</ion-buttons>
 </ion-header>
 <ion-content>
 	<div *ngIf="(user$ | async) as user;">

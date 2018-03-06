@@ -17,7 +17,7 @@ export class ProfilePage {
   constructor(private nav: NavController, private userProvider: UserProvider) { }
 
   viewProfile(key: string): void {
-    this.nav.push('profileView', { key })
+    this.nav.push('profileView', { key, edit: true })
   }
 
   navSelected(page: string): void {

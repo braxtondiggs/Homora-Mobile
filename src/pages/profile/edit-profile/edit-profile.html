@@ -1,0 +1,27 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>Edit Profile</ion-title>
+		<ion-buttons end>
+			<button (click)="saveProfile()" ion-button clear>
+  			Save
+  		</button>
+		</ion-buttons>
+	</ion-navbar>
+</ion-header>
+<ion-content>
+	<form [formGroup]="profileForm" novalidate>
+		<ion-list>
+			<ion-list-header>
+				Personal Info
+			</ion-list-header>
+			<ion-item>
+				<ion-label stacked>First Name</ion-label>
+				<ion-input formControlName="firstName" type="text"></ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label stacked>Last Name</ion-label>
+				<ion-input formControlName="lastName" type="text"></ion-input>
+			</ion-item>
+		</ion-list>
+	</form>
+</ion-content>

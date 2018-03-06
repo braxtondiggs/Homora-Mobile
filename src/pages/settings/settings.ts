@@ -118,6 +118,5 @@ export class SettingsPage {
   ionViewDidLoad() {
     this.user$ = this.userProvider.getDoc().valueChanges();
     this.authData = this.userProvider.getAuthData();
-    console.log(this.user$);
   }
 }
