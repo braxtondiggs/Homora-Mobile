@@ -3,24 +3,48 @@
 		<ion-title>Edit Profile</ion-title>
 		<ion-buttons end>
 			<button (click)="saveProfile()" ion-button clear>
-  			Save
-  		</button>
+				Save
+			</button>
 		</ion-buttons>
 	</ion-navbar>
 </ion-header>
 <ion-content>
-	<form [formGroup]="profileForm" novalidate>
+	<form [formGroup]="profileForm" *ngIf="user" novalidate>
 		<ion-list>
 			<ion-list-header>
 				Personal Info
 			</ion-list-header>
 			<ion-item>
 				<ion-label stacked>First Name</ion-label>
-				<ion-input formControlName="firstName" type="text"></ion-input>
+				<ion-input formControlName="firstName" [(ngModel)]="user.firstName" type="text"></ion-input>
 			</ion-item>
 			<ion-item>
 				<ion-label stacked>Last Name</ion-label>
-				<ion-input formControlName="lastName" type="text"></ion-input>
+				<ion-input formControlName="lastName" [(ngModel)]="user.lastName" type="text"></ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label stacked>Email</ion-label>
+				<ion-input formControlName="email" [(ngModel)]="user.email" type="email"></ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label stacked>Phone</ion-label>
+				<ion-input formControlName="phone" type="tel" [(ngModel)]="user.phone" mask="(999)-999-9999"></ion-input>
+			</ion-item>
+			<ion-item>
+				<ion-label stacked>Birthdate</ion-label>
+				<ion-datetime formControlName="birthdate" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [max]="maxBirthDate" [(ngModel)]="user.birthdate"></ion-datetime>
+			</ion-item>
+			<ion-item>
+				<ion-label stacked>About Me</ion-label>
+				<ion-textarea formControlName="description" [(ngModel)]="user.description"></ion-textarea>
+			</ion-item>
+			<ion-item>
+				<ion-label stacked>Move in Date</ion-label>
+				<ion-datetime formControlName="moveInDate" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minMoveDate" [(ngModel)]="user.moveInDate"></ion-datetime>
+			</ion-item>
+			<ion-item>
+				<!--<ion-label>step=100, snaps, </ion-label>
+				<ion-range [(ngModel)]="budget" min="0" max="5000"></ion-range>-->
 			</ion-item>
 		</ion-list>
 	</form>

@@ -21,7 +21,6 @@ export class ProfileViewPage {
   constructor(private afs: AngularFirestore, private navParams: NavParams, private nav: NavController) { }
 
   canEditProfile(): boolean {
-    console.log(!isEmpty(this.key), this.edit);
     return !isEmpty(this.key) && this.edit;
   }
 
