@@ -13,6 +13,7 @@ import { GoogleMaps } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Facebook } from '@ionic-native/facebook';
 import { NativePageTransitions } from '@ionic-native/native-page-transitions';
+import { Camera } from '@ionic-native/camera';
 
 import { MyApp } from './app.component';
 import { ListingReadMore } from '../pages/listings/listing/listing';
@@ -43,6 +44,7 @@ import { UserProvider } from '../providers/user/user';
     GoogleMaps,
     Geolocation,
     Facebook,
+    Camera,
     NativePageTransitions,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthProvider,

@@ -1,5 +1,4 @@
 import { Image } from './image.model';
-import { Location } from './location.model';
 import { Notifications } from './notifications.model';
 
 export interface User {
@@ -11,7 +10,8 @@ export interface User {
   lastName: string;
   phone?: number,
   moveInDate?: Date | string;
-  location?: Location;
+  location?: string;
+  gender?: string;
   notifications?: Notifications;
   providerData?: any;
 }

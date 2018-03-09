@@ -20,6 +20,7 @@
     "@angular/http": "5.0.3",
     "@angular/platform-browser": "5.0.3",
     "@angular/platform-browser-dynamic": "5.0.3",
+    "@ionic-native/camera": "^4.5.3",
     "@ionic-native/core": "4.4.0",
     "@ionic-native/facebook": "^4.5.3",
     "@ionic-native/geolocation": "^4.5.3",
@@ -33,6 +34,7 @@
     "angularfire2": "^5.0.0-rc.5-next",
     "com.telerik.plugins.nativepagetransitions": "^0.6.5",
     "cordova-android": "^7.1.0",
+    "cordova-plugin-camera": "^4.0.2",
     "cordova-plugin-device": "^2.0.1",
     "cordova-plugin-geolocation": "^4.0.1",
     "cordova-plugin-googlemaps": "^2.2.5",
@@ -67,7 +69,8 @@
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-statusbar": {},
       "cordova-plugin-geolocation": {},
-      "com.telerik.plugins.nativepagetransitions": {}
+      "com.telerik.plugins.nativepagetransitions": {},
+      "cordova-plugin-camera": {}
     },
     "platforms": [
       "android"

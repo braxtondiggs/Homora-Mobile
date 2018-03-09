@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AlertController, LoadingController, NavController, IonicPage } from 'ionic-angular';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 import { AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { UserProvider } from '../../../providers/user/user';
@@ -20,19 +21,21 @@ export class EditProfilePage {
   profileForm: FormGroup;
   maxBirthDate: string = moment().subtract(18, 'y').format();
   minMoveDate: string = moment().format();
-  constructor(private userProvider: UserProvider, private formBuilder: FormBuilder, private alert: AlertController, private loading: LoadingController, private nav: NavController) {
+  constructor(private userProvider: UserProvider, private formBuilder: FormBuilder, private alert: AlertController, private loading: LoadingController, private nav: NavController, private camera: Camera) {
     this.profileForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
+      gender: ['', Validators.required],
       email: ['', Validators.required],
       phone: ['', Validators.required],
       birthdate: ['', Validators.required],
+      location: [''],
       description: ['', Validators.required],
-      moveInDate: ['', Validators.required]
+      moveInDate: ['']
     });
   }
 
-  saveProfile() {
+  saveProfile(): void {
     if (this.profileForm.valid) {
       this.user.birthdate = moment(this.user.birthdate).toDate();
       this.user.moveInDate = moment(this.user.moveInDate).toDate();
@@ -56,7 +59,19 @@ export class EditProfilePage {
     }
   }
 
-  editPhoto() { }
+  editPhoto(): void {
+    this.alert.create({
+      title: 'Take Picture',
+      message: 'Take a new photo or select one from your existing photo library.',
+      buttons: [{
+        text: 'Gallery',
+        handler: () => this.openCamera('gallery')
+      }, {
+        text: 'Camera',
+        handler: () => this.openCamera('camera')
+      }]
+    }).present();
+  }
 
   ionViewDidLoad() {
     this.userDoc = this.userProvider.getDoc();
@@ -64,6 +79,20 @@ export class EditProfilePage {
       this.user = user;
       this.user.birthdate = moment(user.birthdate).format('YYYY-MM-DD');
       this.user.moveInDate = moment(user.moveInDate).format('YYYY-MM-DD');
+    });
+  }
+
+  private openCamera(type: string): void {
+    this.camera.getPicture({
+      quality: 70,
+      destinationType: type === 'camera' ? this.camera.DestinationType.DATA_URL : this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    } as CameraOptions).then((image) => {
+      let base64Image = 'data:image/jpeg;base64,' + image;
+      // TODO: Upload Image
+    }, (err) => {
+      // TODO: Handle error
     });
   }
 }

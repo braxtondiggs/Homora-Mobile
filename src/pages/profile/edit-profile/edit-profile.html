@@ -10,6 +10,11 @@
 </ion-header>
 <ion-content>
 	<form [formGroup]="profileForm" *ngIf="user" novalidate>
+		<ion-slides centeredSlides="false" (click)="editPhoto()">
+			<ion-slide *ngFor="let image of user.images">
+				<img [attr.src]="image.src" alt="{{user.firstName}}" />
+			</ion-slide>
+		</ion-slides>
 		<ion-list>
 			<ion-list-header>
 				Personal Info
@@ -23,6 +28,13 @@
 				<ion-input formControlName="lastName" [(ngModel)]="user.lastName" type="text"></ion-input>
 			</ion-item>
 			<ion-item>
+				<ion-label>Gender</ion-label>
+				<ion-select formControlName="gender" [(ngModel)]="user.gender">
+					<ion-option value="Female">Female</ion-option>
+					<ion-option value="Male">Male</ion-option>
+				</ion-select>
+			</ion-item>
+			<ion-item>
 				<ion-label stacked>Email</ion-label>
 				<ion-input formControlName="email" [(ngModel)]="user.email" type="email"></ion-input>
 			</ion-item>
@@ -33,6 +45,10 @@
 			<ion-item>
 				<ion-label stacked>Birthdate</ion-label>
 				<ion-datetime formControlName="birthdate" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [max]="maxBirthDate" [(ngModel)]="user.birthdate"></ion-datetime>
+			</ion-item>
+			<ion-item>
+				<ion-label stacked>Where You Live</ion-label>
+				<ion-input formControlName="location" [(ngModel)]="user.location" type="text"></ion-input>
 			</ion-item>
 			<ion-item>
 				<ion-label stacked>About Me</ion-label>
