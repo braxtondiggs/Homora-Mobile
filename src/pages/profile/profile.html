@@ -16,7 +16,7 @@
 			<ion-icon name="notifications" item-end></ion-icon>
 		</button>
 		<button (click)="switchAccount()" ion-item>
-			Switch to Lister Mode
+			Switch to {{accountType() ? 'Lister' : 'Mover'}} Mode
 			<ion-icon name="swap" item-end></ion-icon>
 		</button>
 		<button (click)="gotoSettings()" ion-item>

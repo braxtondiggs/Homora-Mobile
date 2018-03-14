@@ -30,6 +30,10 @@ export class ProfilePage {
     window.location.reload();
   }
 
+  accountType(): boolean {
+    return localStorage.getItem('account') === 'basic';
+  }
+
   ionViewDidLoad() {
     this.user$ = this.userProvider.get$();
   }

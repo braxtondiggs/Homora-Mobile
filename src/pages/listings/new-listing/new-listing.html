@@ -1,3 +1,132 @@
-<ion-content padding>
-	New Listing
+<ion-header class="transparent" no-border>
+	<ion-buttons start>
+		<button ion-button icon-start icon-only (click)="prev()" clear>
+				<ion-icon name="arrow-back"></ion-icon>
+			</button>
+	</ion-buttons>
+</ion-header>
+<ion-content>
+	<form [formGroup]="listingForm" novalidate>
+		<ion-slides initialSlide="3">
+			<ion-slide padding>
+				<h1>Describe your place on Homora</h1>
+				<ion-list>
+					<ion-item>
+						<ion-label stacked>Name your place</ion-label>
+						<ion-input formControlName="title" [(ngModel)]="listing.title" type="text"></ion-input>
+					</ion-item>
+					<ion-item>
+						<ion-label stacked>Summary</ion-label>
+						<ion-textarea formControlName="summary" [(ngModel)]="listing.summary" rows="10" placeholder="Tell your future roommate the details that make your apartment unique!"></ion-textarea>
+					</ion-item>
+					<ion-item></ion-item>
+				</ion-list>
+			</ion-slide>
+			<ion-slide padding>
+				<h1>Where’s your place located?</h1>
+				<ion-list>
+					<ion-item>
+						<ion-label stacked>Street Address</ion-label>
+						<ion-input formControlName="address1" [(ngModel)]="listing.location.address1" type="text"></ion-input>
+					</ion-item>
+					<ion-item>
+						<ion-label stacked>Apt, Suite, Bldg. (optional)</ion-label>
+						<ion-input formControlName="address2" [(ngModel)]="listing.location.address2" type="text"></ion-input>
+					</ion-item>
+					<ion-row>
+						<ion-item col-6>
+							<ion-label stacked>City</ion-label>
+							<ion-input formControlName="city" [(ngModel)]="listing.location.city" type="text"></ion-input>
+						</ion-item>
+						<ion-item col-6>
+							<ion-label stacked>State</ion-label>
+							<ion-select formControlName="state" [(ngModel)]="listing.location.state">
+								<ion-option value="DC">District of Columbia</ion-option>
+								<ion-option value="MD">Maryland</ion-option>
+								<ion-option value="VA">Virginia</ion-option>
+							</ion-select>
+						</ion-item>
+					</ion-row>
+					<ion-item>
+						<ion-label stacked>Zip Code</ion-label>
+						<ion-input formControlName="zip" [(ngModel)]="listing.location.zip" type="text"></ion-input>
+					</ion-item>
+					<ion-item class="checkbox">
+						<ion-label>Would you like to make your address private?</ion-label>
+						<ion-checkbox formControlName="private" [(ngModel)]="listing.location.private"></ion-checkbox>
+					</ion-item>
+				</ion-list>
+			</ion-slide>
+			<ion-slide padding>
+				<h1>Who do you want your next roommate to be?</h1>
+				<h3 padding>Gender</h3>
+				<ion-segment formControlName="gender" [(ngModel)]="listing.roommate.gender">
+					<ion-segment-button value="all">
+						<ion-icon name="man"></ion-icon>
+						<ion-icon name="woman"></ion-icon>
+						<div class="segment-label">Male or Female</div>
+					</ion-segment-button>
+					<ion-segment-button value="male">
+						<ion-icon name="man"></ion-icon>
+						<div class="segment-label">Male</div>
+					</ion-segment-button>
+					<ion-segment-button value="female">
+						<ion-icon name="woman"></ion-icon>
+						<div class="segment-label">Female</div>
+					</ion-segment-button>
+				</ion-segment>
+				<h3 class="age-title" padding>Age</h3>
+				<ion-list>
+					<ion-item>
+						<ion-label>Early 20s</ion-label>
+						<ion-checkbox formControlName="groupEarly20" [(ngModel)]="listing.roommate.age.groupEarly20"></ion-checkbox>
+					</ion-item>
+					<ion-item>
+						<ion-label>Late 20s</ion-label>
+						<ion-checkbox formControlName="groupLate20" [(ngModel)]="listing.roommate.age.groupLate20"></ion-checkbox>
+					</ion-item>
+					<ion-item>
+						<ion-label>30s</ion-label>
+						<ion-checkbox formControlName="group30" [(ngModel)]="listing.roommate.age.group30"></ion-checkbox>
+					</ion-item>
+					<ion-item>
+						<ion-label>40s and older</ion-label>
+						<ion-checkbox formControlName="group40older" [(ngModel)]="listing.roommate.age.group40older"></ion-checkbox>
+					</ion-item>
+				</ion-list>
+			</ion-slide>
+			<ion-slide padding>
+				<h1>What's the cost? When is the room available?</h1>
+				<ion-list>
+					<ion-item>
+						<ion-label stacked>Monthly Rent</ion-label>
+						<ion-input formControlName="price" [(ngModel)]="listing.price" type="number"></ion-input>
+					</ion-item>
+					<ion-item>
+						<ion-label stacked>Deposit</ion-label>
+						<ion-input formControlName="deposit" [(ngModel)]="listing.deposit" type="number"></ion-input>
+					</ion-item>
+					<ion-item>
+						<ion-label stacked>Start Date</ion-label>
+						<ion-datetime formControlName="availability" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minAvailability" [(ngModel)]="listing.availability"></ion-datetime>
+					</ion-item>
+					<ion-list-header class="range-header">
+						<h3 text-center><strong>Lease Duration</strong></h3>
+					</ion-list-header>
+					<ion-list-header class="range-header">
+						<div item-start>{{rangeLabelLower}}</div>
+						<div item-end>{{rangeLabelUpper}}</div>
+					</ion-list-header>
+					<ion-item>
+						<ion-range formControlName="duration" [(ngModel)]="listing.duration" (ionChange)="durationChange()" min="1" max="12" dualKnobs="true"></ion-range>
+					</ion-item>
+				</ion-list>
+			</ion-slide>
+		</ion-slides>
+		<ion-fab right bottom>
+			<button ion-fab (click)="next()">
+				Next&nbsp;<ion-icon name="ios-arrow-forward"></ion-icon>
+			</button>
+		</ion-fab>
+	</form>
 </ion-content>

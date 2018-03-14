@@ -1,3 +1,49 @@
 page-new-listing {
+  ion-slide.swiper-slide {
+    align-items: flex-start;
 
+    .slide-zoom {
+      text-align: initial;
+    }
+  }
+
+  h1 {
+    font-weight: bold;
+    margin-bottom: 36px;
+  }
+
+  ion-item.checkbox {
+    margin-top: 24px;
+
+    ion-checkbox {
+      margin: 9px 16px 9px 4px !important;
+    }
+
+    ion-label {
+      white-space: initial !important;
+    }
+  }
+
+  .age-title {
+    margin-top: 24px;
+  }
+
+  ion-segment .segment-button {
+    height: auto!important;
+    padding-top: 10px !important;
+
+    ion-icon {
+      font-size: 5rem !important;
+    }
+
+    .segment-label {
+      line-height: normal;
+      margin-bottom: 5px;
+    }
+  }
+
+  .range-header {
+    border: 0;
+    margin: 0;
+  }
 }
