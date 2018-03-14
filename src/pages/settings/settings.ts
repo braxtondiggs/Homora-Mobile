@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { IonicPage, AlertController, ToastController, NavController } from 'ionic-angular';
+import { AlertController, ToastController, NavController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { AuthProvider } from '../../providers/auth/auth';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -8,13 +8,9 @@ import * as firebase from 'firebase/app';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { Observable } from 'rxjs/Observable';
 import { User } from '../../models';
+import { IntroPage } from '../intro';
 import { findIndex } from 'lodash';
 
-@IonicPage({
-  name: 'settings',
-  segment: 'settings',
-  defaultHistory: ['profile']
-})
 @Component({
   selector: 'page-settings',
   templateUrl: 'settings.html',
@@ -82,8 +78,10 @@ export class SettingsPage {
                 this.authData.signOut(),
                 this.userProvider.getDoc().delete()
               ]).subscribe(() => {
-                this.nav.setRoot('listings');
-                this.showToast('Account has been deleted successfully!');
+                localStorage.clear();
+                this.nav.setRoot(IntroPage).then(() => {
+                  this.showToast('Account has been deleted successfully!');
+                });
               });
             });
           });
@@ -94,8 +92,10 @@ export class SettingsPage {
 
   logout(): void {
     this.afAuth.auth.signOut().then(() => {
-      this.nav.setRoot('listings');
-      this.showToast('Log out Successful!');
+      localStorage.clear();
+      this.nav.setRoot(IntroPage).then(() => {
+        this.showToast('Log out Successful!');
+      });
     });
   }
 

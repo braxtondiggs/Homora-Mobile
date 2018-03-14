@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, LoadingController, NavController, IonicPage } from 'ionic-angular';
+import { AlertController, LoadingController, NavController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
@@ -8,9 +8,6 @@ import { User } from '../../../models';
 import { join, isEmpty, map, reject, startCase } from 'lodash';
 import * as  moment from 'moment';
 
-@IonicPage({
-  name: 'editProfile',
-})
 @Component({
   selector: 'page-edit-profile',
   templateUrl: 'edit-profile.html'
@@ -89,7 +86,8 @@ export class EditProfilePage {
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
     } as CameraOptions).then((image) => {
-      let base64Image = 'data:image/jpeg;base64,' + image;
+      let base64Image = `data:image/jpeg;base64,${image}`;
+      console.log(base64Image);
       // TODO: Upload Image
     }, (err) => {
       // TODO: Handle error

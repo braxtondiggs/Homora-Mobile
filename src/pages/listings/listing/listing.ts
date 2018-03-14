@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavParams, NavController, ModalController, ViewController } from 'ionic-angular';
+import { NavParams, NavController, ModalController, ViewController } from 'ionic-angular';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { Listing, User } from '../../../models';
+import { ProfileViewPage } from '../../profile';
 import { truncate } from 'lodash';
 
-@IonicPage({
-  name: 'listing',
-  segment: 'listing/:key'
-})
+
 @Component({
   selector: 'page-listing',
   templateUrl: 'listing.html',
@@ -24,7 +22,7 @@ export class ListingPage {
   }
 
   viewProfile(key: string): void {
-    this.nav.push('profileView', { key });
+    this.nav.push(ProfileViewPage, { key });
   }
 
   contact(key: any): void {

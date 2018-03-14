@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, LoadingController, ModalController, NavController } from 'ionic-angular';
+import { LoadingController, ModalController, NavController } from 'ionic-angular';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { FilterComponent, MapsComponent } from '../../components';
 import { Observable } from 'rxjs/Observable';
 import { Listing, User } from '../../models';
+import { ListingPage } from './listing/listing';
+import { ProfileViewPage } from '../profile';
 
-@IonicPage({
-  name: 'listings'
-})
 @Component({
   selector: 'listings',
   templateUrl: 'listings.html'
@@ -18,12 +17,12 @@ export class ListingsPage {
   constructor(private afs: AngularFirestore, private loading: LoadingController, private modal: ModalController, private nav: NavController) { }
 
   viewListing(key: string): void {
-    this.nav.push('listing', { key });
+    this.nav.push(ListingPage, { key });
   }
 
   viewProfile(key: string, event: Event): void {
     event.stopPropagation();
-    this.nav.push('profileView', { key });
+    this.nav.push(ProfileViewPage, { key });
   }
   openMaps(): void {
     this.modal.create(MapsComponent).present();

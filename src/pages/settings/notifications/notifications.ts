@@ -1,13 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
 import { UserProvider } from '../../../providers/user/user';
 import { Observable } from 'rxjs/Observable';
 import { User } from '../../../models';
 
-@IonicPage({
-  name: 'notifications',
-  defaultHistory: ['profile']
-})
 @Component({
   selector: 'page-notifications',
   templateUrl: 'notifications.html',

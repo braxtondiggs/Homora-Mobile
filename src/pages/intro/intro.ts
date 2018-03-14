@@ -1,10 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, Slides, IonicPage } from 'ionic-angular';
+import { NavController, Slides } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
+import { MainPage } from '../main';
+import { AuthPage } from '../auth';
 
-@IonicPage({
-  name: 'intro'
-})
 @Component({
   selector: 'page-intro',
   templateUrl: 'intro.html',
@@ -16,12 +15,12 @@ export class IntroPage {
 
   gotoMainPage() {
     this.auth.skipIntro();
-    this.nav.push('main', {}, { animate: false }).then(() => {
+    this.nav.push(MainPage, {}, { animate: false }).then(() => {
       this.nav.remove(0, this.nav.getActive().index);
     });
   }
 
   openAuthPage() {
-    this.nav.push('auth');
+    this.nav.push(AuthPage);
   }
 }

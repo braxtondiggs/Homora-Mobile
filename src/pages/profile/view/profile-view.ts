@@ -1,14 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { User } from '../../../models/';
+import { EditProfilePage } from '../edit-profile/edit-profile';
 import { isEmpty } from 'lodash';
 
-@IonicPage({
-  name: 'profileView',
-  segment: 'profile/:key/:edit'
-})
 @Component({
   selector: 'page-profile-view',
   templateUrl: 'profile-view.html',
@@ -25,7 +22,7 @@ export class ProfileViewPage {
   }
 
   editProfile(): void {
-    this.nav.push('editProfile');
+    this.nav.push(EditProfilePage);
   }
 
   ionViewCanEnter() {

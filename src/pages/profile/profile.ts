@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { Observable } from 'rxjs/Observable';
 import { User } from '../../models';
+import { ProfileViewPage } from './view/profile-view';
+import { NotificationsPage, SettingsPage } from '../settings';
 
-@IonicPage({
-  name: 'profile',
-  segment: 'profile'
-})
 @Component({
   selector: 'page-profile',
   templateUrl: 'profile.html',
@@ -17,11 +15,19 @@ export class ProfilePage {
   constructor(private nav: NavController, private userProvider: UserProvider) { }
 
   viewProfile(key: string): void {
-    this.nav.push('profileView', { key, edit: true })
+    this.nav.push(ProfileViewPage, { key, edit: true })
+  }
+  gotoSettings(): void {
+    this.nav.push(SettingsPage, {});
   }
 
-  navSelected(page: string): void {
-    this.nav.push(page, {});
+  gotoNotification(): void {
+    this.nav.push(NotificationsPage, {});
+  }
+
+  switchAccount(): void {
+    localStorage.setItem('account', localStorage.getItem('account') === 'lister' ? 'basic' : 'lister');
+    window.location.reload();
   }
 
   ionViewDidLoad() {

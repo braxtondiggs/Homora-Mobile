@@ -16,15 +16,16 @@ import { NativePageTransitions } from '@ionic-native/native-page-transitions';
 import { Camera } from '@ionic-native/camera';
 
 import { MyApp } from './app.component';
-import { ListingReadMore } from '../pages/listings/listing/listing';
+import { PagesModule } from '../pages/pages.module';
 import { ComponentsModule } from '../components/components.module';
 import { environment } from './app.environment';
 import { AuthProvider } from '../providers/auth/auth';
 import { UserProvider } from '../providers/user/user';
 
 @NgModule({
-  declarations: [MyApp, ListingReadMore],
+  declarations: [MyApp],
   imports: [
+    PagesModule,
     ComponentsModule,
     ReactiveFormsModule,
     BrowserModule,
@@ -37,7 +38,7 @@ import { UserProvider } from '../providers/user/user';
     AngularFireModule.initializeApp(environment.firebase)
   ],
   bootstrap: [IonicApp],
-  entryComponents: [MyApp, ListingReadMore],
+  entryComponents: [MyApp],
   providers: [
     StatusBar,
     SplashScreen,

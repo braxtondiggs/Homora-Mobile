@@ -1,12 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 
-@IonicPage({
-  name: 'reset',
-  defaultHistory: ['main', 'auth', 'login']
-})
 @Component({
   selector: 'reset-page',
   templateUrl: 'reset.html',
