@@ -46,4 +46,52 @@ page-new-listing {
     border: 0;
     margin: 0;
   }
+
+  .grid.amenities .col,
+  .grid.rules .col {
+    padding: 8px;
+    text-align: center;
+
+    [class*=" icon-"]:not(.icon-md),
+    [class^="icon-"]:not(.icon-md) {
+      font-size: 32px;
+    }
+
+    h4 {
+      font-size: 1.25rem;
+      margin: 8px 0;
+    }
+
+    input {
+      display: none;
+    }
+
+    input[type=checkbox]:checked {
+      ~ [class*=" icon-"]:not(.icon-md),
+      ~ [class^="icon-"]:not(.icon-md),
+      ~ h4 {
+        color: #e67e22;
+      }
+    }
+  }
+
+  .grid.photo-container {
+    .col {
+      background-color: #ecf0f1;
+
+      ion-icon {
+        font-size: 60px;
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%,-50%);
+      }
+    }
+
+    .header-image {
+      .col {
+        height: 300px;
+      }
+    }
+  }
 }

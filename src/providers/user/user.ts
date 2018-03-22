@@ -7,6 +7,7 @@ import { User } from '../../models';
 @Injectable()
 export class UserProvider {
   userData: any;
+  user: User;
   user$: Observable<User>;
   userDoc: AngularFirestoreDocument<User>;
   constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) { }
@@ -15,7 +16,7 @@ export class UserProvider {
     return this.afAuth.authState;
   }
 
-  set(user: any): void {
+  setAuth(user: any): void {
     this.userData = user;
     if (user) this.set$(user);
   }
@@ -37,5 +38,13 @@ export class UserProvider {
 
   getDoc(): AngularFirestoreDocument<User> {
     return this.userDoc;
+  }
+
+  get(): User {
+    return this.user;
+  }
+
+  set(user: User): void {
+    this.user = user;
   }
 }

@@ -6,8 +6,8 @@
 	</ion-buttons>
 </ion-header>
 <ion-content>
-	<form [formGroup]="listingForm" novalidate>
-		<ion-slides initialSlide="3">
+	<form [formGroup]="listingForm" *ngIf="listing" novalidate>
+		<ion-slides>
 			<ion-slide padding>
 				<h1>Describe your place on Homora</h1>
 				<ion-list>
@@ -121,6 +121,158 @@
 						<ion-range formControlName="duration" [(ngModel)]="listing.duration" (ionChange)="durationChange()" min="1" max="12" dualKnobs="true"></ion-range>
 					</ion-item>
 				</ion-list>
+			</ion-slide>
+			<ion-slide padding>
+				<h1>What's some of the cool amenities does the room come with?</h1>
+				<ion-grid class="amenities">
+					<ion-row>
+						<ion-col (click)="select('amenities', 'washer')">
+							<input formControlName="washer" [(ngModel)]="listing.amenities.washer" type="checkbox" />
+							<div class="icon-laundry"></div>
+							<h4>In-unit Washer</h4>
+						</ion-col>
+						<ion-col (click)="select('amenities', 'wifi')">
+							<input formControlName="wifi" [(ngModel)]="listing.amenities.wifi" type="checkbox" />
+							<div class="icon-wifi"></div>
+							<h4>Wifi Included</h4>
+						</ion-col>
+						<ion-col (click)="select('amenities', 'water')">
+							<input formControlName="water" [(ngModel)]="listing.amenities.water" type="checkbox" />
+							<div class="icon-drop2"></div>
+							<h4>Water Included</h4>
+						</ion-col>
+						<ion-col (click)="select('amenities', 'electricity')">
+							<input formControlName="electricity" [(ngModel)]="listing.amenities.electricity" type="checkbox" />
+							<div class="icon-outlet"></div>
+							<h4>Electricty Included</h4>
+						</ion-col>
+						<ion-col (click)="select('amenities', 'furnished')">
+							<input formControlName="furnished" [(ngModel)]="listing.amenities.furnished" type="checkbox" />
+							<div class="icon-couch"></div>
+							<h4>Furnished</h4>
+						</ion-col>
+					</ion-row>
+					<ion-row>
+						<ion-col (click)="select('amenities', 'doorman')">
+							<input formControlName="doorman" [(ngModel)]="listing.amenities.doorman" type="checkbox" />
+							<div class="icon-hand-waving"></div>
+							<h4>Doorman</h4>
+						</ion-col>
+						<ion-col (click)="select('amenities', 'air')">
+							<input formControlName="air" [(ngModel)]="listing.amenities.air" type="checkbox" />
+							<div class="icon-fan"></div>
+							<h4>Air Conditioning</h4>
+						</ion-col>
+						<ion-col (click)="select('amenities', 'heating')">
+							<input formControlName="heating" [(ngModel)]="listing.amenities.heating" type="checkbox" />
+							<div class="icon-thermometer"></div>
+							<h4>Heating</h4>
+						</ion-col>
+						<ion-col (click)="select('amenities', 'month')">
+							<input formControlName="month" [(ngModel)]="listing.amenities.month" type="checkbox" />
+							<div class="icon-calendar-full"></div>
+							<h4>Month-to-Month</h4>
+						</ion-col>
+						<ion-col (click)="select('amenities', 'gym')">
+							<input formControlName="gym" [(ngModel)]="listing.amenities.gym" type="checkbox" />
+							<div class="icon-bench-press"></div>
+							<h4>Gym</h4>
+						</ion-col>
+					</ion-row>
+					<ion-row>
+						<ion-col (click)="select('amenities', 'tv')">
+							<input formControlName="tv" [(ngModel)]="listing.amenities.tv" type="checkbox" />
+							<div class="icon-tv"></div>
+							<h4>Television</h4>
+						</ion-col>
+						<ion-col (click)="select('amenities', 'bathroom')">
+							<input formControlName="bathroom" [(ngModel)]="listing.amenities.bathroom" type="checkbox" />
+							<div class="icon-bathtub"></div>
+							<h4>Private Bathroom</h4>
+						</ion-col>
+						<ion-col (click)="select('amenities', 'dog')">
+							<input formControlName="dog" [(ngModel)]="listing.amenities.dog" type="checkbox" />
+							<div class="icon-bone"></div>
+							<h4>Has Dog</h4>
+						</ion-col>
+						<ion-col (click)="select('amenities', 'cat')">
+							<input formControlName="cat" [(ngModel)]="listing.amenities.cat" type="checkbox" />
+							<div class="icon-paw"></div>
+							<h4>Has Cat</h4>
+						</ion-col>
+						<ion-col (click)="select('amenities', 'otherPet')">
+							<input formControlName="otherPet" [(ngModel)]="listing.amenities.otherPet" type="checkbox" />
+							<div class="icon-fish"></div>
+							<h4>Has Other Pet</h4>
+						</ion-col>
+					</ion-row>
+				</ion-grid>
+				<h1>Any house rules?</h1>
+				<ion-grid class="rules">
+					<ion-row>
+						<ion-col (click)="select('rules', 'smoking')">
+							<input formControlName="smoking" [(ngModel)]="listing.rules.smoking" type="checkbox" />
+							<div class="icon-border-outer"></div>
+							<h4>No Smoking</h4>
+						</ion-col>
+						<ion-col (click)="select('rules', 'pets')">
+							<input formControlName="pets" [(ngModel)]="listing.rules.pets" type="checkbox" />
+							<div class="icon-border-outer"></div>
+							<h4>No Pets</h4>
+						</ion-col>
+						<ion-col (click)="select('rules', 'drugs')">
+							<input formControlName="drugs" [(ngModel)]="listing.rules.drugs" type="checkbox" />
+							<div class="icon-border-outer"></div>
+							<h4>No Drugs</h4>
+						</ion-col>
+						<ion-col (click)="select('rules', 'drinking')">
+							<input formControlName="drinking" [(ngModel)]="listing.rules.drinking" type="checkbox" />
+							<div class="icon-border-outer"></div>
+							<h4>No Drinking</h4>
+						</ion-col>
+						<ion-col (click)="select('rules', 'dogOk')">
+							<input formControlName="dogOk" [(ngModel)]="listing.rules.dogOk" type="checkbox" />
+							<div class="icon-bone"></div>
+							<h4>Dogs Ok</h4>
+						</ion-col>
+					</ion-row>
+					<ion-row>
+						<ion-col (click)="select('rules', 'catOk')">
+							<input formControlName="catOk" [(ngModel)]="listing.rules.catOk" type="checkbox" />
+							<div class="icon-paw"></div>
+							<h4>Cats Ok</h4>
+						</ion-col>
+						<ion-col (click)="select('rules', 'otherPetOk')">
+							<input formControlName="otherPetOk" [(ngModel)]="listing.rules.otherPetOk" type="checkbox" />
+							<div class="icon-fish"></div>
+							<h4>Other Pets OK</h4>
+						</ion-col>
+						<ion-col (click)="select('rules', 'couplesOk')">
+							<input formControlName="couplesOk" [(ngModel)]="listing.rules.couplesOk" type="checkbox" />
+							<div class="icon-man-woman"></div>
+							<h4>Couple Ok</h4>
+						</ion-col>
+						<ion-col></ion-col>
+						<ion-col></ion-col>
+					</ion-row>
+				</ion-grid>
+			</ion-slide>
+			<ion-slide padding>
+				<h1>Add some photos of your place.</h1>
+				<ion-grid class="photo-container">
+					<ion-row class="header-image">
+						<ion-col (click)="editPhoto()">
+							<ion-icon name="images"></ion-icon>
+							<!--<img src="" alt />-->
+						</ion-col>
+					</ion-row>
+					<ion-row class="additional-images" *ngIf="listing.images">
+						<ion-col *ngFor="let image of listing.images" (click)="editPhoto()">
+							<ion-icon name="images"></ion-icon>
+							<!--<img src="" alt />-->
+						</ion-col>
+					</ion-row>
+				</ion-grid>
 			</ion-slide>
 		</ion-slides>
 		<ion-fab right bottom>

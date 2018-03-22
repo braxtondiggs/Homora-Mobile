@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, Content } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
+import { User } from '../../models';
 import { AuthPage } from '../auth';
 import { ListingsPage, ListerPage, NewListingPage } from '../listings';
 import { FavoritesPage } from '../favorites';
@@ -12,7 +13,8 @@ import { ProfilePage } from '../profile';
   templateUrl: 'main.html'
 })
 export class MainPage {
-  user: any;
+  auth: any;
+  user: User;
   accountType: string = 'basic';
   loading: boolean = true;
   @ViewChild(Content) content: Content;
@@ -36,12 +38,16 @@ export class MainPage {
   }
 
   ionViewDidLoad() {
-    this.userProvider.getAuth().subscribe((user) => {
+    this.userProvider.getAuth().subscribe((auth: any) => {
       this.accountType = localStorage.getItem('account') ? localStorage.getItem('account') : 'basic';
-      this.userProvider.set(user);
-      this.user = user;
+      this.userProvider.setAuth(auth);
+      this.auth = auth;
       this.loading = false;
       this.content.resize();
+      this.userProvider.get$().subscribe((user: User) => {
+        this.user = user
+        this.userProvider.set(user);
+      })
     });
   }
 }
