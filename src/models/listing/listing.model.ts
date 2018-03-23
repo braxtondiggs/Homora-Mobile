@@ -1,41 +1,40 @@
-import * as moment from 'moment';
-import { Image } from './image.model';
+import { ListingInterface } from '../../interface/listing/listing.interface';
 import { Location } from './location.model';
 import { Roommate } from './roommate.model';
 import { Amenities } from './amenities.model';
 import { Rules } from './rules.model';
-import { AngularFirestoreDocument } from 'angularfire2/firestore';
-import { User } from '../../models';
+import { merge, toNumber } from 'lodash';
+import * as moment from 'moment';
 
-export class Listing {
-  availability: Date;
-  created: Date;
-  createdBy: any;
-  $key?: string;
-  images?: Image[];
-  roommate: Roommate;
-  location: Location;
-  duration: { lower: number, upper: number };
-  amenities: Amenities;
-  rules: Rules;
-  deposit: number;
-  price: number;
-  status: string;
-  summary: string;
-  title: string;
+export class Listing implements ListingInterface {
+  constructor(
+    public availability = moment().toDate(),
+    public created = moment().toDate(),
+    public createdBy = null,
+    public duration = { lower: 1, upper: 12 },
+    public amenities = new Amenities(),
+    public rules = new Rules(),
+    public roommate = new Roommate(),
+    public location = new Location(),
+    public images = [],
+    public deposit = null,
+    public price = null,
+    public status = 'draft',
+    public summary = null,
+    public title = null
+  ) { }
 
-  constructor() {
-    this.availability = moment().toDate();
-    this.created = moment().toDate();
-    this.duration = { lower: 1, upper: 12 };
-    this.amenities = new Amenities();
-    this.rules = new Rules();
-    this.roommate = new Roommate();
-    this.location = new Location();
-    this.deposit = null;
-    this.price = null;
-    this.status = 'draft';
-    this.summary = null;
-    this.title = null;
+  formattedData(listing: Listing) {
+    return merge(listing, {
+      amenities: Object.assign({}, listing.amenities),
+      rules: Object.assign({}, listing.rules),
+      roommate: {
+        gender: listing.roommate.gender,
+        age: Object.assign({}, listing.roommate.age),
+      },
+      location: Object.assign({}, listing.location),
+      deposit: toNumber(listing.deposit),
+      price: toNumber(listing.price)
+    })
   }
 }

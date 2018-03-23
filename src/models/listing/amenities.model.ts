@@ -1,35 +1,21 @@
-export class Amenities {
-  washer: boolean;
-  wifi: boolean;
-  water: boolean;
-  electricity: boolean;
-  furnished: boolean;
-  doorman: boolean;
-  air: boolean;
-  heating: boolean;
-  month: boolean;
-  gym: boolean;
-  tv: boolean;
-  bathroom: boolean;
-  dog: boolean;
-  cat: boolean;
-  otherPet: boolean;
+import { AmenitiesInterface } from '../../interface/listing/amenities.interface';
 
-  constructor() {
-    this.washer = false;
-    this.wifi = false;
-    this.water = false;
-    this.electricity = false;
-    this.furnished = false;
-    this.doorman = false;
-    this.air = false;
-    this.heating = false;
-    this.month = false;
-    this.gym = false;
-    this.tv = false;
-    this.bathroom = false;
-    this.dog = false;
-    this.cat = false;
-    this.otherPet = false;
-  }
+export class Amenities implements AmenitiesInterface {
+  constructor(
+    public washer = false,
+    public wifi = false,
+    public water = false,
+    public electricity = false,
+    public furnished = false,
+    public doorman = false,
+    public air = false,
+    public heating = false,
+    public month = false,
+    public gym = false,
+    public tv = false,
+    public bathroom = false,
+    public dog = false,
+    public cat = false,
+    public otherPet = false
+  ) { }
 }

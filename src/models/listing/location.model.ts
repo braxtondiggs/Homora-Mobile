@@ -1,21 +1,14 @@
-export class Location {
-  address1: string;
-  address2: string;
-  city: string;
-  country: string;
-  latlng: any;
-  state: string;
-  zip: string;
-  private: boolean;
+import { LocationInterface } from '../../interface/listing/location.interface';
 
-  constructor() {
-    this.address1 = null;
-    this.address2 = null;
-    this.city = null;
-    this.country = 'US';
-    this.latlng = null;
-    this.state = null;
-    this.zip = null;
-    this.private = false;
-  }
+export class Location implements LocationInterface {
+  constructor(
+    public address1 = null,
+    public address2 = null,
+    public city = null,
+    public country = 'US',
+    public latlng = null,
+    public state = null,
+    public zip = null,
+    public isPrivate = false
+  ) { }
 }

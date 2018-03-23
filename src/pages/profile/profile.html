@@ -1,6 +1,6 @@
 <ion-content>
 	<div class="header_container">
-		<button class="header_btn" color="dark" *ngIf="(user$ | async) as user;" (click)="viewProfile(user.$key)" full clear ion-button>
+		<button class="header_btn" color="dark" *ngIf="user" (click)="viewProfile(user.$key)" full clear ion-button>
 			<div class="container">
 				<h2><b>{{user.firstName}}</b></h2>
 				<p>View and edit profile</p>

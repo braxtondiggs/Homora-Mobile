@@ -1,21 +1,14 @@
-export class Rules {
-  smoking: boolean;
-  pets: boolean;
-  drugs: boolean;
-  drinking: boolean;
-  dogOk: boolean;
-  catOk: boolean;
-  otherPetOk: boolean;
-  couplesOk: boolean;
+import { RulesInterface } from '../../interface/listing/rules.interface';
 
-  constructor() {
-    this.smoking = false;
-    this.pets = false;
-    this.drugs = false;
-    this.drinking = false;
-    this.dogOk = false;
-    this.catOk = false;
-    this.otherPetOk = false;
-    this.couplesOk = false;
-  }
+export class Rules implements RulesInterface {
+  constructor(
+    public smoking = false,
+    public pets = false,
+    public drugs = false,
+    public drinking = false,
+    public dogOk = false,
+    public catOk = false,
+    public otherPetOk = false,
+    public couplesOk = false
+  ) { }
 }

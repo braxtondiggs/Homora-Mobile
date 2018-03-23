@@ -1,10 +1,12 @@
-<ion-header class="transparent clear-btns">
-	<ion-navbar></ion-navbar>
-	<ion-buttons *ngIf="canEditProfile()" end>
-		<button (click)="editProfile()" ion-button icon-only clear>
-			<ion-icon name="create"></ion-icon>
-		</button>
-	</ion-buttons>
+<ion-header class="transparent" no-border>
+	<ion-navbar>
+		<ion-title></ion-title>
+		<ion-buttons *ngIf="canEditProfile()" end>
+			<button (click)="editProfile()" color="dark" ion-button icon-only clear>
+				<ion-icon name="create"></ion-icon>
+			</button>
+		</ion-buttons>
+	</ion-navbar>
 </ion-header>
 <ion-content>
 	<div *ngIf="(user$ | async) as user;">
@@ -15,9 +17,9 @@
 		</ion-slides>
 		<div padding>
 			<h2 class="md-headline">{{user.firstName}}</h2>
-			<h3 class="md-subhead" *ngIf="user.location">{{user.location.city}}, {{user.location.state}}</h3>
+			<h3 class="md-subhead" *ngIf="user.location">{{user.location}}</h3>
 			<hr />
-			<p class="md-body">{{(user.summary) ? user.summary : user.firstName + " hasn't filled out a profile yet."}}</p>
+			<p class="md-body">{{(user.description) ? user.description : user.firstName + " hasn't filled out a profile yet."}}</p>
 			<hr />
 			<p class="md-body">Member since {{user.created | amUtc | amDateFormat: 'MMM YYYY'}}</p>
 			<hr />

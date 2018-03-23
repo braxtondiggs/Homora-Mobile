@@ -10,6 +10,7 @@
 </ion-header>
 <ion-content>
 	<form [formGroup]="profileForm" *ngIf="user" novalidate>
+		<input type="file" id="file" (change)="onFileChange($event)" #file>
 		<ion-slides centeredSlides="false" (click)="editPhoto()">
 			<ion-slide *ngFor="let image of user.images">
 				<img [attr.src]="image.src" alt="{{user.firstName}}" />
@@ -52,7 +53,7 @@
 			</ion-item>
 			<ion-item>
 				<ion-label stacked>About Me</ion-label>
-				<ion-textarea formControlName="description" [(ngModel)]="user.description"></ion-textarea>
+				<ion-textarea formControlName="description" [(ngModel)]="user.description" rows="8"></ion-textarea>
 			</ion-item>
 			<ion-item>
 				<ion-label stacked>Move in Date</ion-label>

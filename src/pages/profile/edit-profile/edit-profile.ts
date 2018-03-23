@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AlertController, LoadingController, NavController } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFireStorage } from 'angularfire2/storage';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { UserProvider } from '../../../providers/user/user';
 import { User } from '../../../models';
+import { Image } from '../../../models/user/image.model';
 import { join, isEmpty, map, reject, startCase } from 'lodash';
 import * as  moment from 'moment';
 
@@ -18,7 +20,16 @@ export class EditProfilePage {
   profileForm: FormGroup;
   maxBirthDate: string = moment().subtract(18, 'y').format();
   minMoveDate: string = moment().format();
-  constructor(private userProvider: UserProvider, private formBuilder: FormBuilder, private alert: AlertController, private loading: LoadingController, private nav: NavController, private camera: Camera) {
+  @ViewChild('file') file: ElementRef;
+  constructor(
+    private afs: AngularFirestore,
+    private storage: AngularFireStorage,
+    private userProvider: UserProvider,
+    private formBuilder: FormBuilder,
+    private alert: AlertController,
+    private loading: LoadingController,
+    private nav: NavController,
+    private camera: Camera) {
     this.profileForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -70,6 +81,17 @@ export class EditProfilePage {
     }).present();
   }
 
+  onFileChange(event) {
+    let reader = new FileReader();
+    if (event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.uploadImage(reader.result.split(',')[1], file.type);
+      };
+    }
+  }
+
   ionViewDidLoad() {
     this.userDoc = this.userProvider.getDoc();
     this.userDoc.valueChanges().subscribe((user) => {
@@ -86,11 +108,26 @@ export class EditProfilePage {
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
     } as CameraOptions).then((image) => {
-      let base64Image = `data:image/jpeg;base64,${image}`;
-      console.log(base64Image);
-      // TODO: Upload Image
+      this.uploadImage(image);
     }, (err) => {
-      // TODO: Handle error
+      if (err === 'cordova_not_available') {
+        this.file.nativeElement.click();
+      }
+    });
+  }
+
+  private uploadImage(base64: string, type: string = 'image/jpeg'): void {
+    const loading = this.loading.create();
+    loading.present();
+    const ref = this.storage.ref(`Users/${this.user.$key}/${this.afs.collection('Users').ref.doc().id}`);
+    const task = ref.putString(`data:${type};base64,${base64}`, 'data_url');
+    this.user.images = !isEmpty(this.user.images) ? this.user.images : [];
+
+    task.downloadURL().subscribe((url: string) => {
+      this.user.images.push({
+        src: url
+      } as Image);
+      this.userDoc.update(this.user).then(() => loading.dismiss());
     });
   }
 }

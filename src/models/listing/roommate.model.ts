@@ -1,24 +1,17 @@
-export class Roommate {
-  gender: string;
-  age: RoommateAge;
+import { RoommateInterface, RoommateAgeInterface } from '../../interface/listing/roommate.interface';
 
-  constructor() {
-    this.gender = 'all';
-    this.age = new RoommateAge();
-  }
+export class Roommate implements RoommateInterface {
+  constructor(
+    public gender = 'all',
+    public age = new RoommateAge()
+  ) { }
 }
 
-
-export class RoommateAge {
-  groupEarly20: boolean;
-  groupLate20: boolean;
-  group30: boolean;
-  group40older: boolean;
-
-  constructor() {
-    this.groupEarly20 = true;
-    this.groupLate20 = true;
-    this.group30 = true;
-    this.group40older = true;
-  }
+export class RoommateAge implements RoommateAgeInterface {
+  constructor(
+    public groupEarly20 = true,
+    public groupLate20 = true,
+    public group30 = true,
+    public group40older = true
+  ) { }
 }

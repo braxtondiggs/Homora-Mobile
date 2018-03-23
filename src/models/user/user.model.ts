@@ -2,6 +2,7 @@ import { Image } from './image.model';
 import { Notifications } from './notifications.model';
 
 export interface User {
+  $key: string;
   birthdate: Date | string;
   description?: string;
   email: string;

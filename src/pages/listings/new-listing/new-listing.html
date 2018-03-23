@@ -7,7 +7,7 @@
 </ion-header>
 <ion-content>
 	<form [formGroup]="listingForm" *ngIf="listing" novalidate>
-		<ion-slides>
+		<ion-slides initialSlide="5">
 			<ion-slide padding>
 				<h1>Describe your place on Homora</h1>
 				<ion-list>
@@ -53,7 +53,7 @@
 					</ion-item>
 					<ion-item class="checkbox">
 						<ion-label>Would you like to make your address private?</ion-label>
-						<ion-checkbox formControlName="private" [(ngModel)]="listing.location.private"></ion-checkbox>
+						<ion-checkbox formControlName="isPrivate" [(ngModel)]="listing.location.isPrivate"></ion-checkbox>
 					</ion-item>
 				</ion-list>
 			</ion-slide>
@@ -259,6 +259,7 @@
 			</ion-slide>
 			<ion-slide padding>
 				<h1>Add some photos of your place.</h1>
+				<input type="file" id="file" (change)="onFileChange($event)" #file>
 				<ion-grid class="photo-container">
 					<ion-row class="header-image">
 						<ion-col (click)="editPhoto()">

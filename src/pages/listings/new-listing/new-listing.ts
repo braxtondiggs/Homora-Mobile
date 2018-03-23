@@ -1,13 +1,14 @@
-import { Component, ViewChild } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { AlertController, NavParams, Slides } from 'ionic-angular';
+import { AlertController, LoadingController, NavParams, Slides } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { AngularFireStorage } from 'angularfire2/storage';
 import { UserProvider } from '../../../providers/user/user';
 import { Observable } from 'rxjs/Observable';
 import { isEmpty } from 'lodash';
 import * as moment from 'moment';
-import { Listing } from '../../../models/listing/listing.model'
+import { Listing } from '../../../models'
 
 @Component({
   selector: 'page-new-listing',
@@ -22,9 +23,17 @@ export class NewListingPage {
   rangeLabelUpper: string;
   listingForm: FormGroup;
   @ViewChild(Slides) slides: Slides;
+  @ViewChild('file') file: ElementRef;
   private listingDoc: AngularFirestoreDocument<Listing>;
-  private listingCollection: AngularFirestoreCollection<Listing>;
-  constructor(private afs: AngularFirestore, private formBuilder: FormBuilder, private alert: AlertController, private navParams: NavParams, private camera: Camera, private userProvider: UserProvider) { }
+  constructor(
+    private afs: AngularFirestore,
+    private storage: AngularFireStorage,
+    private formBuilder: FormBuilder,
+    private alert: AlertController,
+    private navParams: NavParams,
+    private camera: Camera,
+    private userProvider: UserProvider,
+    private loading: LoadingController) { }
 
   prev() {
     this.slides.lockSwipes(false);
@@ -62,13 +71,24 @@ export class NewListingPage {
     }).present();
   }
 
-  private save() {
+  onFileChange(event) {
+    let reader = new FileReader();
+    if (event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.uploadImage(reader.result.split(',')[1], file.type);
+      };
+    }
+  }
+
+  private save(): Promise<void> {
     if (this.listingDoc) {
-      this.listingDoc.update(this.listing);
+      return this.listingDoc.update(this.listing.formattedData(this.listing) as any);
     } else {
-      console.log(this.listing);
-      this.listingCollection = this.afs.collection<Listing>('Listings');
-      this.listingCollection.add(this.listing);
+      this.key = this.afs.collection('Listings').ref.doc().id;
+      this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
+      return this.listingDoc.set(this.listing.formattedData(this.listing) as any)
     }
   }
 
@@ -83,11 +103,24 @@ export class NewListingPage {
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
     } as CameraOptions).then((image) => {
-      let base64Image = `data:image/jpeg;base64,${image}`;
-      console.log(base64Image);
-      // TODO: Upload Image
+      this.uploadImage(image);
     }, (err) => {
-      // TODO: Handle error
+      if (err === 'cordova_not_available') {
+        this.file.nativeElement.click();
+      }
+    });
+  }
+
+  private uploadImage(base64: string, type: string = 'image/jpeg'): void {
+    const loading = this.loading.create();
+    loading.present();
+    const ref = this.storage.ref(`Listings/${this.listing.createdBy.id}/${this.key}/${this.afs.collection('Users').ref.doc().id}`);
+    const task = ref.putString(`data:${type};base64,${base64}`, 'data_url');
+    task.downloadURL().subscribe((url: string) => {
+      this.listing.images.push({
+        src: url
+      });
+      this.save().then(() => loading.dismiss());
     });
   }
 
@@ -100,9 +133,8 @@ export class NewListingPage {
       this.listing$ = Observable.of(new Listing())
     }
     this.listing$.subscribe((listing) => {
-      // listing.createdBy = isEmpty(listing.createdBy) ? this.userProvider.getDoc().ref.path : listing.createdBy;
+      listing.createdBy = isEmpty(listing.createdBy) ? this.userProvider.getDoc().ref : listing.createdBy;
       this.listing = listing;
-      console.log(this.listing);
       this.rangeLabelLower = this.rangelLabel(this.listing.duration.lower);
       this.rangeLabelUpper = this.rangelLabel(this.listing.duration.upper);
       this.listingForm = this.formBuilder.group({
@@ -113,7 +145,7 @@ export class NewListingPage {
         city: [this.listing.location.city, Validators.required],
         state: [this.listing.location.state, Validators.required],
         zip: [this.listing.location.zip, Validators.required],
-        private: [this.listing.location.private],
+        isPrivate: [this.listing.location.isPrivate],
         gender: [this.listing.roommate.gender],
         groupEarly20: [this.listing.roommate.age.groupEarly20],
         groupLate20: [this.listing.roommate.age.groupLate20],
@@ -148,7 +180,7 @@ export class NewListingPage {
         couplesOk: [this.listing.rules.couplesOk]
       });
       setTimeout(() => {
-        this.slides.lockSwipes(true);
+        // this.slides.lockSwipes(true);
       });
     });
   }

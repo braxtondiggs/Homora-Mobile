@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
-import { Observable } from 'rxjs/Observable';
 import { User } from '../../models';
 import { ProfileViewPage } from './view/profile-view';
 import { NotificationsPage, SettingsPage } from '../settings';
@@ -11,7 +10,7 @@ import { NotificationsPage, SettingsPage } from '../settings';
   templateUrl: 'profile.html',
 })
 export class ProfilePage {
-  user$: Observable<User>;
+  user: User;
   constructor(private nav: NavController, private userProvider: UserProvider) { }
 
   viewProfile(key: string): void {
@@ -35,6 +34,6 @@ export class ProfilePage {
   }
 
   ionViewDidLoad() {
-    this.user$ = this.userProvider.get$();
+    this.user = this.userProvider.get();
   }
 }
