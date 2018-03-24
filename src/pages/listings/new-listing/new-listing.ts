@@ -6,9 +6,9 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { UserProvider } from '../../../providers/user/user';
 import { Observable } from 'rxjs/Observable';
-import { isEmpty } from 'lodash';
+import { isEmpty, toNumber } from 'lodash';
 import * as moment from 'moment';
-import { Listing } from '../../../models'
+import { Listing } from '../../../interface';
 
 @Component({
   selector: 'page-new-listing',
@@ -42,10 +42,13 @@ export class NewListingPage {
   }
 
   next() {
-    this.save();
-    this.slides.lockSwipes(false);
-    this.slides.slideNext();
-    this.slides.lockSwipes(true);
+    console.log('next');
+    this.save().then(() => {
+      console.log('save worked')
+      this.slides.lockSwipes(false);
+      this.slides.slideNext();
+      this.slides.lockSwipes(true);
+    });
   }
 
   durationChange(): void {
@@ -83,12 +86,13 @@ export class NewListingPage {
   }
 
   private save(): Promise<void> {
+    this.formatListing();
     if (this.listingDoc) {
-      return this.listingDoc.update(this.listing.formattedData(this.listing) as any);
+      return this.listingDoc.update(this.listing);
     } else {
       this.key = this.afs.collection('Listings').ref.doc().id;
       this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
-      return this.listingDoc.set(this.listing.formattedData(this.listing) as any)
+      return this.listingDoc.set(this.listing)
     }
   }
 
@@ -130,7 +134,60 @@ export class NewListingPage {
       this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
       this.listing$ = this.listingDoc.valueChanges()
     } else {
-      this.listing$ = Observable.of(new Listing())
+      this.listing$ = Observable.of({
+        availability: moment().toDate(),
+        amenities: {
+          washer: false,
+          wifi: false,
+          water: false,
+          electricity: false,
+          furnished: false,
+          doorman: false,
+          air: false,
+          heating: false,
+          month: false,
+          gym: false,
+          tv: false,
+          bathroom: false,
+          dog: false,
+          cat: false,
+          otherPet: false
+        },
+        created: moment().toDate(),
+        duration: { lower: 1, upper: 12 },
+        location: {
+          country: 'US',
+          isPrivate: false,
+          address1: null,
+          address2: null,
+          city: null,
+          latlng: null,
+          state: null,
+          zip: null
+        },
+        price: 0,
+        deposit: 0,
+        roommate: {
+          age: {
+            groupEarly20: true,
+            groupLate20: true,
+            group30: true,
+            group40older: true
+          },
+          gender: 'all'
+        },
+        rules: {
+          smoking: false,
+          pets: false,
+          drugs: false,
+          drinking: false,
+          dogOk: false,
+          catOk: false,
+          otherPetOk: false,
+          couplesOk: false
+        },
+        status: 'draft',
+      } as Listing)
     }
     this.listing$.subscribe((listing) => {
       listing.createdBy = isEmpty(listing.createdBy) ? this.userProvider.getDoc().ref : listing.createdBy;
@@ -180,8 +237,14 @@ export class NewListingPage {
         couplesOk: [this.listing.rules.couplesOk]
       });
       setTimeout(() => {
-        // this.slides.lockSwipes(true);
+        this.slides.lockSwipes(true);
       });
     });
+  }
+
+  private formatListing() {
+    this.listing.price = toNumber(this.listing.price);
+    this.listing.deposit = toNumber(this.listing.deposit);
+    this.listing.availability = moment(this.listing.availability).toDate();
   }
 }

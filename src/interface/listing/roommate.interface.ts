@@ -1,9 +1,9 @@
-export interface RoommateInterface {
+export interface ListingRoommate {
   gender: string;
-  age: RoommateAgeInterface;
+  age: RoommateAge;
 }
 
-export interface RoommateAgeInterface {
+export interface RoommateAge {
   groupEarly20: boolean;
   groupLate20: boolean;
   group30: boolean;

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavParams, NavController, ModalController, ViewController } from 'ionic-angular';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
-import { Listing, User } from '../../../models';
+import { Listing, User } from '../../../interface';
 import { ProfileViewPage } from '../../profile';
 import { truncate } from 'lodash';
 

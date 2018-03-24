@@ -5,8 +5,8 @@ import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firesto
 import { AngularFireStorage } from 'angularfire2/storage';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { UserProvider } from '../../../providers/user/user';
-import { User } from '../../../models';
-import { Image } from '../../../models/user/image.model';
+import { User } from '../../../interface';
+import { UserImage } from '../../../interface/user/image.interface';
 import { join, isEmpty, map, reject, startCase } from 'lodash';
 import * as  moment from 'moment';
 
@@ -126,7 +126,7 @@ export class EditProfilePage {
     task.downloadURL().subscribe((url: string) => {
       this.user.images.push({
         src: url
-      } as Image);
+      } as UserImage);
       this.userDoc.update(this.user).then(() => loading.dismiss());
     });
   }

@@ -1,5 +1,5 @@
-import { Listing } from '../listing/listing.model';
-import { User } from '../user/user.model';
+import { Listing } from '../listing/listing.interface';
+import { User } from '../user/user.interface';
 
 export interface Message {
   created: Date;

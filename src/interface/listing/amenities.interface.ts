@@ -1,4 +1,4 @@
-export interface AmenitiesInterface {
+export interface ListingAmenities {
   washer: boolean;
   wifi: boolean;
   water: boolean;

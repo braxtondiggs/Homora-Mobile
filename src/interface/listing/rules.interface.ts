@@ -1,4 +1,4 @@
-export interface RulesInterface {
+export interface ListingRules {
   smoking: boolean;
   pets: boolean;
   drugs: boolean;

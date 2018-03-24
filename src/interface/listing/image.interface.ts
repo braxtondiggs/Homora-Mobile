@@ -1,3 +1,3 @@
-export interface ImageInterface {
+export interface ListingImage {
   src: string;
 }

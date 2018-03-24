@@ -7,7 +7,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { Observable } from 'rxjs/Observable';
-import { User } from '../../models';
+import { User } from '../../interface';
 import { IntroPage } from '../intro';
 import { findIndex } from 'lodash';
 

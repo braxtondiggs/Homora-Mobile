@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { UserProvider } from '../../../providers/user/user';
 import { Observable } from 'rxjs/Observable';
-import { User } from '../../../models';
+import { User } from '../../../interface';
 
 @Component({
   selector: 'page-notifications',

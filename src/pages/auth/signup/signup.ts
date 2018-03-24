@@ -5,7 +5,7 @@ import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firesto
 import { HttpClient } from '@angular/common/http';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AuthProvider } from '../../../providers/auth/auth';
-import { User } from '../../../models'
+import { User } from '../../../interface'
 import { AppSettings } from '../../../app/app.constants';
 import { MainPage } from '../../main';
 import { merge } from 'lodash';
@@ -36,6 +36,7 @@ export class SignupPage {
       this.afAuth.auth.createUserWithEmailAndPassword(this.signup.value.email, this.signup.value.password).then((user) => {
         let userDoc: AngularFirestoreDocument<User> = this.afs.collection<User>('Users').doc(user.uid);
         const userData: User = {
+          $key: user.uid,
           birthdate: moment(this.signup.value.birthday).toDate(),
           email: this.signup.value.email,
           firstName: this.signup.value.firstName,

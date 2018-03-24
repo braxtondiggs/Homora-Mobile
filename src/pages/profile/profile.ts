@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
-import { User } from '../../models';
+import { User } from '../../interface';
 import { ProfileViewPage } from './view/profile-view';
 import { NotificationsPage, SettingsPage } from '../settings';
 

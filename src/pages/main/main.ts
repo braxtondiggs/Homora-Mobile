@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, Content } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
-import { User } from '../../models';
+import { User } from '../../interface';
 import { AuthPage } from '../auth';
 import { ListingsPage, ListerPage, NewListingPage } from '../listings';
 import { FavoritesPage } from '../favorites';

@@ -1,5 +1,5 @@
-import { Image } from './image.model';
-import { Notifications } from './notifications.model';
+import { UserImage } from './image.interface';
+import { UserNotifications } from './notifications.interface';
 
 export interface User {
   $key: string;
@@ -7,12 +7,12 @@ export interface User {
   description?: string;
   email: string;
   firstName: string;
-  images?: Image[];
+  images?: UserImage[];
   lastName: string;
   phone?: number,
   moveInDate?: Date | string;
   location?: string;
   gender?: string;
-  notifications?: Notifications;
+  notifications?: UserNotifications;
   providerData?: any;
 }

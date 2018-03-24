@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
-import { User } from '../../../models/';
+import { User } from '../../../interface';
 import { EditProfilePage } from '../edit-profile/edit-profile';
 import { isEmpty } from 'lodash';
 

@@ -3,7 +3,7 @@ import { LoadingController, ModalController, NavController } from 'ionic-angular
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { FilterComponent, MapsComponent } from '../../components';
 import { Observable } from 'rxjs/Observable';
-import { Listing, User } from '../../models';
+import { Listing, User } from '../../interface';
 import { ListingPage } from './listing/listing';
 import { ProfileViewPage } from '../profile';
 
