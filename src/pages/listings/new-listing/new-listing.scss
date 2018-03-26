@@ -95,6 +95,18 @@ page-new-listing {
     .header-image {
       .col {
         height: 300px;
+
+        &.hasImage {
+          background-color: initial;
+
+          ion-icon {
+            display: none;
+          }
+
+          img {
+            width: 100%;
+          }
+        }
       }
     }
   }

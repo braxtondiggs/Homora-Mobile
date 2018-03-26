@@ -5,8 +5,9 @@ import { AlertController, LoadingController, NavController, Slides } from 'ionic
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { ListingProvider, UserProvider } from '../../../providers';
+import { ListingPage } from '../listing/listing';
 import { Observable } from 'rxjs/Observable';
-import { isEmpty, toNumber } from 'lodash';
+import { isEmpty, isNull, toNumber } from 'lodash';
 import * as moment from 'moment';
 import { Listing } from '../../../interface';
 
@@ -16,6 +17,7 @@ import { Listing } from '../../../interface';
 })
 export class NewListingPage {
   key: string;
+  saving: boolean = false;
   listing: Listing;
   listing$: Observable<Listing>;
   minAvailability: string = moment().format();
@@ -37,7 +39,7 @@ export class NewListingPage {
     private loading: LoadingController) { }
 
   prev() {
-    if (this.slides.isBeginning && this.key) {
+    if (this.slides.isBeginning() && this.key) {
       this.nav.parent.select(0);
     } else {
       this.slides.lockSwipes(false);
@@ -47,10 +49,17 @@ export class NewListingPage {
   }
 
   next() {
+    this.saving = true;
     this.save().then(() => {
-      this.slides.lockSwipes(false);
-      this.slides.slideNext();
-      this.slides.lockSwipes(true);
+      if (!this.slides.isEnd()) {
+        this.slides.lockSwipes(false);
+        this.slides.slideNext();
+        this.slides.lockSwipes(true);
+      } else {
+        this.listingProvider.setActive(this.key);
+        this.nav.push(ListingPage, { key: this.key, isPreview: true });
+      }
+      this.saving = false;
     });
   }
 
@@ -92,14 +101,18 @@ export class NewListingPage {
     //TODO: Add delete
   }
 
-  private save(): Promise<void> {
-    this.formatListing();
-    if (this.listingDoc) {
-      return this.listingDoc.update(this.listing);
+  private save(force: boolean = false): Promise<void> {
+    if (this.listingForm.dirty || force) {
+      this.formatListing();
+      if (this.listingDoc) {
+        return this.listingDoc.update(this.listing);
+      } else {
+        this.key = this.afs.collection('Listings').ref.doc().id;
+        this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
+        return this.listingDoc.set(this.listing)
+      }
     } else {
-      this.key = this.afs.collection('Listings').ref.doc().id;
-      this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
-      return this.listingDoc.set(this.listing)
+      return Promise.resolve();
     }
   }
 
@@ -128,14 +141,15 @@ export class NewListingPage {
     const ref = this.storage.ref(`Listings/${this.listing.createdBy.id}/${this.key}/${this.afs.collection('Users').ref.doc().id}`);
     const task = ref.putString(`data:${type};base64,${base64}`, 'data_url');
     task.downloadURL().subscribe((url: string) => {
+      if (isEmpty(this.listing.images)) this.listing.images = [];
       this.listing.images.push({
         src: url
       });
-      this.save().then(() => loading.dismiss());
+      this.save(true).then(() => loading.dismiss());
     });
   }
 
-  ionViewWillEnter() {
+  ionViewDidEnter() {
     this.key = this.listingProvider.getActive();
     if (this.key) {
       this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
@@ -173,8 +187,8 @@ export class NewListingPage {
           state: null,
           zip: null
         },
-        price: 0,
-        deposit: 0,
+        price: null,
+        deposit: null,
         roommate: {
           age: {
             groupEarly20: true,
@@ -184,6 +198,8 @@ export class NewListingPage {
           },
           gender: 'all'
         },
+        title: null,
+        summary: null,
         rules: {
           smoking: false,
           pets: false,
@@ -246,13 +262,21 @@ export class NewListingPage {
       });
       setTimeout(() => {
         this.slides.lockSwipes(true);
-      });
+      }, 500);
     });
   }
 
+  ionViewDidLeave() {
+    if (this.slides && this.slides.length() > 0 && isNull(this.listingProvider.getActive())) {
+      this.slides.lockSwipes(false);
+      this.slides.slideTo(0);
+      this.slides.lockSwipes(true);
+    }
+  }
+
   private formatListing() {
-    this.listing.price = toNumber(this.listing.price);
-    this.listing.deposit = toNumber(this.listing.deposit);
+    this.listing.price = !isNull(this.listing.price) ? toNumber(this.listing.price) : null;
+    this.listing.deposit = !isNull(this.listing.deposit) ? toNumber(this.listing.deposit) : null;
     this.listing.availability = moment(this.listing.availability).toDate();
   }
 }

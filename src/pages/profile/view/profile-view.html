@@ -26,11 +26,18 @@
 			<hr />
 			<p class="md-body">Member since {{user.created | amUtc | amDateFormat: 'MMM YYYY'}}</p>
 			<hr />
-			<div class="related-listings" *ngIf="false">
-				<h2 class="md-title">2 Listings</h2>
-				<div class="" *ngFor="">
-
-				</div>
+			<div class="related-listings" *ngIf="(listings$ | async) as listings;">
+				<h2 class="md-title" margin>{{user.firstName}}'s {{listings.length}} Listings</h2>
+				<ion-slides slidesPerView="2">
+					<ion-slide *ngFor="let listing of listings" (click)="viewListing(listing.$key)">
+						<ion-card>
+							<img [attr.src]="(listing.images)?listing.images[0].src:DEFAULT_LISTING_IMAGE" alt="{{listing.title}}" />
+							<ion-card-content>
+								<ion-card-title no-padding>{{listing.title}}</ion-card-title>
+							</ion-card-content>
+						</ion-card>
+					</ion-slide>
+				</ion-slides>
 			</div>
 		</div>
 	</div>

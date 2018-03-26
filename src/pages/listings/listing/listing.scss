@@ -3,6 +3,11 @@ page-listing {
     height: 320px;
   }
 
+  .readmore {
+    vertical-align: unset;
+    margin-left: 8px;
+  }
+
   .price {
     font-size: 3rem;
     margin: 8px 0 4px;
@@ -50,7 +55,8 @@ page-listing {
     }
   }
 
-  .interested::after {
+  .interested::after,
+  .submit::after {
     background: white;
     border-radius: 5px;
     box-shadow: 2px 2px 3px 3px #ccc;
@@ -63,5 +69,10 @@ page-listing {
     position: absolute;
     top: 50%;
     transform: translate(0, -50%);
+  }
+
+  .submit::after {
+    content: 'Submit ';
+    left: -65px;
   }
 }

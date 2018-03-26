@@ -6,7 +6,7 @@
 			</button>
 		</ion-buttons>
 		<ion-buttons right>
-			<button ion-button (click)="delete()" color="danger" *ngIf="key" clear>
+			<button ion-button (click)="delete()" color="danger" *ngIf="key && false" clear>
 				Delete
 			</button>
 		</ion-buttons>
@@ -269,13 +269,13 @@
 				<input type="file" id="file" (change)="onFileChange($event)" #file>
 				<ion-grid class="photo-container">
 					<ion-row class="header-image">
-						<ion-col (click)="editPhoto()">
+						<ion-col (click)="editPhoto()" [ngClass]="{'hasImage': listing.images[0].src}">
 							<ion-icon name="images"></ion-icon>
-							<!--<img src="" alt />-->
+							<img *ngIf="listing.images[0].src" [attr.src]="listing.images[0].src" alt="First Header Image" />
 						</ion-col>
 					</ion-row>
 					<ion-row class="additional-images" *ngIf="listing.images">
-						<ion-col *ngFor="let image of listing.images" (click)="editPhoto()">
+						<ion-col *ngFor="let image of listing.images" (click)="editPhoto()" col-4>
 							<ion-icon name="images"></ion-icon>
 							<!--<img src="" alt />-->
 						</ion-col>
@@ -284,8 +284,9 @@
 			</ion-slide>
 		</ion-slides>
 		<ion-fab right bottom>
-			<button ion-fab (click)="next()">
-				Next&nbsp;<ion-icon name="ios-arrow-forward"></ion-icon>
+			<button ion-fab (click)="next()" [disabled]="saving">
+				<ion-icon name="ios-arrow-forward" *ngIf="!saving"></ion-icon>
+				<ion-spinner color="light" *ngIf="saving"></ion-spinner>
 			</button>
 		</ion-fab>
 	</form>

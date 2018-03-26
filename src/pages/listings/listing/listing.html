@@ -1,6 +1,6 @@
-<ion-header class="transparent clear-btns">
+<ion-header [ngClass]="{'transparent clear-btns': !preview }">
 	<ion-navbar>
-		<ion-buttons end>
+		<ion-buttons *ngIf="!preview" end>
 			<button ion-button icon-only clear>
 				<ion-icon name="share"></ion-icon>
 			</button>
@@ -32,30 +32,40 @@
 						<ion-avatar class="avatar">
 							<img [attr.src]="(createdBy.images[0].src) ? createdBy.images[0].src : DEFAULT_USER_IMAGE" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
 						</ion-avatar>
-						<p class="listing-createdby md-subhead">{{createdBy.firstName}}, 27</p>
+						<p class="listing-createdby md-subhead">{{createdBy.firstName}}, {{ today | amDifference: createdBy.birthdate :'years'}}</p>
 					</ion-col>
 				</ion-row>
 				<ion-row class="more-info" align-items-center>
 					<ion-col>
 						<h3 class="md-subhead" no-margin><ion-icon name="home"></ion-icon>&nbsp;Move-in</h3>
-						<p no-margin>Available Now</p>
+						<p no-margin>{{availability(listing.availability)}}</p>
 					</ion-col>
-					<ion-col>
+					<ion-col *ngIf="listing.duration">
 						<h3 class="md-subhead" no-margin><ion-icon name="calendar"></ion-icon>&nbsp;Duration</h3>
-						<p no-margin>1-12 months</p>
+						<p no-margin>{{duration(listing.duration.lower, listing.duration.upper)}}</p>
 					</ion-col>
 					<ion-col>
 						<h3 class="md-subhead" no-margin><ion-icon name="cash"></ion-icon>&nbsp;Deposit</h3>
-						<p no-margin>$1,075</p>
+						<p no-margin>{{listing.deposit | currency:'USD':true:'1.0-3'}}</p>
 					</ion-col>
 				</ion-row>
 			</ion-grid>
-			<p class="md-subhead" (click)="readMore(listing.summary)" *ngIf="listing.summary" padding-horizontal>{{listing.summaryTruncated}}<button ion-button clear no-padding>Read More</button></p>
+			<p class="md-subhead" (click)="readMore(listing.summary)" *ngIf="listing.summary" padding-horizontal>{{listing.summaryTruncated}}<button class="readmore" ion-button clear no-padding>Read More</button></p>
 		</div>
+		<ion-fab class="interested" *ngIf="!preview && !isUserListing(listing.createdBy.id)" right bottom>
+			<button ion-fab (click)="contact(listing.createdBy.id, listing.$key)">
+				<ion-icon name="chatbubbles"></ion-icon>
+			</button>
+		</ion-fab>
+		<ion-fab class="submit" *ngIf="preview" right bottom>
+			<button ion-fab (click)="submit(listing)">
+				<ion-icon name="ios-arrow-forward"></ion-icon>
+			</button>
+		</ion-fab>
+		<ion-fab class="edit" *ngIf="!preview && isUserListing(listing.createdBy.id)" right bottom>
+			<button ion-fab (click)="edit(listing.$key)">
+				<ion-icon name="create"></ion-icon>
+			</button>
+		</ion-fab>
 	</div>
-	<ion-fab class="interested" right bottom>
-		<button ion-fab (click)="contact()">
-			<ion-icon name="chatbubbles"></ion-icon>
-		</button>
-	</ion-fab>
 </ion-content>

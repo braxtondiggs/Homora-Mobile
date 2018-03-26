@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { AlertController, LoadingController, NavController } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, ToastController, Slides } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
@@ -8,7 +8,7 @@ import { UserProvider } from '../../../providers/user/user';
 import { User } from '../../../interface';
 import { UserImage } from '../../../interface/user/image.interface';
 import { AppSettings } from '../../../app/app.constants';
-import { join, isEmpty, map, reject, startCase } from 'lodash';
+import { join, isEmpty, isNull, map, reject, startCase } from 'lodash';
 import * as  moment from 'moment';
 
 @Component({
@@ -23,6 +23,7 @@ export class EditProfilePage {
   maxBirthDate: string = moment().subtract(18, 'y').format();
   minMoveDate: string = moment().format();
   @ViewChild('file') file: ElementRef;
+  @ViewChild(Slides) slides: Slides;
   constructor(
     private afs: AngularFirestore,
     private storage: AngularFireStorage,
@@ -30,6 +31,7 @@ export class EditProfilePage {
     private formBuilder: FormBuilder,
     private alert: AlertController,
     private loading: LoadingController,
+    private toast: ToastController,
     private nav: NavController,
     private camera: Camera) {
     this.profileForm = this.formBuilder.group({
@@ -47,13 +49,17 @@ export class EditProfilePage {
 
   saveProfile(): void {
     if (this.profileForm.valid) {
-      this.user.birthdate = moment(this.user.birthdate).toDate();
-      this.user.moveInDate = moment(this.user.moveInDate).toDate();
+      this.formatUser();
       const loader = this.loading.create();
       loader.present();
       this.userDoc.update(this.user).then(() => {
         loader.dismiss();
-        this.nav.pop();
+        this.nav.pop().then(() => {
+          this.toast.create({
+            message: 'Profile successfully updated.',
+            duration: 3000
+          }).present();
+        })
       });
     } else {
       const message = join(reject(map(this.profileForm.controls, (o: any, key: string) => {
@@ -129,7 +135,15 @@ export class EditProfilePage {
       this.user.images.push({
         src: url
       } as UserImage);
-      this.userDoc.update(this.user).then(() => loading.dismiss());
+      this.userDoc.update(this.user).then(() => {
+        this.slides.slideTo(this.slides.length());
+        loading.dismiss();
+      });
     });
+  }
+
+  private formatUser() {
+    this.user.birthdate = !isNull(this.user.birthdate) ? moment(this.user.birthdate).toDate() : null;
+    this.user.moveInDate = !isNull(this.user.moveInDate) ? moment(this.user.moveInDate).toDate() : null;
   }
 }

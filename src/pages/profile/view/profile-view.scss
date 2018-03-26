@@ -6,4 +6,16 @@ page-profile-view {
   .md-headline {
     font-size: 38px;
   }
+
+  .related-listings {
+    ion-slides {
+      height: 200px;
+
+      .card-title {
+        font-size: 14px;
+        font-weight: bold;
+        text-align: left;
+      }
+    }
+  }
 }
