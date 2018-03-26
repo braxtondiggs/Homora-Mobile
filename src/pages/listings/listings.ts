@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { Listing, User } from '../../interface';
 import { ListingPage } from './listing/listing';
 import { ProfileViewPage } from '../profile';
+import { AppSettings } from '../../app/app.constants';
 
 @Component({
   selector: 'listings',
@@ -13,6 +14,8 @@ import { ProfileViewPage } from '../profile';
 })
 export class ListingsPage {
   listings$: Observable<Listing[]>;
+  DEFAULT_LISTING_IMAGE: string = AppSettings.DEFAULT_LISTING_IMAGE;
+  DEFAULT_USER_IMAGE: string = AppSettings.DEFAULT_USER_IMAGE;
   private listingsCollection: AngularFirestoreCollection<Listing[]>;
   constructor(private afs: AngularFirestore, private loading: LoadingController, private modal: ModalController, private nav: NavController) { }
 
@@ -34,12 +37,12 @@ export class ListingsPage {
   ionViewDidLoad() {
     const loader = this.loading.create({ content: 'Finding Listings...' });
     loader.present();
-    this.listingsCollection = this.afs.collection<Listing[]>('Listings');
+    this.listingsCollection = this.afs.collection<Listing[]>('Listings', (ref) => ref.where('status', '==', 'published').orderBy('created', 'desc'));
     this.listings$ = this.listingsCollection.snapshotChanges().map((actions: any) => {
       return actions.map((action: any) => {
         const data = action.payload.doc.data();
         data.createdBy$ = this.afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
-        return ({ $key: action.payload.doc.id, ...data })
+        return ({ $key: action.payload.doc.id, ...data });
       });
     })
     this.listings$.subscribe(() => loader.dismiss());

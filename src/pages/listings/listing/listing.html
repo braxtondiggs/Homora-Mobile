@@ -16,18 +16,21 @@
 			<ion-slide *ngFor="let image of listing.images">
 				<img [attr.src]="image.src" alt="{{listing.title}}" />
 			</ion-slide>
+			<ion-slide *ngIf="!listing.images">
+				<img [attr.src]="DEFAULT_LISTING_IMAGE" alt="Default Image" />
+			</ion-slide>
 		</ion-slides>
 		<div class="listing-header" padding-vertical>
-			<h2 class="title md-display-1" padding-horizontal no-margin>{{listing.title}}</h2>
+			<h2 class="title md-display-1" *ngIf="listing.title" padding-horizontal no-margin>{{listing.title}}</h2>
 			<ion-grid no-padding>
 				<ion-row align-items-start padding-horizontal>
 					<ion-col>
-						<h3 class="price md-display-1" no-margin>{{listing.price | currency:'USD':true:'1.0-3'}}<span>/&nbsp;month</span></h3>
-						<h4 class="location md-subhead" no-margin><ion-icon name="pin"></ion-icon> {{listing.location.city}}, {{listing.location.state}}</h4>
+						<h3 class="price md-display-1" *ngIf="listing.price" no-margin>{{listing.price | currency:'USD':true:'1.0-3'}}<span>/&nbsp;month</span></h3>
+						<h4 class="location md-subhead" *ngIf="listing.location.city && listing.location.state" no-margin><ion-icon name="pin"></ion-icon> {{listing.location.city}}, {{listing.location.state}}</h4>
 					</ion-col>
 					<ion-col (click)="viewProfile(createdBy.$key)" *ngIf="(listing.createdBy$ | async) as createdBy;" col-auto>
 						<ion-avatar class="avatar">
-							<img [attr.src]="createdBy.images[0].src" alt="{{createdBy.firstName}}">
+							<img [attr.src]="(createdBy.images[0].src) ? createdBy.images[0].src : DEFAULT_USER_IMAGE" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
 						</ion-avatar>
 						<p class="listing-createdby md-subhead">{{createdBy.firstName}}, 27</p>
 					</ion-col>
@@ -47,7 +50,7 @@
 					</ion-col>
 				</ion-row>
 			</ion-grid>
-			<p class="md-subhead" (click)="readMore(listing.summary)" padding-horizontal>{{listing.summaryTruncated}}<button ion-button clear no-padding>Read More</button></p>
+			<p class="md-subhead" (click)="readMore(listing.summary)" *ngIf="listing.summary" padding-horizontal>{{listing.summaryTruncated}}<button ion-button clear no-padding>Read More</button></p>
 		</div>
 	</div>
 	<ion-fab class="interested" right bottom>

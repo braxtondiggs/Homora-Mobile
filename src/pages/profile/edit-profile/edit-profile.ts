@@ -7,6 +7,7 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { UserProvider } from '../../../providers/user/user';
 import { User } from '../../../interface';
 import { UserImage } from '../../../interface/user/image.interface';
+import { AppSettings } from '../../../app/app.constants';
 import { join, isEmpty, map, reject, startCase } from 'lodash';
 import * as  moment from 'moment';
 
@@ -18,6 +19,7 @@ export class EditProfilePage {
   user: User;
   userDoc: AngularFirestoreDocument<User>;
   profileForm: FormGroup;
+  DEFAULT_USER_IMAGE: string = AppSettings.DEFAULT_USER_IMAGE;
   maxBirthDate: string = moment().subtract(18, 'y').format();
   minMoveDate: string = moment().format();
   @ViewChild('file') file: ElementRef;

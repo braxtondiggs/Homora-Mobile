@@ -14,6 +14,9 @@
 			<ion-slide *ngFor="let image of user.images">
 				<img [attr.src]="image.src" alt="{{user.firstName}}" />
 			</ion-slide>
+			<ion-slide *ngIf="!user.images">
+				<img [attr.src]="DEFAULT_USER_IMAGE" alt="Default User Image" />
+			</ion-slide>
 		</ion-slides>
 		<div padding>
 			<h2 class="md-headline">{{user.firstName}}</h2>

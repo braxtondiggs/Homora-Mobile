@@ -4,6 +4,7 @@ import { UserProvider } from '../../providers/user/user';
 import { User } from '../../interface';
 import { ProfileViewPage } from './view/profile-view';
 import { NotificationsPage, SettingsPage } from '../settings';
+import { AppSettings } from '../../app/app.constants';
 
 @Component({
   selector: 'page-profile',
@@ -11,6 +12,7 @@ import { NotificationsPage, SettingsPage } from '../settings';
 })
 export class ProfilePage {
   user: User;
+  DEFAULT_USER_IMAGE: string = AppSettings.DEFAULT_USER_IMAGE;
   constructor(private nav: NavController, private userProvider: UserProvider) { }
 
   viewProfile(key: string): void {

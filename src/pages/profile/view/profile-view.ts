@@ -4,6 +4,7 @@ import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firesto
 import { Observable } from 'rxjs/Observable';
 import { User } from '../../../interface';
 import { EditProfilePage } from '../edit-profile/edit-profile';
+import { AppSettings } from '../../../app/app.constants';
 import { isEmpty } from 'lodash';
 
 @Component({
@@ -14,6 +15,7 @@ export class ProfileViewPage {
   key: string;
   edit: boolean;
   user$: Observable<User>;
+  DEFAULT_USER_IMAGE: string = AppSettings.DEFAULT_USER_IMAGE;
   private userDoc: AngularFirestoreDocument<User>;
   constructor(private afs: AngularFirestore, private navParams: NavParams, private nav: NavController) { }
 

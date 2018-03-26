@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Listing, User } from '../../../interface';
 import { ProfileViewPage } from '../../profile';
 import { truncate } from 'lodash';
-
+import { AppSettings } from '../../../app/app.constants';
 
 @Component({
   selector: 'page-listing',
@@ -13,6 +13,8 @@ import { truncate } from 'lodash';
 })
 export class ListingPage {
   key: string;
+  DEFAULT_LISTING_IMAGE: string = AppSettings.DEFAULT_LISTING_IMAGE;
+  DEFAULT_USER_IMAGE: string = AppSettings.DEFAULT_USER_IMAGE;
   listing$: Observable<Listing>;
   private listingDoc: AngularFirestoreDocument<Listing>;
   constructor(private afs: AngularFirestore, private nav: NavController, private navParams: NavParams, private modal: ModalController) { }

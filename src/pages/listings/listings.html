@@ -6,6 +6,9 @@
 					<ion-slide *ngFor="let image of listing.images">
 						<img [attr.src]="image.src" alt="{{listing.title}}" />
 					</ion-slide>
+					<ion-slide *ngIf="!listing.images">
+						<img [attr.src]="DEFAULT_LISTING_IMAGE" alt="Default Image" />
+					</ion-slide>
 				</ion-slides>
 				<div class="price-container">
 					<h2 class="price" color="light" ion-text>{{listing.price | currency:'USD':true:'1.0-3'}}</h2>
@@ -17,7 +20,7 @@
 			<ion-card-content>
 				<ion-card-header class="profile" no-padding>
 					<ion-avatar class="avatar" (click)="viewProfile(createdBy.$key, $event)" *ngIf="(listing.createdBy$ | async) as createdBy;">
-						<img [attr.src]="createdBy.images[0].src" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
+						<img [attr.src]="(createdBy.images[0].src) ? createdBy.images[0].src : DEFAULT_USER_IMAGE" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
 					</ion-avatar>
 				</ion-card-header>
 				<ion-card-title>{{listing.title}}</ion-card-title>
