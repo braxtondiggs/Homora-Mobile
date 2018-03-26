@@ -5,7 +5,7 @@
 		<ion-tab tabTitle="INBOX" [root]="MessagesTab" tabUrlPath="user" tabIcon="chatbubbles" tabsHideOnSubPages="true"></ion-tab>
 		<ion-tab tabTitle="PROFILE" [root]="ProfileTab" tabUrlPath="user" tabIcon="person" tabsHideOnSubPages="true"></ion-tab>
 	</ion-tabs>
-	<ion-tabs *ngIf="auth && accountType === 'lister'" selectedIndex="2">
+	<ion-tabs *ngIf="auth && accountType === 'lister'" selectedIndex="0">
 		<ion-tab tabTitle="MY LISTINGS" [root]="ListerTab" tabUrlPath="user" tabIcon="home" tabsHideOnSubPages="true"></ion-tab>
 		<ion-tab tabTitle="INBOX" [root]="MessagesTab" tabUrlPath="user" tabIcon="chatbubbles" tabsHideOnSubPages="true"></ion-tab>
 		<ion-tab tabTitle="NEW LISTING" [root]="NewListingTab" tabUrlPath="listing" tabIcon="add-circle" tabsHideOnSubPages="true"></ion-tab>

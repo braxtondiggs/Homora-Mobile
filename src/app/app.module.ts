@@ -20,8 +20,7 @@ import { MyApp } from './app.component';
 import { PagesModule } from '../pages/pages.module';
 import { ComponentsModule } from '../components/components.module';
 import { environment } from './app.environment';
-import { AuthProvider } from '../providers/auth/auth';
-import { UserProvider } from '../providers/user/user';
+import { AuthProvider, ListingProvider, UserProvider } from '../providers';
 
 @NgModule({
   declarations: [MyApp],
@@ -51,6 +50,7 @@ import { UserProvider } from '../providers/user/user';
     NativePageTransitions,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthProvider,
+    ListingProvider,
     UserProvider
   ]
 })

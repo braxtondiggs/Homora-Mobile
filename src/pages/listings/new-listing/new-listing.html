@@ -1,9 +1,16 @@
-<ion-header class="transparent" no-border>
-	<ion-buttons start>
-		<button ion-button icon-start icon-only (click)="prev()" clear>
+<ion-header no-border>
+	<ion-navbar>
+		<ion-buttons left>
+			<button ion-button icon-start icon-only (click)="prev()" *ngIf="key" clear start>
 				<ion-icon name="arrow-back"></ion-icon>
 			</button>
-	</ion-buttons>
+		</ion-buttons>
+		<ion-buttons right>
+			<button ion-button (click)="delete()" color="danger" *ngIf="key" clear>
+				Delete
+			</button>
+		</ion-buttons>
+	</ion-navbar>
 </ion-header>
 <ion-content>
 	<form [formGroup]="listingForm" *ngIf="listing" novalidate>

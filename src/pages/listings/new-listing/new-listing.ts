@@ -1,10 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { AlertController, LoadingController, NavParams, Slides } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, Slides } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { UserProvider } from '../../../providers/user/user';
+import { ListingProvider, UserProvider } from '../../../providers';
 import { Observable } from 'rxjs/Observable';
 import { isEmpty, toNumber } from 'lodash';
 import * as moment from 'moment';
@@ -29,22 +29,25 @@ export class NewListingPage {
     private afs: AngularFirestore,
     private storage: AngularFireStorage,
     private formBuilder: FormBuilder,
+    private nav: NavController,
     private alert: AlertController,
-    private navParams: NavParams,
     private camera: Camera,
+    private listingProvider: ListingProvider,
     private userProvider: UserProvider,
     private loading: LoadingController) { }
 
   prev() {
-    this.slides.lockSwipes(false);
-    this.slides.slidePrev();
-    this.slides.lockSwipes(true);
+    if (this.slides.isBeginning && this.key) {
+      this.nav.parent.select(0);
+    } else {
+      this.slides.lockSwipes(false);
+      this.slides.slidePrev();
+      this.slides.lockSwipes(true);
+    }
   }
 
   next() {
-    console.log('next');
     this.save().then(() => {
-      console.log('save worked')
       this.slides.lockSwipes(false);
       this.slides.slideNext();
       this.slides.lockSwipes(true);
@@ -83,6 +86,10 @@ export class NewListingPage {
         this.uploadImage(reader.result.split(',')[1], file.type);
       };
     }
+  }
+
+  delete() {
+    //TODO: Add delete
   }
 
   private save(): Promise<void> {
@@ -128,11 +135,12 @@ export class NewListingPage {
     });
   }
 
-  ionViewDidLoad() {
-    this.key = this.navParams.get('key');
+  ionViewWillEnter() {
+    this.key = this.listingProvider.getActive();
     if (this.key) {
       this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
-      this.listing$ = this.listingDoc.valueChanges()
+      this.listing$ = this.listingDoc.valueChanges();
+      this.listingProvider.setActive(null);
     } else {
       this.listing$ = Observable.of({
         availability: moment().toDate(),

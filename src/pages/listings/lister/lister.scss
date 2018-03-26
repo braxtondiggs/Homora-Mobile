@@ -1,12 +1,32 @@
 page-lister {
+  .card {
+    .list {
+      border-top: 1px solid #dedede;
+    }
+
+    h2 {
+      margin: 0 !important;
+    }
+  }
+
+  h2 {
+    font-weight: bold;
+    margin-top: 48px !important;
+  }
+
+  .active-listings h2 {
+    margin-top: 16px !important;
+  }
+
   .add-listing {
     font-size: 14px;
     font-weight: bold;
-    margin: 16px 0;
+    margin-top: 48px;
 
     .icon {
-      color: #2980b9;
+      font-size: 24px;
       margin-right: 24px;
+      vertical-align: bottom;
     }
   }
 }
