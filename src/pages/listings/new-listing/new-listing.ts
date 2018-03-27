@@ -7,6 +7,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import { ListingProvider, UserProvider } from '../../../providers';
 import { ListingPage } from '../listing/listing';
 import { Observable } from 'rxjs/Observable';
+import { forkJoin } from 'rxjs/observable/forkJoin';
 import { isEmpty, isNull, toNumber } from 'lodash';
 import * as moment from 'moment';
 import { Listing } from '../../../interface';
@@ -97,8 +98,14 @@ export class NewListingPage {
     }
   }
 
-  delete() {
-    //TODO: Add delete
+  deleteImage(index: number, $event): void {
+    $event.stopPropagation();
+    const name = this.listing.images[index].name;
+    const ref = this.storage.ref(`Listings/${this.listing.createdBy.id}/${this.key}/${name}`);
+    const loading = this.loading.create();
+    loading.present();
+    this.listing.images.splice(index, 1);
+    forkJoin([ref.delete(), this.listingDoc.update(this.listing)]).subscribe(() => loading.dismiss());
   }
 
   private save(force: boolean = false): Promise<void> {
@@ -136,13 +143,15 @@ export class NewListingPage {
   }
 
   private uploadImage(base64: string, type: string = 'image/jpeg'): void {
+    const key: string = this.afs.collection('Users').ref.doc().id;
     const loading = this.loading.create();
     loading.present();
-    const ref = this.storage.ref(`Listings/${this.listing.createdBy.id}/${this.key}/${this.afs.collection('Users').ref.doc().id}`);
+    const ref = this.storage.ref(`Listings/${this.listing.createdBy.id}/${this.key}/${key}`);
     const task = ref.putString(`data:${type};base64,${base64}`, 'data_url');
     task.downloadURL().subscribe((url: string) => {
       if (isEmpty(this.listing.images)) this.listing.images = [];
       this.listing.images.push({
+        name: key,
         src: url
       });
       this.save(true).then(() => loading.dismiss());

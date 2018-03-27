@@ -81,14 +81,44 @@ page-new-listing {
 
   .grid.photo-container {
     .col {
-      background-color: #ecf0f1;
+      height: 125px;
+      padding: 2px;
+      position: relative;
+      overflow: hidden;
 
-      ion-icon {
+      &::after {
+        content: '';
+        background-color: #ecf0f1;
+        height: 100%;
+        width: 100%;
+        display: block;
+      }
+
+      img {
+        object-fit: cover;
+        height: 100%;
+      }
+
+      ion-icon[name="images"] {
         font-size: 60px;
         left: 50%;
         position: absolute;
         top: 50%;
         transform: translate(-50%,-50%);
+      }
+
+      .trash {
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+
+      &.first {
+        display: none;
+      }
+
+      &.hasImage {
+        background-color: initial;
       }
     }
 
@@ -97,9 +127,11 @@ page-new-listing {
         height: 300px;
 
         &.hasImage {
-          background-color: initial;
+          &::after {
+            display: none;
+          }
 
-          ion-icon {
+          ion-icon[name="images"] {
             display: none;
           }
 

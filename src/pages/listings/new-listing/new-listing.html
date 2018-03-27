@@ -269,15 +269,23 @@
 				<input type="file" id="file" (change)="onFileChange($event)" #file>
 				<ion-grid class="photo-container">
 					<ion-row class="header-image">
-						<ion-col (click)="editPhoto()" [ngClass]="{'hasImage': listing.images[0].src}">
+						<ion-col (click)="editPhoto()" [ngClass]="{'hasImage': listing.images}">
 							<ion-icon name="images"></ion-icon>
-							<img *ngIf="listing.images[0].src" [attr.src]="listing.images[0].src" alt="First Header Image" />
+							<img *ngIf="listing.images" [attr.src]="listing.images[0].src" alt="First Header Image" />
+							<button (click)="deleteImage(0, $event)" *ngIf="listing.images" color="danger" class="trash" ion-button icon-only>
+								<ion-icon name="trash"></ion-icon>
+							</button>
 						</ion-col>
 					</ion-row>
 					<ion-row class="additional-images" *ngIf="listing.images">
-						<ion-col *ngFor="let image of listing.images" (click)="editPhoto()" col-4>
+						<ion-col *ngFor="let image of listing.images; let i = index; let first = first;" [ngClass]="{'first': first, 'hasImage': image}" (click)="editPhoto()" col-4>
+							<img [attr.src]="image.src" alt="{{listing.title}}" />
+							<button (click)="deleteImage(i, $event)" *ngIf="image.src" color="danger" class="trash" ion-button icon-only>
+								<ion-icon name="trash"></ion-icon>
+							</button>
+						</ion-col>
+						<ion-col class="empty-photo" (click)="editPhoto()" col-4>
 							<ion-icon name="images"></ion-icon>
-							<!--<img src="" alt />-->
 						</ion-col>
 					</ion-row>
 				</ion-grid>
