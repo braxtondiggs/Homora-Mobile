@@ -12,8 +12,11 @@
 	<form [formGroup]="profileForm" *ngIf="user" novalidate>
 		<input type="file" id="file" (change)="onFileChange($event)" #file>
 		<ion-slides centeredSlides="false" (click)="editPhoto()">
-			<ion-slide *ngFor="let image of user.images">
+			<ion-slide *ngFor="let image of user.images; let i = index">
 				<img [attr.src]="image.src" alt="{{user.firstName}}" />
+				<button (click)="deleteImage(i, $event)" *ngIf="image.src" color="danger" class="trash" ion-button icon-only>
+					<ion-icon name="trash"></ion-icon>
+				</button>
 			</ion-slide>
 			<ion-slide *ngIf="!user.images">
 				<img [attr.src]="DEFAULT_USER_IMAGE" alt="Default User Image" />

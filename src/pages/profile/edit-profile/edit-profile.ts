@@ -4,6 +4,8 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+import { forkJoin } from 'rxjs/observable/forkJoin';
 import { UserProvider } from '../../../providers/user/user';
 import { User } from '../../../interface';
 import { UserImage } from '../../../interface/user/image.interface';
@@ -100,6 +102,16 @@ export class EditProfilePage {
     }
   }
 
+  deleteImage(index: number, $event): void {
+    $event.stopPropagation();
+    const name = this.user.images[index].name;
+    const ref = this.storage.ref(`Users/${this.user.$key}/${name}`);
+    const loading = this.loading.create();
+    loading.present();
+    this.user.images.splice(index, 1);
+    forkJoin([!isNull(name) ? ref.delete() : Observable.of({}), this.userDoc.update(this.user)]).subscribe(() => loading.dismiss());
+  }
+
   ionViewDidLoad() {
     this.userDoc = this.userProvider.getDoc();
     this.userDoc.valueChanges().subscribe((user) => {
@@ -125,15 +137,17 @@ export class EditProfilePage {
   }
 
   private uploadImage(base64: string, type: string = 'image/jpeg'): void {
+    const key = this.afs.collection('Users').ref.doc().id;
     const loading = this.loading.create();
     loading.present();
-    const ref = this.storage.ref(`Users/${this.user.$key}/${this.afs.collection('Users').ref.doc().id}`);
+    const ref = this.storage.ref(`Users/${this.user.$key}/${key}`);
     const task = ref.putString(`data:${type};base64,${base64}`, 'data_url');
     this.user.images = !isEmpty(this.user.images) ? this.user.images : [];
 
     task.downloadURL().subscribe((url: string) => {
       this.user.images.push({
-        src: url
+        src: url,
+        name: key
       } as UserImage);
       this.userDoc.update(this.user).then(() => {
         this.slides.slideTo(this.slides.length());

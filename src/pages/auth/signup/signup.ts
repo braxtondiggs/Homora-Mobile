@@ -42,7 +42,8 @@ export class SignupPage {
           firstName: this.signup.value.firstName,
           lastName: this.signup.value.lastName,
           images: [{
-            src: AppSettings.DEFAULT_USER_IMAGE
+            src: AppSettings.DEFAULT_USER_IMAGE,
+            name: null,
           }]
         };
         userDoc.set(userData).then(() => {
