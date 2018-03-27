@@ -1,4 +1,16 @@
 page-new-listing {
+  .danger.error {
+    color: rgba(231, 76, 60, .7);
+    font-size: 12px;
+    font-weight: 400;
+    margin: 0;
+    padding: 8px 16px;
+
+    &.image-error {
+      font-size: 16px;
+    }
+  }
+
   ion-slide.swiper-slide {
     align-items: flex-start;
 
@@ -82,21 +94,21 @@ page-new-listing {
   .grid.photo-container {
     .col {
       height: 125px;
+      overflow: hidden;
       padding: 2px;
       position: relative;
-      overflow: hidden;
 
       &::after {
-        content: '';
         background-color: #ecf0f1;
+        content: '';
+        display: block;
         height: 100%;
         width: 100%;
-        display: block;
       }
 
       img {
-        object-fit: cover;
         height: 100%;
+        object-fit: cover;
       }
 
       ion-icon[name="images"] {

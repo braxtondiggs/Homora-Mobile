@@ -8,7 +8,7 @@ import { ListingProvider, UserProvider } from '../../../providers';
 import { ListingPage } from '../listing/listing';
 import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
-import { isEmpty, isNull, toNumber } from 'lodash';
+import { first, findIndex, map, includes, isEmpty, isNull, reject, toNumber, size } from 'lodash';
 import * as moment from 'moment';
 import { Listing } from '../../../interface';
 
@@ -19,12 +19,15 @@ import { Listing } from '../../../interface';
 export class NewListingPage {
   key: string;
   saving: boolean = false;
+  submitted: boolean = false;
+  backBtn: boolean = false;
   listing: Listing;
   listing$: Observable<Listing>;
   minAvailability: string = moment().format();
   rangeLabelLower: string;
   rangeLabelUpper: string;
   listingForm: FormGroup;
+  labelMap: any;
   @ViewChild(Slides) slides: Slides;
   @ViewChild('file') file: ElementRef;
   private listingDoc: AngularFirestoreDocument<Listing>;
@@ -56,9 +59,28 @@ export class NewListingPage {
         this.slides.lockSwipes(false);
         this.slides.slideNext();
         this.slides.lockSwipes(true);
-      } else {
+      } else if (this.slides.isEnd() && this.listingForm.valid && size(this.listing.images) > 2) {
+        this.submitted = true;
         this.listingProvider.setActive(this.key);
         this.nav.push(ListingPage, { key: this.key, isPreview: true });
+      } else if ((this.slides.isEnd() && this.listingForm.invalid) || (this.slides.isEnd() && size(this.listing.images) <= 2)) {
+        const error = first(reject(map(this.listingForm.controls, (o, key) => ({ errors: o.errors, name: key })), (o) => isNull(o.errors)));
+        this.submitted = true;
+        this.alert.create({
+          title: 'Looks like some info is missing.',
+          subTitle: 'Some information is missing or needs to be updated.',
+          buttons: [{
+            text: 'Ok',
+            handler: () => {
+              if (error) {
+                const index = findIndex(this.labelMap, (o: any) => includes(o, error.name));
+                this.slides.lockSwipes(false);
+                this.slides.slideTo(index);
+                this.slides.lockSwipes(true);
+              }
+            }
+          }]
+        }).present();
       }
       this.saving = false;
     });
@@ -106,6 +128,14 @@ export class NewListingPage {
     loading.present();
     this.listing.images.splice(index, 1);
     forkJoin([ref.delete(), this.listingDoc.update(this.listing)]).subscribe(() => loading.dismiss());
+  }
+
+  onSlideChange() {
+    this.backBtn = this.showBackBtn();
+  }
+
+  private showBackBtn(): boolean {
+    return !isEmpty(this.key) || !this.slides.isBeginning();
   }
 
   private save(force: boolean = false): Promise<void> {
@@ -269,8 +299,15 @@ export class NewListingPage {
         otherPetOk: [this.listing.rules.otherPetOk],
         couplesOk: [this.listing.rules.couplesOk]
       });
+      this.labelMap = [
+        ['title', 'summary'],
+        ['address1', 'city', 'state', 'zip'],
+        [],
+        ['price', 'deposit', 'availability', 'duration']
+      ];
       setTimeout(() => {
         this.slides.lockSwipes(true);
+        this.backBtn = this.showBackBtn();
       }, 500);
     });
   }

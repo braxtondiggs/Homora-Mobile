@@ -1,7 +1,7 @@
 <ion-header no-border>
 	<ion-navbar>
 		<ion-buttons left>
-			<button ion-button icon-start icon-only (click)="prev()" *ngIf="key" clear start>
+			<button ion-button icon-start icon-only (click)="prev()" *ngIf="backBtn" clear start>
 				<ion-icon name="arrow-back"></ion-icon>
 			</button>
 		</ion-buttons>
@@ -14,18 +14,20 @@
 </ion-header>
 <ion-content>
 	<form [formGroup]="listingForm" *ngIf="listing" novalidate>
-		<ion-slides initialSlide="0">
+		<ion-slides (ionSlideWillChange)="onSlideChange() " initialSlide="0">
 			<ion-slide padding>
 				<h1>Describe your place on Homora</h1>
 				<ion-list>
 					<ion-item>
 						<ion-label stacked>Name your place</ion-label>
-						<ion-input formControlName="title" [(ngModel)]="listing.title" type="text"></ion-input>
+						<ion-input formControlName="title" [(ngModel)]="listing.title" type="text" [class.invalid]="!listingForm.controls.title.valid && (listingForm.controls.title.dirty || submitted)"></ion-input>
 					</ion-item>
+					<p *ngIf="!listingForm.controls.title.valid && (listingForm.controls.title.dirty || submitted)" class="danger error">Title is not valid.</p>
 					<ion-item>
 						<ion-label stacked>Summary</ion-label>
-						<ion-textarea formControlName="summary" [(ngModel)]="listing.summary" rows="10" placeholder="Tell your future roommate the details that make your apartment unique!"></ion-textarea>
+						<ion-textarea formControlName="summary" [(ngModel)]="listing.summary" rows="10" placeholder="Tell your future roommate the details that make your apartment unique!" [class.invalid]="!listingForm.controls.summary.valid && (listingForm.controls.summary.dirty || submitted)"></ion-textarea>
 					</ion-item>
+					<p *ngIf="!listingForm.controls.summary.valid && (listingForm.controls.summary.dirty || submitted)" class="danger error">Summary is not valid.</p>
 					<ion-item></ion-item>
 				</ion-list>
 			</ion-slide>
@@ -34,40 +36,44 @@
 				<ion-list>
 					<ion-item>
 						<ion-label stacked>Street Address</ion-label>
-						<ion-input formControlName="address1" [(ngModel)]="listing.location.address1" type="text"></ion-input>
+						<ion-input formControlName="address1" [(ngModel)]="listing.location.address1" [class.invalid]="!listingForm.controls.address1.valid && (listingForm.controls.address1.dirty || submitted)" type="text"></ion-input>
 					</ion-item>
+					<p *ngIf="!listingForm.controls.address1.valid && (listingForm.controls.address1.dirty || submitted)" class="danger error">Address is not valid.</p>
 					<ion-item>
 						<ion-label stacked>Apt, Suite, Bldg. (optional)</ion-label>
-						<ion-input formControlName="address2" [(ngModel)]="listing.location.address2" type="text"></ion-input>
+						<ion-input formControlName="address2" [(ngModel)]="listing.location.address2" [class.invalid]="!listingForm.controls.address2.valid && (listingForm.controls.address2.dirty || submitted)" type="text"></ion-input>
 					</ion-item>
 					<ion-row>
 						<ion-item col-6>
 							<ion-label stacked>City</ion-label>
-							<ion-input formControlName="city" [(ngModel)]="listing.location.city" type="text"></ion-input>
+							<ion-input formControlName="city" [(ngModel)]="listing.location.city" [class.invalid]="!listingForm.controls.city.valid && (listingForm.controls.city.dirty || submitted)" type="text"></ion-input>
 						</ion-item>
 						<ion-item col-6>
 							<ion-label stacked>State</ion-label>
-							<ion-select formControlName="state" [(ngModel)]="listing.location.state">
+							<ion-select formControlName="state" [(ngModel)]="listing.location.state" [class.invalid]="!listingForm.controls.state.valid && (listingForm.controls.state.dirty || submitted)">
 								<ion-option value="DC">District of Columbia</ion-option>
 								<ion-option value="MD">Maryland</ion-option>
 								<ion-option value="VA">Virginia</ion-option>
 							</ion-select>
 						</ion-item>
+						<p *ngIf="!listingForm.controls.city.valid && (listingForm.controls.city.dirty || submitted)" class="danger error" col-6>City is not valid.</p>
+						<p *ngIf="!listingForm.controls.state.valid && (listingForm.controls.state.dirty || submitted)" class="danger error" col-6>State is not valid.</p>
 					</ion-row>
 					<ion-item>
 						<ion-label stacked>Zip Code</ion-label>
-						<ion-input formControlName="zip" [(ngModel)]="listing.location.zip" type="text"></ion-input>
+						<ion-input formControlName="zip" [(ngModel)]="listing.location.zip" [class.invalid]="!listingForm.controls.zip.valid && (listingForm.controls.zip.dirty || submitted)" type="text"></ion-input>
 					</ion-item>
+					<p *ngIf="!listingForm.controls.zip.valid && (listingForm.controls.zip.dirty || submitted)" class="danger error" col-6>Zipcode is not valid.</p>
 					<ion-item class="checkbox">
 						<ion-label>Would you like to make your address private?</ion-label>
-						<ion-checkbox formControlName="isPrivate" [(ngModel)]="listing.location.isPrivate"></ion-checkbox>
+						<ion-checkbox formControlName="isPrivate" [(ngModel)]="listing.location.isPrivate" [class.invalid]="!listingForm.controls.isPrivate.valid && (listingForm.controls.isPrivate.dirty || submitted)"></ion-checkbox>
 					</ion-item>
 				</ion-list>
 			</ion-slide>
 			<ion-slide padding>
 				<h1>Who do you want your next roommate to be?</h1>
 				<h3 padding>Gender</h3>
-				<ion-segment formControlName="gender" [(ngModel)]="listing.roommate.gender">
+				<ion-segment formControlName="gender" [(ngModel)]="listing.roommate.gender" [class.invalid]="!listingForm.controls.gender.valid && (listingForm.controls.gender.dirty || submitted)">
 					<ion-segment-button value="all">
 						<ion-icon name="man"></ion-icon>
 						<ion-icon name="woman"></ion-icon>
@@ -86,19 +92,19 @@
 				<ion-list>
 					<ion-item>
 						<ion-label>Early 20s</ion-label>
-						<ion-checkbox formControlName="groupEarly20" [(ngModel)]="listing.roommate.age.groupEarly20"></ion-checkbox>
+						<ion-checkbox formControlName="groupEarly20" [(ngModel)]="listing.roommate.age.groupEarly20" [class.invalid]="!listingForm.controls.groupEarly20.valid && (listingForm.controls.groupEarly20.dirty || submitted)"></ion-checkbox>
 					</ion-item>
 					<ion-item>
 						<ion-label>Late 20s</ion-label>
-						<ion-checkbox formControlName="groupLate20" [(ngModel)]="listing.roommate.age.groupLate20"></ion-checkbox>
+						<ion-checkbox formControlName="groupLate20" [(ngModel)]="listing.roommate.age.groupLate20" [class.invalid]="!listingForm.controls.groupLate20.valid && (listingForm.controls.groupLate20.dirty || submitted)"></ion-checkbox>
 					</ion-item>
 					<ion-item>
 						<ion-label>30s</ion-label>
-						<ion-checkbox formControlName="group30" [(ngModel)]="listing.roommate.age.group30"></ion-checkbox>
+						<ion-checkbox formControlName="group30" [(ngModel)]="listing.roommate.age.group30" [class.invalid]="!listingForm.controls.group30.valid && (listingForm.controls.group30.dirty || submitted)"></ion-checkbox>
 					</ion-item>
 					<ion-item>
 						<ion-label>40s and older</ion-label>
-						<ion-checkbox formControlName="group40older" [(ngModel)]="listing.roommate.age.group40older"></ion-checkbox>
+						<ion-checkbox formControlName="group40older" [(ngModel)]="listing.roommate.age.group40older" [class.invalid]="!listingForm.controls.group40older.valid && (listingForm.controls.group40older.dirty || submitted)"></ion-checkbox>
 					</ion-item>
 				</ion-list>
 			</ion-slide>
@@ -107,16 +113,19 @@
 				<ion-list>
 					<ion-item>
 						<ion-label stacked>Monthly Rent</ion-label>
-						<ion-input formControlName="price" [(ngModel)]="listing.price" type="number"></ion-input>
+						<ion-input formControlName="price" [(ngModel)]="listing.price" [class.invalid]="!listingForm.controls.price.valid && (listingForm.controls.price.dirty || submitted)" type="number"></ion-input>
 					</ion-item>
+					<p *ngIf="!listingForm.controls.price.valid && (listingForm.controls.price.dirty || submitted)" class="danger error">Price is not valid.</p>
 					<ion-item>
 						<ion-label stacked>Deposit</ion-label>
-						<ion-input formControlName="deposit" [(ngModel)]="listing.deposit" type="number"></ion-input>
+						<ion-input formControlName="deposit" [(ngModel)]="listing.deposit" [class.invalid]="!listingForm.controls.deposit.valid && (listingForm.controls.deposit.dirty || submitted)" type="number"></ion-input>
 					</ion-item>
+					<p *ngIf="!listingForm.controls.deposit.valid && (listingForm.controls.deposit.dirty || submitted)" class="danger error">Deposit is not valid.</p>
 					<ion-item>
 						<ion-label stacked>Start Date</ion-label>
-						<ion-datetime formControlName="availability" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minAvailability" [(ngModel)]="listing.availability"></ion-datetime>
+						<ion-datetime formControlName="availability" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minAvailability" [(ngModel)]="listing.availability" [class.invalid]="!listingForm.controls.availability.valid && (listingForm.controls.availability.dirty || submitted)"></ion-datetime>
 					</ion-item>
+					<p *ngIf="!listingForm.controls.availability.valid && (listingForm.controls.availability.dirty || submitted)" class="danger error">Svailability date is not valid.</p>
 					<ion-list-header class="range-header">
 						<h3 text-center><strong>Lease Duration</strong></h3>
 					</ion-list-header>
@@ -125,7 +134,7 @@
 						<div item-end>{{rangeLabelUpper}}</div>
 					</ion-list-header>
 					<ion-item>
-						<ion-range formControlName="duration" [(ngModel)]="listing.duration" (ionChange)="durationChange()" min="1" max="12" dualKnobs="true"></ion-range>
+						<ion-range formControlName="duration" [(ngModel)]="listing.duration" (ionChange)="durationChange()" min="1" max="12" dualKnobs="true" [class.invalid]="!listingForm.controls.duration.valid && (listingForm.controls.duration.dirty || submitted)"></ion-range>
 					</ion-item>
 				</ion-list>
 			</ion-slide>
@@ -266,6 +275,7 @@
 			</ion-slide>
 			<ion-slide padding>
 				<h1>Add some photos of your place.</h1>
+				<p *ngIf="listing.images && listing.images.length <= 2 && submitted" class="danger error image-error">Please include atleast 3 images for your listing.</p>
 				<input type="file" id="file" (change)="onFileChange($event)" #file>
 				<ion-grid class="photo-container">
 					<ion-row class="header-image">
