@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Listing, User } from '../../../interface';
 import { ListingProvider, UserProvider } from '../../../providers';
 import { ProfileViewPage } from '../../profile';
-import { omit, truncate } from 'lodash';
+import { filter, omit, truncate, size } from 'lodash';
 import { AppSettings } from '../../../app/app.constants';
 import moment from 'moment';
 
@@ -79,6 +79,10 @@ export class ListingPage {
 
   isUserListing(key: string): boolean {
     return key === this.userProvider.get().$key;
+  }
+
+  hasFeatures(features: any): boolean {
+    return size(filter(features, (o) => o)) > 0;
   }
 
   ionViewDidLoad() {

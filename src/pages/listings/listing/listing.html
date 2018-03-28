@@ -51,18 +51,124 @@
 				</ion-row>
 			</ion-grid>
 			<p class="md-subhead" (click)="readMore(listing.summary)" *ngIf="listing.summary" padding-horizontal>{{listing.summaryTruncated}}<button class="readmore" ion-button clear no-padding>Read More</button></p>
+			<div *ngIf="hasFeatures(listing.amenities)" padding>
+				<h3 class="md-title title-border" ion-text>AMENITIES</h3>
+				<ion-grid class="amenities">
+					<ion-row>
+						<ion-col *ngIf="listing.amenities.washer" col-3>
+							<div class="icon-laundry"></div>
+							<h4>In-unit Washer</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.amenities.wifi" col-3>
+							<div class="icon-wifi"></div>
+							<h4>Wifi Included</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.amenities.water" col-3>
+							<div class="icon-drop2"></div>
+							<h4>Water Included</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.amenities.electricity" col-3>
+							<div class="icon-outlet"></div>
+							<h4>Electricty Included</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.amenities.furnished" col-3>
+							<div class="icon-couch"></div>
+							<h4>Furnished</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.amenities.doorman" col-3>
+							<div class="icon-hand-waving"></div>
+							<h4>Doorman</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.amenities.air" col-3>
+							<div class="icon-fan"></div>
+							<h4>Air Conditioning</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.amenities.heating" col-3>
+							<div class="icon-thermometer"></div>
+							<h4>Heating</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.amenities.month" col-3>
+							<div class="icon-calendar-full"></div>
+							<h4>Month-to-Month</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.amenities.gym" col-3>
+							<div class="icon-bench-press"></div>
+							<h4>Gym</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.amenities.tv" col-3>
+							<div class="icon-tv"></div>
+							<h4>Television</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.amenities.bathroom" col-3>
+							<div class="icon-bathtub"></div>
+							<h4>Private Bathroom</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.amenities.dog" col-3>
+							<div class="icon-bone"></div>
+							<h4>Has Dog</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.amenities.cat" col-3>
+							<div class="icon-paw"></div>
+							<h4>Has Cat</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.amenities.otherPet" col-3>
+							<div class="icon-fish"></div>
+							<h4>Has Other Pet</h4>
+						</ion-col>
+					</ion-row>
+				</ion-grid>
+			</div>
+			<div *ngIf="hasFeatures(listing.rules)" padding>
+				<h3 class="md-title title-border" ion-text>RULES</h3>
+				<ion-grid class="rules">
+					<ion-row>
+						<ion-col *ngIf="listing.rules.smoking" col-3>
+							<div class="icon-border-outer"></div>
+							<h4>No Smoking</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.rules.pets" col-3>
+							<div class="icon-border-outer"></div>
+							<h4>No Pets</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.rules.drugs" col-3>
+							<div class="icon-border-outer"></div>
+							<h4>No Drugs</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.rules.drinking" col-3>
+							<div class="icon-border-outer"></div>
+							<h4>No Drinking</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.rules.dogOk" col-3>
+							<div class="icon-bone"></div>
+							<h4>Dogs Ok</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.rules.catOk" col-3>
+							<div class="icon-paw"></div>
+							<h4>Cats Ok</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.rules.otherPetOk" col-3>
+							<div class="icon-fish"></div>
+							<h4>Other Pets OK</h4>
+						</ion-col>
+						<ion-col *ngIf="listing.rules.couplesOk" col-3>
+							<div class="icon-man-woman"></div>
+							<h4>Couple Ok</h4>
+						</ion-col>
+					</ion-row>
+				</ion-grid>
+			</div>
 		</div>
-		<ion-fab class="interested" *ngIf="!preview && !isUserListing(listing.createdBy.id)" right bottom>
+		<ion-fab class="interested float" *ngIf="!preview && !isUserListing(listing.createdBy.id)" right bottom>
 			<button ion-fab (click)="contact(listing.createdBy.id, listing.$key)">
 				<ion-icon name="chatbubbles"></ion-icon>
 			</button>
 		</ion-fab>
-		<ion-fab class="submit" *ngIf="preview" right bottom>
+		<ion-fab class="submit float" *ngIf="preview" right bottom>
 			<button ion-fab (click)="submit(listing)">
 				<ion-icon name="ios-arrow-forward"></ion-icon>
 			</button>
 		</ion-fab>
-		<ion-fab class="edit" *ngIf="!preview && isUserListing(listing.createdBy.id)" right bottom>
+		<ion-fab class="edit float" *ngIf="!preview && isUserListing(listing.createdBy.id)" right bottom>
 			<button ion-fab (click)="edit(listing.$key)">
 				<ion-icon name="create"></ion-icon>
 			</button>

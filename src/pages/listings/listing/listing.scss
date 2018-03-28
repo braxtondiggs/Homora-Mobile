@@ -4,8 +4,15 @@ page-listing {
   }
 
   .readmore {
-    vertical-align: unset;
     margin-left: 8px;
+    vertical-align: unset;
+  }
+
+  .title-border {
+    border-bottom: solid 1px rgba(127, 140, 141, .4);
+    border-top: solid 1px rgba(127, 140, 141, .4);
+    padding: 8px 32px;
+    margin: 10px -16px;
   }
 
   .price {
@@ -74,5 +81,21 @@ page-listing {
   .submit::after {
     content: 'Submit ';
     left: -65px;
+  }
+
+  .grid.amenities .col,
+  .grid.rules .col {
+    padding: 8px;
+    text-align: center;
+
+    [class*=" icon-"]:not(.icon-md),
+    [class^="icon-"]:not(.icon-md) {
+      font-size: 32px;
+    }
+
+    h4 {
+      font-size: 1.25rem;
+      margin: 8px 0;
+    }
   }
 }
