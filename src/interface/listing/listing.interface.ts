@@ -1,3 +1,4 @@
+import { DocumentReference } from '@firebase/firestore-types';
 import { ListingImage } from './image.interface';
 import { ListingLocation } from './location.interface';
 import { ListingRoommate } from './roommate.interface';
@@ -7,7 +8,7 @@ import { ListingRules } from './rules.interface';
 export interface Listing {
   availability: Date;
   created: Date;
-  createdBy: any;
+  createdBy: DocumentReference;
   $key?: string;
   images?: ListingImage[];
   roommate: ListingRoommate;

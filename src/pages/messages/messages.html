@@ -4,35 +4,19 @@
 	</ion-navbar>
 </ion-header>
 <ion-content>
-	<ion-list>
+	<ion-list *ngIf="(messages$ | async) as messages;">
 		<ion-item-sliding>
-			<ion-item (click)="viewMessage()">
-				<ion-avatar item-start>
-					<img src="http://via.placeholder.com/150x150" alt="something">
+			<ion-item *ngFor="let message of messages" (click)="viewMessage(message.$key)">
+				<ion-avatar *ngIf="(message.user$ | async) as receiver;" item-start>
+					<img [attr.src]="(receiver.images[0].src) ? receiver.images[0].src : DEFAULT_USER_IMAGE" alt="{{receiver.firstName}}">
 				</ion-avatar>
-				<h2>Finn</h2>
-				<h3>Don't Know What To Do!</h3>
-				<p>I've had a pretty messed up day. If we just...</p>
+				<h2 *ngIf="(message.user$ | async) as receiver;">{{receiver.firstName}}</h2>
+				<p>{{message.chats[0].message}}</p>
 			</ion-item>
-			<ion-item-options side="left">
-				<button ion-button color="danger">
-          <ion-icon name="trash"></ion-icon>
-        </button>
-			</ion-item-options>
-		</ion-item-sliding>
-		<ion-item-sliding>
-			<ion-item (click)="viewMessage()">
-				<ion-avatar item-start>
-					<img src="http://via.placeholder.com/150x150" alt="something">
-				</ion-avatar>
-				<h2>Finn</h2>
-				<h3>Don't Know What To Do!</h3>
-				<p>I've had a pretty messed up day. If we just...</p>
-			</ion-item>
-			<ion-item-options side="left">
-				<button ion-button color="danger">
-          <ion-icon name="trash"></ion-icon>
-        </button>
+			<ion-item-options side="right">
+				<button ion-button color="danger" (click)="deleteMessage(message.$key)">
+					<ion-icon name="trash"></ion-icon> Delete
+				</button>
 			</ion-item-options>
 		</ion-item-sliding>
 	</ion-list>

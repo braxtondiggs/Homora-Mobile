@@ -1,10 +1,9 @@
-import { Listing } from '../listing/listing.interface';
-import { User } from '../user/user.interface';
+import { Chats } from './chats.interface';
+import { DocumentReference } from '@firebase/firestore-types';
 
 export interface Message {
+  chats: Chats[],
   created: Date;
-  listing?: Listing;
-  message: string;
-  receiver: User;
-  sender: User;
+  listing: DocumentReference;
+  users: boolean[];
 }
