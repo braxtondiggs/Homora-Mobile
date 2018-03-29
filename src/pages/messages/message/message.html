@@ -1,8 +1,37 @@
 <ion-header>
 	<ion-navbar>
-		<ion-title>Message</ion-title>
+		<ion-title>{{receiver.firstName}}</ion-title>
 	</ion-navbar>
+	<!--<ion-navbar>
+		<ion-title>Bar 2</ion-title>
+	</ion-navbar>-->
 </ion-header>
 <ion-content>
-
+	<div class="message-wrap" *ngIf="(message$ | async) as message;">
+		<div *ngFor="let chat of message.chat" class="message">
+			<!-- [class.left]=" msg.userId === toUser.id " [class.right]=" msg.userId === user.id ">-->
+			<img class="user-img" [src]="msg.userAvatar" alt="">
+			<!--<ion-spinner name="dots" *ngIf="msg.status === 'pending'"></ion-spinner>-->
+			<div class="msg-detail">
+				<div class="msg-info">
+					<!--<p>{{msg.userName}}&nbsp;&nbsp;&nbsp;{{msg.time | relativeTime}}</p>-->
+				</div>
+				<div class="msg-content">
+					<span class="triangle"></span>
+					<p class="line-breaker ">{{msg.message}}</p>
+				</div>
+			</div>
+		</div>
+	</div>
 </ion-content>
+<ion-footer no-border>
+	<div class="input-wrap">
+		<button ion-button clear icon-only item-right>
+			<ion-icon name="camera"></ion-icon>
+		</button>
+		<textarea #chat_input placeholder="Write a message" [(ngModel)]="message" (keyup.enter)="sendMessage()" (focusin)="onFocus()"></textarea>
+		<button ion-button clear icon-only item-right (click)="sendMessage()">
+			<ion-icon name="send"></ion-icon>
+		</button>
+	</div>
+</ion-footer>
