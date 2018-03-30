@@ -13,8 +13,8 @@
 				<div class="price-container">
 					<h2 class="price" color="light" ion-text>{{listing.price | currency:'USD':true:'1.0-3'}}</h2>
 				</div>
-				<button class="favorite" ion-button icon-only clear>
-					<ion-icon name="heart-outline"></ion-icon>
+				<button class="favorite" (click)="toggleFavorite(listing.$key, $event)" ion-button icon-only clear>
+					<ion-icon name="{{isFavorite(listing.$key)}}"></ion-icon>
 				</button>
 			</div>
 			<ion-card-content>
