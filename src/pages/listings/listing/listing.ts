@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavParams, NavController, ModalController, ToastController, ViewController } from 'ionic-angular';
+import { AlertController, LoadingController, NavParams, NavController, ModalController, ToastController, ViewController } from 'ionic-angular';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { Listing, User } from '../../../interface';
 import { ListingProvider, UserProvider } from '../../../providers';
 import { ProfileViewPage } from '../../profile';
-import { filter, omit, truncate, size } from 'lodash';
+import { MessagePage } from '../../messages';
+import { AuthPage } from '../../auth';
+import { filter, join, omit, truncate, size, sortBy } from 'lodash';
 import { AppSettings } from '../../../app/app.constants';
 import moment from 'moment';
 
@@ -15,6 +17,8 @@ import moment from 'moment';
 })
 export class ListingPage {
   key: string;
+  user: User;
+  accountType: string;
   preview: boolean = false;
   DEFAULT_LISTING_IMAGE: string = AppSettings.DEFAULT_LISTING_IMAGE;
   DEFAULT_USER_IMAGE: string = AppSettings.DEFAULT_USER_IMAGE;
@@ -28,7 +32,8 @@ export class ListingPage {
     private navParams: NavParams,
     private modal: ModalController,
     private loading: LoadingController,
-    private toast: ToastController) { }
+    private toast: ToastController,
+    private alert: AlertController) { }
 
   readMore(summary: string): void {
     this.modal.create(ListingReadMore, { summary }).present();
@@ -38,13 +43,28 @@ export class ListingPage {
     this.nav.push(ProfileViewPage, { key });
   }
 
-  contact(user: string, listing: string): void {
-    // TODO: Add messaging
+  contact(createdBy: string, listing: string): void {
+    if (this.user) {
+      const key = join(sortBy([createdBy, this.user.$key]), '') + listing;
+      this.nav.push(MessagePage, { key, listing, createdBy });
+    } else {
+      this.alert.create({
+        subTitle: `You need to be logged in to chat with this user!`,
+        buttons: [{
+          text: 'Cancel'
+        }, {
+          text: 'Ok',
+          handler: (data) => {
+            this.nav.push(AuthPage);
+          }
+        }]
+      }).present();
+    }
   }
 
   edit(key: string): void {
     this.listingProvider.setActive(key);
-    this.nav.pop().then(() => {
+    this.nav.popToRoot().then(() => {
       this.nav.parent.select(2);
     });
   }
@@ -78,7 +98,7 @@ export class ListingPage {
   }
 
   isUserListing(key: string): boolean {
-    return key === this.userProvider.get().$key;
+    return this.user && key === this.user.$key;
   }
 
   hasFeatures(features: any): boolean {
@@ -88,6 +108,8 @@ export class ListingPage {
   ionViewDidLoad() {
     this.key = this.navParams.get('key');
     this.preview = this.navParams.get('isPreview') || false;
+    this.user = this.userProvider.get();
+    this.accountType = this.userProvider.getAccountType();
     if (this.key) {
       this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
       this.listing$ = this.listingDoc.snapshotChanges().map((action: any) => {

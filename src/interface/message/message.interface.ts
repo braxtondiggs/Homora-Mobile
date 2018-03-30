@@ -4,6 +4,7 @@ import { DocumentReference } from '@firebase/firestore-types';
 export interface Message {
   chats: Chats[],
   created: Date;
+  modified: Date;
   listing: DocumentReference;
-  users: boolean[];
+  users: any;
 }

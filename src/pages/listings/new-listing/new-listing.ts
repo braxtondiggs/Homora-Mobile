@@ -6,8 +6,8 @@ import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { ListingProvider, UserProvider } from '../../../providers';
 import { ListingPage } from '../listing/listing';
-import { Observable } from 'rxjs/Observable';
-import { forkJoin } from 'rxjs/observable/forkJoin';
+import { Observable } from 'rxjs/Rx';
+import { DocumentReference } from '@firebase/firestore-types';
 import { first, findIndex, map, includes, isEmpty, isNull, reject, toNumber, size } from 'lodash';
 import * as moment from 'moment';
 import { Listing } from '../../../interface';
@@ -127,7 +127,7 @@ export class NewListingPage {
     const loading = this.loading.create();
     loading.present();
     this.listing.images.splice(index, 1);
-    forkJoin([ref.delete(), this.listingDoc.update(this.listing)]).subscribe(() => loading.dismiss());
+    Observable.forkJoin([ref.delete(), this.listingDoc.update(this.listing)]).subscribe(() => loading.dismiss());
   }
 
   onSlideChange() {
@@ -253,7 +253,7 @@ export class NewListingPage {
       } as Listing)
     }
     this.listing$.subscribe((listing) => {
-      listing.createdBy = isEmpty(listing.createdBy) ? this.userProvider.getDoc().ref : listing.createdBy;
+      listing.createdBy = isEmpty(listing.createdBy) ? this.userProvider.getDoc().ref as DocumentReference : listing.createdBy as DocumentReference;
       this.listing = listing;
       this.rangeLabelLower = this.rangelLabel(this.listing.duration.lower);
       this.rangeLabelUpper = this.rangelLabel(this.listing.duration.upper);

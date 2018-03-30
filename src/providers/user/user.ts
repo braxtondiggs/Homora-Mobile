@@ -47,4 +47,8 @@ export class UserProvider {
   set(user: User): void {
     this.user = user;
   }
+
+  getAccountType(): string {
+    return localStorage.getItem('account') ? localStorage.getItem('account') : 'basic';
+  }
 }

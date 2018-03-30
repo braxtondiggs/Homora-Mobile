@@ -93,6 +93,7 @@ export class SettingsPage {
   logout(): void {
     this.afAuth.auth.signOut().then(() => {
       localStorage.clear();
+      this.userProvider.set(null);
       this.nav.setRoot(IntroPage).then(() => {
         this.showToast('Log out Successful!');
       });

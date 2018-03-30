@@ -39,15 +39,19 @@ export class MainPage {
 
   ionViewDidLoad() {
     this.userProvider.getAuth().subscribe((auth: any) => {
-      this.accountType = localStorage.getItem('account') ? localStorage.getItem('account') : 'basic';
-      this.userProvider.setAuth(auth);
-      this.auth = auth;
       this.loading = false;
-      this.content.resize();
-      this.userProvider.get$().subscribe((user: User) => {
-        this.user = user
-        this.userProvider.set(user);
-      })
+      this.auth = auth;
+      if (auth) {
+        this.accountType = this.userProvider.getAccountType();
+        this.userProvider.setAuth(auth);
+        this.content.resize();
+        this.userProvider.get$().subscribe((user: User) => {
+          this.user = user
+          this.userProvider.set(user);
+        });
+      } else {
+        this.content.resize();
+      }
     });
   }
 }

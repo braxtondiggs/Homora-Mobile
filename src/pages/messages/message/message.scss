@@ -2,6 +2,10 @@ page-message {
   $toUserBackgroundColor: #fff;
   $userBackgroundColor: #387ef5;
 
+  .toolbar:first-child {
+    border-bottom: 3px solid rgba(119, 119, 119, .2);
+  }
+
   ion-content .scroll-content {
     background-color: #f5f5f5;
   }
@@ -13,6 +17,37 @@ page-message {
 
   .line-breaker {
     white-space: pre-line;
+  }
+
+  .sub-header {
+    display: flex;
+    padding: 4px 16px;
+
+    ion-avatar {
+      margin: 0 16px 0 0;
+
+      img {
+        height: 50px;
+        width: 50px;
+      }
+    }
+
+    > div {
+      flex: 1;
+
+      h2 {
+        margin: 0 0 2px;
+        font-size: 18px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+
+      p {
+        font-weight: bold;
+        margin: 0;
+      }
+    }
   }
 
   .input-wrap {
@@ -28,7 +63,7 @@ page-message {
   }
 
   .message-wrap {
-    padding: 0 10px;
+    padding: 20px 10px 0;
 
     .message {
       padding: 7px 0;
@@ -61,8 +96,8 @@ page-message {
           border: 1px solid #ddd;
           border-radius: 5px;
           color: #fff;
-          margin-top: 5px;
-          max-width: 80%;
+          font-size: 18px;
+          line-height: 22px;
           padding: 8px;
           position: relative;
           width: auto;
@@ -131,7 +166,7 @@ page-message {
 
       .msg-content {
         background-color: $userBackgroundColor;
-        float: right;
+        text-align: right;
 
         span.triangle {
           background-color: $userBackgroundColor;

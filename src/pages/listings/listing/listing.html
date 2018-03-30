@@ -163,12 +163,12 @@
 				<ion-icon name="chatbubbles"></ion-icon>
 			</button>
 		</ion-fab>
-		<ion-fab class="submit float" *ngIf="preview" right bottom>
+		<ion-fab class="submit float" *ngIf="preview && accountType !== 'basic'" right bottom>
 			<button ion-fab (click)="submit(listing)">
 				<ion-icon name="ios-arrow-forward"></ion-icon>
 			</button>
 		</ion-fab>
-		<ion-fab class="edit float" *ngIf="!preview && isUserListing(listing.createdBy.id)" right bottom>
+		<ion-fab class="edit float" *ngIf="!preview && isUserListing(listing.createdBy.id) && accountType !== 'basic'" right bottom>
 			<button ion-fab (click)="edit(listing.$key)">
 				<ion-icon name="create"></ion-icon>
 			</button>

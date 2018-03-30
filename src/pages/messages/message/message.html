@@ -1,24 +1,32 @@
 <ion-header>
 	<ion-navbar>
-		<ion-title>{{receiver.firstName}}</ion-title>
+		<ion-title *ngIf="receiver">{{receiver.firstName}}</ion-title>
 	</ion-navbar>
-	<!--<ion-navbar>
-		<ion-title>Bar 2</ion-title>
-	</ion-navbar>-->
+	<ion-navbar>
+		<div class="sub-header" *ngIf="(listing$ | async) as listing;" (click)="viewListing(listing.$key)">
+			<ion-avatar>
+				<img [attr.src]="(listing.images) ? listing.images[0].src : DEFAULT_LISTING_IMAGE" alt="{{listing.title}}" />
+			</ion-avatar>
+			<div>
+				<h2>{{listing.title}}</h2>
+				<p>{{listing.price | currency:'USD':true:'1.0-3'}}</p>
+			</div>
+			<button ion-button clear>Details</button>
+		</div>
+	</ion-navbar>
 </ion-header>
 <ion-content>
-	<div class="message-wrap" *ngIf="(message$ | async) as message;">
-		<div *ngFor="let chat of message.chat" class="message">
-			<!-- [class.left]=" msg.userId === toUser.id " [class.right]=" msg.userId === user.id ">-->
-			<img class="user-img" [src]="msg.userAvatar" alt="">
-			<!--<ion-spinner name="dots" *ngIf="msg.status === 'pending'"></ion-spinner>-->
+	<div class="message-wrap" *ngIf="user && receiver && message">
+		<div *ngFor="let chat of message.chats" class="message" [class.right]="chat.sender === user.$key" [class.left]="chat.sender === receiver.$key">
+			<img class="user-img" [attr.src]="(user.images) ? user.images[0].src : DEFAULT_USER_IMAGE" alt="{{user.firstName}}" (click)="viewProfile(user.$key)" *ngIf="chat.sender === user.$key">
+			<img class="user-img" [attr.src]="(receiver.images) ? receiver.images[0].src : DEFAULT_USER_IMAGE" alt="{{receiver.firstName}}" (click)="viewProfile(receiver.$key)" *ngIf="chat.sender === receiver.$key">
 			<div class="msg-detail">
-				<div class="msg-info">
-					<!--<p>{{msg.userName}}&nbsp;&nbsp;&nbsp;{{msg.time | relativeTime}}</p>-->
-				</div>
 				<div class="msg-content">
 					<span class="triangle"></span>
-					<p class="line-breaker ">{{msg.message}}</p>
+					<p class="line-breaker ">{{chat.message}}</p>
+				</div>
+				<div class="msg-info">
+					<p>{{chat.created | amTimeAgo}}</p>
 				</div>
 			</div>
 		</div>
@@ -29,7 +37,7 @@
 		<button ion-button clear icon-only item-right>
 			<ion-icon name="camera"></ion-icon>
 		</button>
-		<textarea #chat_input placeholder="Write a message" [(ngModel)]="message" (keyup.enter)="sendMessage()" (focusin)="onFocus()"></textarea>
+		<textarea #chat_input placeholder="Write a message" [(ngModel)]="messageInput" (keyup.enter)="sendMessage()" (focusin)="onFocus()"></textarea>
 		<button ion-button clear icon-only item-right (click)="sendMessage()">
 			<ion-icon name="send"></ion-icon>
 		</button>

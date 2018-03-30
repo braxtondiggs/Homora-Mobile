@@ -59,7 +59,7 @@ export class SignupPage {
           this.showToast(error.msg);
         });
       }).catch((error: any) => {
-        this.showToast(error.msg);
+        this.showToast(error.message);
       });
     } else {
       this.showToast('Invaild Email. Please check if your email has been entered correctly.');
