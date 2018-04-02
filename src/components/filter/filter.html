@@ -13,5 +13,70 @@
 	</ion-navbar>
 </ion-header>
 <ion-content>
-	Filter Component Ready for Service
+	<ion-list>
+		<ion-item>
+			<ion-label>Sort By</ion-label>
+			<ion-select [(ngModel)]="sort" (ionChange)="onChange()">
+				<ion-option>Best Match</ion-option>
+				<ion-option>Recent</ion-option>
+				<ion-option>Price</ion-option>
+			</ion-select>
+		</ion-item>
+		<ion-list-header class="range-header">
+			<ion-label>Price</ion-label>
+		</ion-list-header>
+		<ion-list-header class="range-header">
+			<div item-start>{{price.lower | currency:'USD':true:'1.0-3'}}</div>
+			<div item-end>{{price.upper | currency:'USD':true:'1.0-3'}}</div>
+		</ion-list-header>
+		<ion-item>
+			<ion-range min="0" max="10000" debounce="500" dualKnobs="true" [(ngModel)]="price" (ionChange)="onChange()"></ion-range>
+		</ion-item>
+		<ion-list-header class="range-header">
+			<ion-label>Duration</ion-label>
+		</ion-list-header>
+		<ion-list-header class="range-header">
+			<div item-start>{{duration.lower}}</div>
+			<div item-end>{{duration.upper}}</div>
+		</ion-list-header>
+		<ion-item>
+			<ion-range min="0" max="12" debounce="500" dualKnobs="true" [(ngModel)]="duration" (ionChange)="onChange()"></ion-range>
+		</ion-item>
+		<ion-item>
+			<ion-label>Gender</ion-label>
+			<ion-select [(ngModel)]="gender" (ionChange)="onChange()">
+				<ion-option value="all">Either</ion-option>
+				<ion-option value="female">Female</ion-option>
+				<ion-option value="male">Male</ion-option>
+			</ion-select>
+		</ion-item>
+		<ion-list-header class="range-header">
+			<ion-label>Age</ion-label>
+		</ion-list-header>
+		<ion-item>
+			<ion-grid>
+				<ion-row>
+					<ion-col>
+						<ion-label>Early 20s</ion-label>
+						<ion-checkbox [(ngModel)]="groupEarly20"></ion-checkbox>
+					</ion-col>
+					<ion-col>
+						<ion-label>Late 20s</ion-label>
+						<ion-checkbox [(ngModel)]="groupLate20"></ion-checkbox>
+					</ion-col>
+					<ion-col>
+						<ion-label>30s</ion-label>
+						<ion-checkbox [(ngModel)]="group30"></ion-checkbox>
+					</ion-col>
+					<ion-col>
+						<ion-label>40s and older</ion-label>
+						<ion-checkbox [(ngModel)]="group40older"></ion-checkbox>
+					</ion-col>
+				</ion-row>
+			</ion-grid>
+		</ion-item>
+	</ion-list>
 </ion-content>
+<ion-footer>
+	<button ion-button rounded block>Show 300+ Rooms</button>
+</ion-footer>

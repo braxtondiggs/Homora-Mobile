@@ -1,3 +1,24 @@
 filter {
+  .range-header {
+    border: 0;
+    margin: 0;
+    min-height: initial;
 
+    div[item-end],
+    div[item-start] {
+      margin: 0;
+    }
+
+    div[item-end] {
+      margin-right: 9px;
+    }
+  }
+
+  .item-range ion-range {
+    padding-top: 0;
+  }
+
+  .footer {
+    padding: 8px 24px;
+  }
 }
