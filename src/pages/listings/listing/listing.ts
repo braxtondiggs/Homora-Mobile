@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { AlertController, LoadingController, NavParams, NavController, ModalController, ToastController, ViewController } from 'ionic-angular';
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { DocumentReference } from '@firebase/firestore-types';
 import { Observable } from 'rxjs/Observable';
-import { Listing, User } from '../../../interface';
+import { Favorite, Listing, User } from '../../../interface';
 import { ListingProvider, UserProvider } from '../../../providers';
 import { ProfileViewPage } from '../../profile';
 import { MessagePage } from '../../messages';
 import { AuthPage } from '../../auth';
-import { filter, join, omit, truncate, size, sortBy } from 'lodash';
+import { first, filter, join, omit, truncate, size, sortBy } from 'lodash';
 import { AppSettings } from '../../../app/app.constants';
 import moment from 'moment';
 
@@ -18,12 +19,14 @@ import moment from 'moment';
 export class ListingPage {
   key: string;
   user: User;
+  favorite: Favorite;
   accountType: string;
   preview: boolean = false;
   DEFAULT_LISTING_IMAGE: string = AppSettings.DEFAULT_LISTING_IMAGE;
   DEFAULT_USER_IMAGE: string = AppSettings.DEFAULT_USER_IMAGE;
   listing$: Observable<Listing>;
   private listingDoc: AngularFirestoreDocument<Listing>;
+  private favoriteCollection: AngularFirestoreCollection<Favorite>;
   constructor(
     private afs: AngularFirestore,
     private listingProvider: ListingProvider,
@@ -105,6 +108,22 @@ export class ListingPage {
     return size(filter(features, (o) => o)) > 0;
   }
 
+  toggleFavorite(): void {
+    if (this.isFavorite() === 'heart') {
+      this.afs.doc<Favorite>(`Favorites/${this.favorite.$key}`).delete();
+    } else {
+      this.favoriteCollection.add({
+        listing: this.afs.doc<Listing>(`Listings/${this.key}`).ref as DocumentReference,
+        created: moment().toDate(),
+        user: this.userProvider.getDoc().ref as DocumentReference
+      } as Favorite);
+    }
+  }
+
+  isFavorite(): string {
+    return this.favorite && this.favorite.listing && this.favorite.listing.path === `Listings/${this.key}` ? 'heart' : 'heart-outline';
+  }
+
   ionViewDidLoad() {
     this.key = this.navParams.get('key');
     this.preview = this.navParams.get('isPreview') || false;
@@ -118,6 +137,12 @@ export class ListingPage {
         data.summaryTruncated = truncate(data.summary, { length: 250, separator: ' ' });
         return ({ $key: action.payload.id, ...data });
       });
+      if (this.user) {
+        this.favoriteCollection = this.afs.collection<Favorite>('Favorites', (ref) => ref.where('user', '==', this.userProvider.getDoc().ref).where('listing', '==', this.listingDoc.ref));
+        this.favoriteCollection.snapshotChanges().map((actions: any) => actions.map((action: any) => ({ $key: action.payload.doc.id, ...action.payload.doc.data() }))).subscribe((favorite: Favorite[]) => {
+          this.favorite = first(favorite);
+        });
+      }
     }
   }
 }

@@ -56,6 +56,7 @@ export class ListingsPage {
   isFavorite(key: string): string {
     return findIndex(this.favorites, ['listing.path', `Listings/${key}`]) > -1 ? 'heart' : 'heart-outline';
   }
+
   openMaps(): void {
     this.modal.create(MapsComponent).present();
   }
@@ -75,13 +76,15 @@ export class ListingsPage {
         data.createdBy$ = this.afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
         return ({ $key: action.payload.doc.id, ...data });
       });
-    })
+    });
     this.listings$.subscribe(() => {
       loader.dismiss();
-      this.favoriteCollection = this.afs.collection<Favorite>('Favorites', (ref) => ref.where('user', '==', this.userProvider.getDoc().ref));
-      this.favoriteCollection.snapshotChanges().map((actions: any) => actions.map((action: any) => ({ $key: action.payload.doc.id, ...action.payload.doc.data() }))).subscribe((favorites: Favorite[]) => {
-        this.favorites = favorites;
-      });
+      if (this.user) {
+        this.favoriteCollection = this.afs.collection<Favorite>('Favorites', (ref) => ref.where('user', '==', this.userProvider.getDoc().ref));
+        this.favoriteCollection.snapshotChanges().map((actions: any) => actions.map((action: any) => ({ $key: action.payload.doc.id, ...action.payload.doc.data() }))).subscribe((favorites: Favorite[]) => {
+          this.favorites = favorites;
+        });
+      }
     });
   }
 }
