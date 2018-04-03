@@ -16,7 +16,7 @@
 					<p item-end>{{message.modified | amTimeAgo}}</p>
 				</ion-item>
 				<ion-item-options side="right">
-					<button ion-button color="danger" (click)="deleteMessage(message.$key)">
+					<button ion-button color="danger" (click)="deleteMessage(message.$key);$event.stopPropagation()">
 						<ion-icon name="trash"></ion-icon> Delete
 					</button>
 				</ion-item-options>

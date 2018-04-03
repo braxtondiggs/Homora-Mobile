@@ -14,7 +14,7 @@
 </ion-header>
 <ion-content>
 	<form [formGroup]="listingForm" *ngIf="listing" novalidate>
-		<ion-slides (ionSlideWillChange)="onSlideChange() " initialSlide="0">
+		<ion-slides (ionSlideWillChange)="onSlideChange()" initialSlide="0">
 			<ion-slide padding>
 				<h1>Describe your place on Homora</h1>
 				<ion-list>

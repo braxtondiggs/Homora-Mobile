@@ -12,10 +12,46 @@ filter {
     div[item-end] {
       margin-right: 9px;
     }
+
+    .label {
+      font-size: 16px;
+    }
   }
 
   .item-range ion-range {
     padding-top: 0;
+  }
+
+  ion-item-divider {
+    min-height: 15px;
+
+    .label {
+      margin: 8px 8px 8px 0;
+    }
+  }
+
+  .checkbox-container {
+    .item-block {
+      min-height: 3rem;
+
+      .checkbox {
+        margin: 0 16px 0 4px;
+      }
+
+      .item-inner {
+        border-bottom: 0;
+        padding-right: 4px;
+
+        ion-label {
+          margin: 0;
+        }
+      }
+    }
+
+    &.checkbox-icon .item-block ion-label > div {
+      display: inline-block;
+      margin-right: 8px;
+    }
   }
 
   .footer {

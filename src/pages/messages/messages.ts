@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
 import { MessagePage } from './message/message';
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Rx';
 import { Message, User } from '../../interface';
 import { UserProvider } from '../../providers';
@@ -30,6 +30,7 @@ export class MessagesPage {
   deleteMessage(key: string): void {
     this.afs.doc<Message>(`Messages/${key}`).delete().then(() => {
       this.toast.create({
+        duration: 3000,
         message: 'Message was successfully deleted'
       }).present();
     });

@@ -4,28 +4,23 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 import { Observable } from 'rxjs/Observable';
 import { Listing } from '../../interface';
 import { ListingProvider } from '../../providers';
-import { filter } from 'lodash';
+import { filter, size } from 'lodash';
+import * as moment from 'moment';
 
 @Component({
   selector: 'filter',
-  templateUrl: 'filter.html'
+  templateUrl: 'filter.html',
+  providers: [ListingProvider],
 })
 export class FilterComponent {
-  sort: string = 'Best Match';
-  price: { lower: number, upper: number } = { lower: 0, upper: 10000 };
-  duration: { lower: number, upper: number } = { lower: 0, upper: 12 };
-  gender: string = 'all';
-  groupEarly20: boolean = true;
-  groupLate20: boolean = true;
-  group30: boolean = true;
-  group40older: boolean = false;
+  loading: boolean = false;
   listings$: Observable<Listing[]>;
+  listingTotal: number = 75;
+  minAvailability: string = moment().format();
   private listingsCollection: AngularFirestoreCollection<Listing>;
   constructor(private afs: AngularFirestore,
-    private listingProvider: ListingProvider,
-    private view: ViewController) {
-    this.initComponent();
-  }
+    public listingProvider: ListingProvider,
+    private view: ViewController) { }
 
   close() {
     this.view.dismiss({});
@@ -36,23 +31,24 @@ export class FilterComponent {
   }
 
   onChange() {
+    this.loading = true;
     this.listingsCollection = this.afs.collection<Listing>('Listings', (ref) => ref.where('status', '==', 'published'));
     this.listings$ = this.listingsCollection.snapshotChanges().map((actions: any) => {
       return filter(actions.map((action: any) => {
         const data = action.payload.doc.data();
         return ({ $key: action.payload.doc.id, ...data });
       }), (o) => {
-        return this.listingProvider.filterPrice(o, this.price) &&
-          this.listingProvider.filterDuration(o, this.duration) &&
-          this.listingProvider.filterGender(o, this.gender);
+        return this.listingProvider.filterPrice(o) &&
+          this.listingProvider.filterDuration(o) &&
+          this.listingProvider.filterGender(o) &&
+          this.listingProvider.filterAge(o) &&
+          this.listingProvider.filterAmenities(o) &&
+          this.listingProvider.filterRules(o);
       });
     });
-    this.listings$.subscribe((value: any) => {
-      console.log(value);
+    this.listings$.subscribe((listings: Listing[]) => {
+      this.loading = false;
+      this.listingTotal = size(listings);
     });
-  }
-
-  private initComponent() {
-
   }
 }
