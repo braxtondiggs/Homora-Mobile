@@ -16,7 +16,7 @@
 	<ion-list>
 		<ion-item>
 			<ion-label>Sort By</ion-label>
-			<ion-select [(ngModel)]="listingProvider.sort" (ionChange)="onChange()">
+			<ion-select [(ngModel)]="listingProvider.sort" (ionChange)="sortChange()">
 				<ion-option>Best Match</ion-option>
 				<ion-option>Recent</ion-option>
 				<ion-option>Price</ion-option>
@@ -36,8 +36,8 @@
 			<ion-label>Duration</ion-label>
 		</ion-list-header>
 		<ion-list-header class="range-header">
-			<div item-start>{{listingProvider.duration.lower}}</div>
-			<div item-end>{{listingProvider.duration.upper}}</div>
+			<div item-start>{{rangelLabel(listingProvider.duration.lower)}}</div>
+			<div item-end>{{rangelLabel(listingProvider.duration.upper)}}</div>
 		</ion-list-header>
 		<ion-item>
 			<ion-range min="0" max="12" debounce="500" dualKnobs="true" [(ngModel)]="listingProvider.duration" (ionChange)="onChange()"></ion-range>
@@ -242,7 +242,7 @@
 	</ion-list>
 </ion-content>
 <ion-footer>
-	<button [disabled]="loading" ion-button rounded block>
+	<button [disabled]="loading" (click)="close()" ion-button rounded block>
 		<span *ngIf="!loading">Show {{listingTotal}}+ Rooms</span>
 		<ion-spinner name="dots" *ngIf="loading" color="light"></ion-spinner>
 	</button>

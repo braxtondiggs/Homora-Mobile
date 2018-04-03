@@ -5,7 +5,7 @@ import { DocumentReference } from '@firebase/firestore-types';
 import { FilterComponent, MapsComponent } from '../../components';
 import { Observable } from 'rxjs/Observable';
 import { Favorite, Listing, User } from '../../interface';
-import { UserProvider } from '../../providers';
+import { ListingProvider, UserProvider } from '../../providers';
 import { ListingPage } from './listing/listing';
 import { ProfileViewPage } from '../profile';
 import { AppSettings } from '../../app/app.constants';
@@ -18,13 +18,16 @@ import { findIndex } from 'lodash';
 })
 export class ListingsPage {
   user: User;
+  listings: Listing[];
+  filter: boolean = false;
+  isLoading: boolean = true;
   favorites: Favorite[];
   listings$: Observable<Listing[]>;
   DEFAULT_LISTING_IMAGE: string = AppSettings.DEFAULT_LISTING_IMAGE;
   DEFAULT_USER_IMAGE: string = AppSettings.DEFAULT_USER_IMAGE;
-  private listingsCollection: AngularFirestoreCollection<Listing>;
   private favoriteCollection: AngularFirestoreCollection<Favorite>;
   constructor(private afs: AngularFirestore,
+    private listingProvider: ListingProvider,
     private userProvider: UserProvider,
     private loading: LoadingController,
     private modal: ModalController,
@@ -62,23 +65,30 @@ export class ListingsPage {
   }
 
   openFilter(): void {
-    this.modal.create(FilterComponent).present();
+    const modal = this.modal.create(FilterComponent);
+    modal.onDidDismiss(() => {
+      this.filter = !this.listingProvider.pristine;
+      this.ionViewDidLoad();
+    });
+    modal.present();
+  }
+
+  removeFilters(): void {
+    this.listingProvider.resetFilter();
+    this.filter = !this.listingProvider.pristine;
+    this.ionViewDidLoad();
   }
 
   ionViewDidLoad() {
     const loader = this.loading.create({ content: 'Finding Listings...' });
     loader.present();
+    this.isLoading = true;
     this.user = this.userProvider.get();
-    this.listingsCollection = this.afs.collection<Listing>('Listings', (ref) => ref.where('status', '==', 'published').orderBy('created', 'desc'));
-    this.listings$ = this.listingsCollection.snapshotChanges().map((actions: any) => {
-      return actions.map((action: any) => {
-        const data = action.payload.doc.data();
-        data.createdBy$ = this.afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
-        return ({ $key: action.payload.doc.id, ...data });
-      });
-    });
-    this.listings$.subscribe(() => {
+    this.listings$ = this.listingProvider.getListings(!this.filter);
+    this.listings$.subscribe((listings: Listing[]) => {
+      this.listings = listings;
       loader.dismiss();
+      this.isLoading = false;
       if (this.user) {
         this.favoriteCollection = this.afs.collection<Favorite>('Favorites', (ref) => ref.where('user', '==', this.userProvider.getDoc().ref));
         this.favoriteCollection.snapshotChanges().map((actions: any) => actions.map((action: any) => ({ $key: action.payload.doc.id, ...action.payload.doc.data() }))).subscribe((favorites: Favorite[]) => {

@@ -1,5 +1,5 @@
 <ion-content>
-	<div *ngIf="(listings$ | async) as listings;">
+	<div *ngIf="listings && listings.length > 0; else empty_results">
 		<ion-card *ngFor="let listing of listings" (click)="viewListing(listing.$key)">
 			<div class="slide-container">
 				<ion-slides pager="true">
@@ -28,6 +28,17 @@
 			</ion-card-content>
 		</ion-card>
 	</div>
+	<ng-template #empty_results>
+		<ion-grid *ngIf="!isLoading" class="empty-listings">
+			<ion-row justify-content-center align-items-center>
+				<div>
+					<h1>No Results</h1>
+					<p>To get more results, try adjusting your search by changing your move-in date, removing your filters, or zooming out of the map.</p>
+					<button (click)="removeFilters()" ion-button rounded>Remove Filters</button>
+				</div>
+			</ion-row>
+		</ion-grid>
+	</ng-template>
 	<ion-fab left bottom>
 		<button ion-fab (click)="openFilter()">
 			<ion-icon name="funnel"></ion-icon>
