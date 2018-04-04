@@ -10,7 +10,7 @@ import { ListingPage } from './listing/listing';
 import { ProfileViewPage } from '../profile';
 import { AppSettings } from '../../app/app.constants';
 import * as moment from 'moment';
-import { findIndex } from 'lodash';
+import { findIndex, size } from 'lodash';
 
 @Component({
   selector: 'listings',
@@ -65,7 +65,7 @@ export class ListingsPage {
   }
 
   openFilter(): void {
-    const modal = this.modal.create(FilterComponent);
+    const modal = this.modal.create(FilterComponent, { listingTotal: size(this.listings) });
     modal.onDidDismiss(() => {
       this.filter = !this.listingProvider.pristine;
       this.ionViewDidLoad();

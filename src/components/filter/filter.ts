@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { ViewController } from 'ionic-angular';
+import { NavParams, ViewController } from 'ionic-angular';
 import { Listing } from '../../interface';
 import { ListingProvider } from '../../providers';
-import { size } from 'lodash';
+import { toNumber, size } from 'lodash';
 import * as moment from 'moment';
 
 @Component({
@@ -14,7 +14,10 @@ export class FilterComponent {
   listingTotal: number = 75;
   minAvailability: string = moment().format();
   constructor(private listingProvider: ListingProvider,
-    private view: ViewController) { }
+    private view: ViewController,
+    private params: NavParams) {
+    this.listingTotal = toNumber(this.params.get('listingTotal'));
+  }
 
   close(): void {
     this.view.dismiss();
@@ -42,6 +45,10 @@ export class FilterComponent {
       this.listingProvider.pristine = false;
       this.getListings(false);
     }
+  }
+
+  formatTotal(total: number): string {
+    return total > 0 ? `${total}+` : total.toString()
   }
 
   private getListings(filter: boolean): void {

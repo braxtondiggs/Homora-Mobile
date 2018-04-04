@@ -5,7 +5,6 @@ import { Listing } from '../../interface';
 import { ListingAmenities } from '../../interface/listing/amenities.interface';
 import { ListingRules } from '../../interface/listing/rules.interface';
 import { RoommateAge } from '../../interface/listing/roommate.interface';
-// import { filter, intersectionWith } from 'lodash';
 import * as _ from 'lodash';
 
 @Injectable()
@@ -80,12 +79,12 @@ export class ListingProvider {
         const data = action.payload.doc.data();
         return ({ $key: action.payload.doc.id, ...data });
       }), (o) => {
-        return this.filterAge(o)/*filterList || this.filterPrice(o) &&
+        return filterList || this.filterPrice(o) &&
           this.filterDuration(o) &&
           this.filterGender(o) &&
           this.filterAge(o) &&
           this.filterAmenities(o) &&
-          this.filterRules(o);*/
+          this.filterRules(o);
       });
     });
   }
@@ -103,27 +102,17 @@ export class ListingProvider {
   }
 
   filterAge(listing: Listing): boolean {
-    if (listing.roommate && listing.roommate.age) {
-      const data = _.pickBy(this.age, _.identity);
-      console.log('listing', listing.roommate.age);
-      console.log(_.merge(data, listing.roommate.age));
-      // console.log(listing.roommate.age);
-      // console.log(_.intersectionWith([listing.roommate.age], [this.age], _.isEqual));
-      return true;
-    } else {
-      return false;
-    }
-    // return (listing.roommate && listing.roommate.age) && listing.roommate.age.groupEarly20 === this.age.groupEarly20 || listing.roommate.age.groupLate20 === this.age.groupLate20 || listing.roommate.age.group30 === this.age.group30 || listing.roommate.age.group40older === this.age.group40older;
+    if (!listing.roommate || !listing.roommate.age) return false;
+    return _.chain(this.age).pickBy(_.identity).map((value, key) => value && listing.roommate.age[key]).compact().size().value() > 0 || _.chain(this.age).pickBy(_.identity).values().compact().size().value() === 0;
   }
 
   filterAmenities(listing: Listing): boolean {
-    return listing.amenities && listing.amenities.washer === this.amenities.washer && listing.amenities.wifi === this.amenities.wifi && listing.amenities.water === this.amenities.water && listing.amenities.electricity === this.amenities.electricity && listing.amenities.furnished === this.amenities.furnished &&
-      listing.amenities.doorman === this.amenities.doorman && listing.amenities.air === this.amenities.air && listing.amenities.heating === this.amenities.heating && listing.amenities.month === this.amenities.month && listing.amenities.gym === this.amenities.gym && listing.amenities.tv === this.amenities.tv &&
-      listing.amenities.bathroom === this.amenities.bathroom && listing.amenities.dog === this.amenities.dog && listing.amenities.cat === this.amenities.cat && listing.amenities.otherPet === this.amenities.otherPet;
+    if (!listing.amenities) return false;
+    return _.chain(this.amenities).pickBy(_.identity).map((value, key) => value && listing.amenities[key]).compact().size().value() > 0 || _.chain(this.amenities).pickBy(_.identity).values().compact().size().value() === 0;
   }
 
   filterRules(listing: Listing): boolean {
-    return listing.rules && listing.rules.smoking === this.rules.smoking && listing.rules.pets === this.rules.pets && listing.rules.drugs === this.rules.drugs && listing.rules.drinking === this.rules.drinking && listing.rules.dogOk === this.rules.dogOk &&
-      listing.rules.catOk === this.rules.catOk && listing.rules.otherPetOk === this.rules.otherPetOk && listing.rules.couplesOk === this.rules.couplesOk;
+    if (!listing.rules) return false;
+    return _.chain(this.rules).pickBy(_.identity).map((value, key) => value && listing.rules[key]).compact().size().value() > 0 || _.chain(this.rules).pickBy(_.identity).values().compact().size().value() === 0;
   }
 }

@@ -160,7 +160,7 @@ export class NewListingPage {
   private openCamera(type: string): void {
     this.camera.getPicture({
       quality: 70,
-      destinationType: this.camera.DestinationType.FILE_URI,
+      destinationType: this.camera.DestinationType.DATA_URL,
       sourceType: type === 'camera' ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE
