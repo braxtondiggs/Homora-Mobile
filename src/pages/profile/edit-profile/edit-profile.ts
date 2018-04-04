@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { AlertController, LoadingController, NavController, ToastController, Slides } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, Platform, ToastController, Slides } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
@@ -35,7 +35,8 @@ export class EditProfilePage {
     private loading: LoadingController,
     private toast: ToastController,
     private nav: NavController,
-    private camera: Camera) {
+    private camera: Camera,
+    private platform: Platform) {
     this.profileForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
@@ -122,18 +123,20 @@ export class EditProfilePage {
   }
 
   private openCamera(type: string): void {
-    this.camera.getPicture({
-      quality: 70,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      sourceType: type === 'camera' ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
-    } as CameraOptions).then((image) => {
-      this.uploadImage(image);
-    }, (err) => {
-      if (err === 'cordova_not_available') {
-        this.file.nativeElement.click();
-      }
+    this.platform.ready().then(() => {
+      this.camera.getPicture({
+        quality: 70,
+        destinationType: this.camera.DestinationType.DATA_URL,
+        sourceType: type === 'camera' ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE
+      } as CameraOptions).then((image) => {
+        this.uploadImage(image);
+      }, (err) => {
+        if (err === 'cordova_not_available') {
+          this.file.nativeElement.click();
+        }
+      });
     });
   }
 
