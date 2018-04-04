@@ -10,7 +10,6 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { GoogleMaps } from '@ionic-native/google-maps';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Facebook } from '@ionic-native/facebook';
 import { NativePageTransitions } from '@ionic-native/native-page-transitions';
@@ -43,7 +42,6 @@ import { AuthProvider, ListingProvider, UserProvider } from '../providers';
   providers: [
     StatusBar,
     SplashScreen,
-    GoogleMaps,
     Geolocation,
     Facebook,
     Camera,

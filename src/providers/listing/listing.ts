@@ -5,7 +5,8 @@ import { Listing } from '../../interface';
 import { ListingAmenities } from '../../interface/listing/amenities.interface';
 import { ListingRules } from '../../interface/listing/rules.interface';
 import { RoommateAge } from '../../interface/listing/roommate.interface';
-import { filter } from 'lodash';
+// import { filter, intersectionWith } from 'lodash';
+import * as _ from 'lodash';
 
 @Injectable()
 export class ListingProvider {
@@ -75,16 +76,16 @@ export class ListingProvider {
   getListings(filterList: boolean = true): Observable<Listing[]> {
     const listingsCollection = this.afs.collection<Listing>('Listings', (ref) => ref.where('status', '==', 'published'));
     return listingsCollection.snapshotChanges().map((actions: any) => {
-      return filter(actions.map((action: any) => {
+      return _.filter(actions.map((action: any) => {
         const data = action.payload.doc.data();
         return ({ $key: action.payload.doc.id, ...data });
       }), (o) => {
-        return filterList || this.filterPrice(o) &&
+        return this.filterAge(o)/*filterList || this.filterPrice(o) &&
           this.filterDuration(o) &&
           this.filterGender(o) &&
           this.filterAge(o) &&
           this.filterAmenities(o) &&
-          this.filterRules(o);
+          this.filterRules(o);*/
       });
     });
   }
@@ -102,7 +103,17 @@ export class ListingProvider {
   }
 
   filterAge(listing: Listing): boolean {
-    return listing.roommate && listing.roommate.age && listing.roommate.age.groupEarly20 === this.age.groupEarly20 && listing.roommate.age.groupLate20 === this.age.groupLate20 && listing.roommate.age.group30 === this.age.group30 && listing.roommate.age.group40older === this.age.group40older;
+    if (listing.roommate && listing.roommate.age) {
+      const data = _.pickBy(this.age, _.identity);
+      console.log('listing', listing.roommate.age);
+      console.log(_.merge(data, listing.roommate.age));
+      // console.log(listing.roommate.age);
+      // console.log(_.intersectionWith([listing.roommate.age], [this.age], _.isEqual));
+      return true;
+    } else {
+      return false;
+    }
+    // return (listing.roommate && listing.roommate.age) && listing.roommate.age.groupEarly20 === this.age.groupEarly20 || listing.roommate.age.groupLate20 === this.age.groupLate20 || listing.roommate.age.group30 === this.age.group30 || listing.roommate.age.group40older === this.age.group40older;
   }
 
   filterAmenities(listing: Listing): boolean {

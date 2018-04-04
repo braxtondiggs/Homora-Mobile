@@ -1,25 +1,30 @@
-import { Component } from '@angular/core';
-import { GoogleMaps, GoogleMap, GoogleMapsEvent, GoogleMapOptions } from '@ionic-native/google-maps';
+import { Component, ViewChild } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+import { } from '@types/googlemaps';
 
 @Component({
   selector: 'maps',
   templateUrl: 'maps.html'
 })
 export class MapsComponent {
-  map: GoogleMap;
-
-  constructor(private geolocation: Geolocation) { }
+  map: google.maps.Map;
+  @ViewChild('gmap') gmapElement: any;
+  constructor(private geolocation: Geolocation,
+    private platform: Platform) { }
 
   ionViewDidLoad() {
-    this.geolocation.getCurrentPosition().then((resp: Geoposition) => {
-      this.loadMap(resp);
-    }).catch((error) => {
-      console.log(error);
+    this.platform.ready().then(() => {
+      this.geolocation.getCurrentPosition({ maximumAge: 3000, timeout: 5000, enableHighAccuracy: true }).then((resp: Geoposition) => {
+        console.log('location', resp);
+        // this.loadMap(resp);
+      }).catch((error) => {
+        console.log(error);
+      });
     });
   }
 
-  loadMap(position: Geoposition) {
+  /*loadMap(position: Geoposition) {
     let mapOptions: GoogleMapOptions = {
       camera: {
         target: {
@@ -56,5 +61,5 @@ export class MapsComponent {
           });
 
       });
-  }
+  }*/
 }
