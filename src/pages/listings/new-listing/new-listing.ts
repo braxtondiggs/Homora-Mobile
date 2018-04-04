@@ -159,11 +159,13 @@ export class NewListingPage {
 
   private openCamera(type: string): void {
     this.camera.getPicture({
-      quality: 70,
+      quality: 75,
       destinationType: this.camera.DestinationType.DATA_URL,
+      targetWidth: 1000,
+      targetHeight: 1000,
       sourceType: type === 'camera' ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE
+      correctOrientation: type === 'camera',
+      encodingType: this.camera.EncodingType.JPEG
     } as CameraOptions).then((image) => {
       this.uploadImage(image);
     }, (err) => {
