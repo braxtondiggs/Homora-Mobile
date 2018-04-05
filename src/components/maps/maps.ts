@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Platform, ToastController } from 'ionic-angular';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+import { GeoLocationProvider } from '../../providers';
 import { } from '@types/googlemaps';
 
 @Component({
@@ -9,57 +10,59 @@ import { } from '@types/googlemaps';
 })
 export class MapsComponent {
   map: google.maps.Map;
+  DEFAULT_LATLNG = {
+    LAT: 38.889931,
+    LNG: -77.009003
+  };
+  drawerOptions: any = {
+    handleHeight: 0,
+    thresholdFromBottom: 200,
+    thresholdFromTop: 200,
+    bounceBack: false
+  };
   @ViewChild('gmap') gmapElement: any;
   constructor(private geolocation: Geolocation,
+    private locationProvider: GeoLocationProvider,
+    private toast: ToastController,
     private platform: Platform) { }
 
   ionViewDidLoad() {
+    this.loadMap();
     this.platform.ready().then(() => {
-      this.geolocation.getCurrentPosition({ maximumAge: 3000, timeout: 5000, enableHighAccuracy: true }).then((resp: Geoposition) => {
-        console.log('location', resp);
-        // this.loadMap(resp);
-      }).catch((error) => {
-        console.log(error);
-      });
+      if (this.platform.is('cordova')) {
+        this.geolocation.getCurrentPosition({
+          maximumAge: 3000,
+          timeout: 5000,
+          enableHighAccuracy: true
+        }).then((location: Geoposition) => this.updateMapLocation(location)).catch((error: any) => {
+          this.toast.create({ message: error.toString(), duration: 3000 }).present();
+        });
+      } else {
+        this.locationProvider.getLocation().subscribe((location: Geoposition) => {
+          console.log(location);
+          this.updateMapLocation(location);
+        }, (err) => {
+          console.log(err);
+        });
+      }
     });
   }
+  private updateMapLocation(location: Geoposition) {
+    this.map.setCenter(new google.maps.LatLng(location.coords.latitude, location.coords.longitude));
+  }
 
-  /*loadMap(position: Geoposition) {
-    let mapOptions: GoogleMapOptions = {
-      camera: {
-        target: {
-          lat: 43.0741904,
-          lng: -89.3809802
-        },
-        zoom: 18,
-        tilt: 30
-      }
+  private loadMap() {
+    var mapProp = {
+      center: new google.maps.LatLng(this.DEFAULT_LATLNG.LAT, this.DEFAULT_LATLNG.LNG),
+      zoom: 13,
+      style: [{
+        featureType: 'poi',
+        elementType: 'labels',
+        stylers: [{
+          visibility: 'off'
+        }]
+      }]
     };
-
-    this.map = GoogleMaps.create('map_canvas', mapOptions);
-
-    // Wait the MAP_READY before using any methods.
-    this.map.one(GoogleMapsEvent.MAP_READY)
-      .then(() => {
-        console.log('Map is ready!');
-
-        // Now you can use all methods safely.
-        this.map.addMarker({
-          title: 'Ionic',
-          icon: 'blue',
-          animation: 'DROP',
-          position: {
-            lat: 43.0741904,
-            lng: -89.3809802
-          }
-        })
-          .then(marker => {
-            marker.on(GoogleMapsEvent.MARKER_CLICK)
-              .subscribe(() => {
-                alert('clicked');
-              });
-          });
-
-      });
-  }*/
+    this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
+  }
 }

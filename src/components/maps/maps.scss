@@ -3,4 +3,12 @@ maps {
     height: 100%;
     width: 100%;
   }
+
+  content-drawer {
+    background-color: #34495e !important;
+  }
+
+  content-drawer .content {
+    padding: 20px;
+  }
 }

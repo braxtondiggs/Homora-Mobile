@@ -20,6 +20,7 @@ import { PagesModule } from '../pages/pages.module';
 import { ComponentsModule } from '../components/components.module';
 import { environment } from './app.environment';
 import { AuthProvider, ListingProvider, UserProvider } from '../providers';
+import { GeoLocationProvider } from '../providers/geolocation/geolocation';
 
 @NgModule({
   declarations: [MyApp],
@@ -49,7 +50,8 @@ import { AuthProvider, ListingProvider, UserProvider } from '../providers';
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthProvider,
     ListingProvider,
-    UserProvider
+    UserProvider,
+    GeoLocationProvider
   ]
 })
 export class AppModule { }
