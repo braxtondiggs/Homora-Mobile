@@ -1,16 +1,18 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { AlertController, LoadingController, NavController, Slides } from 'ionic-angular';
+import { AlertController, LoadingController, NavController, ToastController, Slides } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { ListingProvider, UserProvider } from '../../../providers';
+import { GeoLocationProvider, ListingProvider, UserProvider } from '../../../providers';
 import { ListingPage } from '../listing/listing';
+import { Listing } from '../../../interface';
+import { Metro } from '../../../interface/listing/location.interface';
 import { Observable } from 'rxjs/Rx';
 import { DocumentReference } from '@firebase/firestore-types';
-import { first, findIndex, map, includes, isEmpty, isNull, reject, toNumber, size } from 'lodash';
+import * as _ from 'lodash';
 import * as moment from 'moment';
-import { Listing } from '../../../interface';
+import * as firebase from 'firebase/app'
 
 @Component({
   selector: 'page-new-listing',
@@ -37,7 +39,9 @@ export class NewListingPage {
     private formBuilder: FormBuilder,
     private nav: NavController,
     private alert: AlertController,
+    private toast: ToastController,
     private camera: Camera,
+    private geoLocationProvider: GeoLocationProvider,
     private listingProvider: ListingProvider,
     private userProvider: UserProvider,
     private loading: LoadingController) { }
@@ -59,12 +63,12 @@ export class NewListingPage {
         this.slides.lockSwipes(false);
         this.slides.slideNext();
         this.slides.lockSwipes(true);
-      } else if (this.slides.isEnd() && this.listingForm.valid && size(this.listing.images) > 2) {
+      } else if (this.slides.isEnd() && this.listingForm.valid && _.size(this.listing.images) > 2) {
         this.submitted = true;
         this.listingProvider.setActive(this.key);
         this.nav.push(ListingPage, { key: this.key, isPreview: true });
-      } else if ((this.slides.isEnd() && this.listingForm.invalid) || (this.slides.isEnd() && size(this.listing.images) <= 2)) {
-        const error = first(reject(map(this.listingForm.controls, (o, key) => ({ errors: o.errors, name: key })), (o) => isNull(o.errors)));
+      } else if ((this.slides.isEnd() && this.listingForm.invalid) || (this.slides.isEnd() && _.size(this.listing.images) <= 2)) {
+        const error = _.first(_.reject(_.map(this.listingForm.controls, (o, key) => ({ errors: o.errors, name: key })), (o) => _.isNull(o.errors)));
         this.submitted = true;
         this.alert.create({
           title: 'Looks like some info is missing.',
@@ -73,7 +77,7 @@ export class NewListingPage {
             text: 'Ok',
             handler: () => {
               if (error) {
-                const index = findIndex(this.labelMap, (o: any) => includes(o, error.name));
+                const index = _.findIndex(this.labelMap, (o: any) => _.includes(o, error.name));
                 this.slides.lockSwipes(false);
                 this.slides.slideTo(index);
                 this.slides.lockSwipes(true);
@@ -83,6 +87,12 @@ export class NewListingPage {
         }).present();
       }
       this.saving = false;
+    }).catch((err: any) => {
+      this.saving = false;
+      this.toast.create({
+        message: err,
+        duration: 3000
+      }).present();
     });
   }
 
@@ -135,19 +145,22 @@ export class NewListingPage {
   }
 
   private showBackBtn(): boolean {
-    return !isEmpty(this.key) || !this.slides.isBeginning();
+    return !_.isEmpty(this.key) || !this.slides.isBeginning();
   }
 
-  private save(force: boolean = false): Promise<void> {
+  private save(force: boolean = false): Promise<any> {
     if (this.listingForm.dirty || force) {
-      this.formatListing();
-      if (this.listingDoc) {
-        return this.listingDoc.update(this.listing);
-      } else {
-        this.key = this.afs.collection('Listings').ref.doc().id;
-        this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
-        return this.listingDoc.set(this.listing)
-      }
+      return this.formatListing().then(() => {
+        if (this.listingDoc) {
+          return this.listingDoc.update(this.listing);
+        } else {
+          this.key = this.afs.collection('Listings').ref.doc().id;
+          this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
+          return this.listingDoc.set(this.listing)
+        }
+      }).catch((err) => {
+        return Promise.reject(err);
+      });
     } else {
       return Promise.resolve();
     }
@@ -182,12 +195,18 @@ export class NewListingPage {
     const ref = this.storage.ref(`Listings/${this.listing.createdBy.id}/${this.key}/${key}`);
     const task = ref.putString(`data:${type};base64,${base64}`, 'data_url');
     task.downloadURL().subscribe((url: string) => {
-      if (isEmpty(this.listing.images)) this.listing.images = [];
+      if (_.isEmpty(this.listing.images)) this.listing.images = [];
       this.listing.images.push({
         name: key,
         src: url
       });
-      this.save(true).then(() => loading.dismiss());
+      this.save(true).then(() => loading.dismiss()).catch((err) => {
+        loading.dismiss();
+        this.toast.create({
+          message: err,
+          duration: 3000
+        }).present();
+      });
     });
   }
 
@@ -256,7 +275,7 @@ export class NewListingPage {
       } as Listing)
     }
     this.listing$.subscribe((listing) => {
-      listing.createdBy = isEmpty(listing.createdBy) ? this.userProvider.getDoc().ref as DocumentReference : listing.createdBy as DocumentReference;
+      listing.createdBy = _.isEmpty(listing.createdBy) ? this.userProvider.getDoc().ref as DocumentReference : listing.createdBy as DocumentReference;
       this.listing = listing;
       this.rangeLabelLower = this.rangelLabel(this.listing.duration.lower);
       this.rangeLabelUpper = this.rangelLabel(this.listing.duration.upper);
@@ -316,16 +335,41 @@ export class NewListingPage {
   }
 
   ionViewDidLeave() {
-    if (this.slides && this.slides.length() > 0 && isNull(this.listingProvider.getActive())) {
+    if (this.slides && this.slides.length() > 0 && _.isNull(this.listingProvider.getActive())) {
       this.slides.lockSwipes(false);
       this.slides.slideTo(0);
       this.slides.lockSwipes(true);
     }
   }
 
-  private formatListing() {
-    this.listing.price = !isNull(this.listing.price) ? toNumber(this.listing.price) : null;
-    this.listing.deposit = !isNull(this.listing.deposit) ? toNumber(this.listing.deposit) : null;
+  private formatListing(): Promise<void> {
+    this.listing.price = !_.isNull(this.listing.price) ? _.toNumber(this.listing.price) : null;
+    this.listing.deposit = !_.isNull(this.listing.deposit) ? _.toNumber(this.listing.deposit) : null;
     this.listing.availability = moment(this.listing.availability).toDate();
+    let that = this;
+    if (this.listingForm.controls.address1.dirty || this.listingForm.controls.address2.dirty || this.listingForm.controls.city.dirty || this.listingForm.controls.state.dirty || this.listingForm.controls.zip.dirty) {
+      const address = `${this.listing.location.address1} ${!_.isEmpty(this.listing.location.address2) ? this.listing.location.address2 : ''}
+         ${this.listing.location.city} , ${this.listing.location.state} ${this.listing.location.zip} ${this.listing.location.country}`;
+      return this.geoLocationProvider.latLngForAddress(address).then(function(latlng) {
+        if (that.listing.location.isPrivate) {
+          let random = [_.toNumber(_.random(0.0001, 0.0009).toFixed(4)), _.toNumber(_.random(0.0001, 0.0009).toFixed(4))];
+          latlng.lat = _.random(0, 1) === 0 ? _.subtract(latlng.lat, random[0]) : _.add(latlng.lat, random[0]);
+          latlng.lng = _.random(0, 1) === 0 ? _.subtract(latlng.lng, random[1]) : _.add(latlng.lng, random[1]);
+        }
+        that.listing.location.latlng = new firebase.firestore.GeoPoint(latlng.lat, latlng.lng);
+        return that.geoLocationProvider.getMetros(latlng).then(function(metros: Metro[]) {
+          that.listing.location.metro = metros;
+          _.forEach(that.listing.location.metro, function(metro: any, key: any) {
+            that.listing.location.metro[key].latlng = new firebase.firestore.GeoPoint(metro.Lat, metro.Lon);
+            that.listing.location.metro[key] = _.chain(metro).pickBy(_.identity).omit(['Lat', 'Lon']).value() as any;
+          });
+          return Promise.resolve();
+        });
+      }, (err) => {
+        return Promise.reject(err);
+      });
+    } else {
+      return Promise.resolve();
+    }
   }
 }

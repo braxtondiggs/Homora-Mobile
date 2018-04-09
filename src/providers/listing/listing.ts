@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
-import { Listing } from '../../interface';
+import { Listing, User } from '../../interface';
 import { ListingAmenities } from '../../interface/listing/amenities.interface';
 import { ListingRules } from '../../interface/listing/rules.interface';
 import { RoommateAge } from '../../interface/listing/roommate.interface';
@@ -77,6 +77,7 @@ export class ListingProvider {
     return listingsCollection.snapshotChanges().map((actions: any) => {
       return _.filter(actions.map((action: any) => {
         const data = action.payload.doc.data();
+        data.createdBy$ = this.afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
         return ({ $key: action.payload.doc.id, ...data });
       }), (o) => {
         return filterList || this.filterPrice(o) &&

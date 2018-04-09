@@ -3,4 +3,64 @@ maps {
     height: 100%;
     width: 100%;
   }
+
+  .close_btn {
+    left: 0;
+    position: absolute;
+    top: 0;
+    z-index: 10;
+  }
+
+  .redo_btn {
+    left: 50%;
+    position: absolute;
+    top: 0;
+    transform: translate(-50%, 0);
+    z-index: 10;
+  }
+
+  .content-drawer {
+    -webkit-transition: height .3s ease;
+    background-color: #fff;
+    bottom: 0;
+    box-shadow: 0 -4px 22px -8px rgba(0,0,0,0.75);
+    height: 0;
+    position: absolute;
+    transition: height .3s ease;
+    width: 100%;
+    z-index: 10 !important;
+
+    &.active {
+      height: 275px;
+    }
+  }
+
+  .card-header {
+    height: 175px;
+    overflow: hidden;
+    position: relative;
+
+    img {
+      width: 100%;
+    }
+  }
+
+  .card-content {
+    padding: 8px;
+    text-align: initial;
+    white-space: nowrap;
+
+    .card-title {
+      font-size: 2rem;
+      overflow: hidden;
+      padding-bottom: 0;
+      text-overflow: ellipsis;
+    }
+
+    .sub-text {
+      color: #7f8c8d;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
 }
