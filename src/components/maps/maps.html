@@ -1,11 +1,25 @@
 <ion-content>
+	<button (click)="close()" class="close_btn" color="dark" ion-button icon-only clear><ion-icon name="close"></ion-icon></button>
+	<button (click)="redoSearch()" *ngIf="showSearchBtn" class="redo_btn" ion-button rounded>Redo search in this area</button>
 	<div #gmap id="map_canvas"></div>
 </ion-content>
-<content-drawer [options]="drawerOptions">
+<div class="content-drawer" [ngClass]="{'active': isDrawerActive}">
 	<div class="content">
-		The world is your oyster.
-		<p>
-			If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-		</p>
+		<ion-slides slidesPerView="2">
+			<ion-slide *ngFor="let listing of listings" (click)="viewListing(listing.$key)">
+				<ion-card [ngClass]="{'active': listing.active}">
+					<div class="card-header">
+						<img [attr.src]="(listing.images)?listing.images[0].src:DEFAULT_LISTING_IMAGE" alt="{{listing.title}}" />
+						<div class="price-container">
+							<h2 class="price" color="light" ion-text>{{listing.price | currency:'USD':true:'1.0-3'}}</h2>
+						</div>
+					</div>
+					<ion-card-content>
+						<ion-card-title>{{listing.title}}</ion-card-title>
+						<p class="sub-text">{{listing.availability | date: 'M/d'}} &#183; 1-12 Months Lease</p>
+					</ion-card-content>
+				</ion-card>
+			</ion-slide>
+		</ion-slides>
 	</div>
-</content-drawer>
+</div>
