@@ -93,11 +93,7 @@ export class ListingPage {
   }
 
   duration(lower: number, upper: number): string {
-    if (lower === upper) {
-      return `${upper} months`;
-    } else {
-      return `${lower}-${upper} months`;
-    }
+    return lower === upper ? `${upper} months` : `${lower}-${upper} months`;
   }
 
   isUserListing(key: string): boolean {

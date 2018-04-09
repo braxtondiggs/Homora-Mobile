@@ -79,12 +79,16 @@ export class ListingsPage {
     this.ionViewDidLoad();
   }
 
+  duration(lower: number, upper: number): string {
+    return lower === upper ? `${upper} months` : `${lower}-${upper} months`;
+  }
+
   ionViewDidLoad() {
     const loader = this.loading.create({ content: 'Finding Listings...' });
     loader.present();
     this.isLoading = true;
     this.user = this.userProvider.get();
-    this.listings$ = this.listingProvider.getListings(!this.filter);
+    this.listings$ = this.listingProvider.getListings();
     this.listings$.subscribe((listings: Listing[]) => {
       this.listings = listings;
       loader.dismiss();

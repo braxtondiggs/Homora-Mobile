@@ -24,7 +24,7 @@
 					</ion-avatar>
 				</ion-card-header>
 				<ion-card-title>{{listing.title}}</ion-card-title>
-				<p class="sub-text">{{listing.availability | date: 'M/d'}} &#183; 1-12 Months Lease</p>
+				<p class="sub-text">{{listing.availability | date: 'M/d'}} &#183; {{duration(listing.duration.lower, listing.duration.upper)}}</p>
 			</ion-card-content>
 		</ion-card>
 	</div>

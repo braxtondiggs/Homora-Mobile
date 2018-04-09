@@ -35,14 +35,31 @@ maps {
     }
   }
 
+  .card {
+    border-top: transparent solid 4px;
+
+    &.active {
+      border-color: #1569ff;
+    }
+  }
+
   .card-header {
     height: 175px;
     overflow: hidden;
     position: relative;
 
     img {
+      height: 100%;
       width: 100%;
     }
+
+    .price-container {
+      bottom: 20px;
+    }
+  }
+
+  .hidden {
+    visibility: hidden;
   }
 
   .card-content {

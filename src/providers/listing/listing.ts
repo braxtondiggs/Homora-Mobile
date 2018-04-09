@@ -6,6 +6,7 @@ import { ListingAmenities } from '../../interface/listing/amenities.interface';
 import { ListingRules } from '../../interface/listing/rules.interface';
 import { RoommateAge } from '../../interface/listing/roommate.interface';
 import * as _ from 'lodash';
+import * as firebase from 'firebase/app'
 
 @Injectable()
 export class ListingProvider {
@@ -57,10 +58,10 @@ export class ListingProvider {
       pets: false,
       drugs: false,
       drinking: false,
-      dogOk: true,
-      catOk: true,
+      dogOk: false,
+      catOk: false,
       otherPetOk: false,
-      couplesOk: true
+      couplesOk: false
     } as ListingRules;
   }
 
@@ -72,8 +73,12 @@ export class ListingProvider {
     this.active = key;
   }
 
-  getListings(filterList: boolean = true): Observable<Listing[]> {
-    const listingsCollection = this.afs.collection<Listing>('Listings', (ref) => ref.where('status', '==', 'published'));
+  getListings(filterList: boolean = false, area: any = { center: { latitude: 38.8256989, longitude: -77.0306601 }, radius: 20 }): Observable<Listing[]> {
+    const box = this.boundingBoxCoordinates(area.center, area.radius);
+    const lesserGeopoint = new firebase.firestore.GeoPoint(box.swCorner.latitude, box.swCorner.longitude);
+    const greaterGeopoint = new firebase.firestore.GeoPoint(box.neCorner.latitude, box.neCorner.longitude);
+
+    const listingsCollection = this.afs.collection<Listing>('Listings', (ref) => ref.where('status', '==', 'published').where('location.latlng', '>', lesserGeopoint).where('location.latlng', '<', greaterGeopoint));
     return listingsCollection.snapshotChanges().map((actions: any) => {
       return _.filter(actions.map((action: any) => {
         const data = action.payload.doc.data();
@@ -116,4 +121,54 @@ export class ListingProvider {
     if (!listing.rules) return false;
     return _.chain(this.rules).pickBy(_.identity).map((value, key) => value && listing.rules[key]).compact().size().value() > 0 || _.chain(this.rules).pickBy(_.identity).values().compact().size().value() === 0;
   }
+
+  private boundingBoxCoordinates(center, radius) {
+    const KM_PER_DEGREE_LATITUDE = 110.574;
+    const latDegrees = radius / KM_PER_DEGREE_LATITUDE;
+    const latitudeNorth = Math.min(90, center.latitude + latDegrees);
+    const latitudeSouth = Math.max(-90, center.latitude - latDegrees);
+    // calculate longitude based on current latitude
+    const longDegsNorth = this.metersToLongitudeDegrees(radius, latitudeNorth);
+    const longDegsSouth = this.metersToLongitudeDegrees(radius, latitudeSouth);
+    const longDegs = Math.max(longDegsNorth, longDegsSouth);
+    return {
+      swCorner: { // bottom-left (SW corner)
+        latitude: latitudeSouth,
+        longitude: this.wrapLongitude(center.longitude - longDegs),
+      },
+      neCorner: { // top-right (NE corner)
+        latitude: latitudeNorth,
+        longitude: this.wrapLongitude(center.longitude + longDegs),
+      },
+    };
+  }
+
+  private metersToLongitudeDegrees(distance, latitude) {
+    const EARTH_EQ_RADIUS = 6378137.0;
+    // this is a super, fancy magic number that the GeoFire lib can explain (maybe)
+    const E2 = 0.00669447819799;
+    const EPSILON = 1e-12;
+    const radians = this.degreesToRadians(latitude);
+    const num = Math.cos(radians) * EARTH_EQ_RADIUS * Math.PI / 180;
+    const denom = 1 / Math.sqrt(1 - E2 * Math.sin(radians) * Math.sin(radians));
+    const deltaDeg = num * denom;
+    if (deltaDeg < EPSILON) {
+      return distance > 0 ? 360 : 0;
+    }
+    // else
+    return Math.min(360, distance / deltaDeg);
+  }
+
+  private wrapLongitude(longitude) {
+    if (longitude <= 180 && longitude >= -180) {
+      return longitude;
+    }
+    const adjusted = longitude + 180;
+    if (adjusted > 0) {
+      return (adjusted % 360) - 180;
+    }
+    return 180 - (-adjusted % 360);
+  }
+
+  private degreesToRadians(degrees) { return (degrees * Math.PI) / 180; }
 }

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, Platform, ToastController, ViewController } from 'ionic-angular';
+import { NavController, Platform, Slides, ToastController, ViewController } from 'ionic-angular';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { GeoLocationProvider, ListingProvider } from '../../providers';
 import { ListingPage } from '../../pages/listings/listing/listing';
@@ -7,7 +7,7 @@ import { Listing } from '../../interface';
 import { Observable } from 'rxjs/Observable';
 import { AppSettings } from '../../app/app.constants';
 import { } from '@types/googlemaps';
-import { forEach } from 'lodash';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'maps',
@@ -15,15 +15,19 @@ import { forEach } from 'lodash';
 })
 export class MapsComponent {
   map: google.maps.Map;
+  markers: google.maps.Marker[] = [];
   isDrawerActive: boolean = true;
   showSearchBtn: boolean = false;
+  activeListing: boolean[];
+  isLoading: boolean;
   listings: Listing[];
   listings$: Observable<Listing[]>;
   DEFAULT_LISTING_IMAGE: string = AppSettings.DEFAULT_LISTING_IMAGE;
   DEFAULT_LATLNG = {
-    LAT: 38.889931,
-    LNG: -77.009003
+    LAT: 38.8256989,
+    LNG: -77.0306601
   };
+  @ViewChild(Slides) slides: Slides;
   @ViewChild('gmap') gmapElement: any;
   constructor(private geolocation: Geolocation,
     private locationProvider: GeoLocationProvider,
@@ -61,9 +65,14 @@ export class MapsComponent {
 
   redoSearch(): void {
     this.showSearchBtn = false;
+    this.updateListing();
   }
   viewListing(key: string): void {
     this.nav.push(ListingPage, { key });
+  }
+
+  duration(lower: number, upper: number): string {
+    return lower === upper ? `${upper} months` : `${lower}-${upper} months`;
   }
 
   private updateMapLocation(location: Geoposition) {
@@ -72,27 +81,55 @@ export class MapsComponent {
   }
 
   private updateListing() {
-    this.listings$ = this.listingProvider.getListings(true);
-    this.listings$.subscribe((listings: Listing[]) => {
-      console.log(listings);
-      this.listings = listings;
-      let marker;
-      forEach(this.listings, (listing) => {
-        marker = new google.maps.Marker({
-          position: new google.maps.LatLng(listing.location.latlng.latitude, listing.location.latlng.longitude),
-          map: this.map
-        });
-        google.maps.event.addListener(marker, 'click', (marker, i) => {
-          console.log(i, marker);
+    this.isLoading = true;
+    setTimeout(() => {
+      var bounds = this.map.getBounds();
+      var center = bounds.getCenter();
+      var r = 6378.8
+      // degrees to radians (divide by 57.2958)
+      var ne_lat = bounds.getNorthEast().lat() / 57.2958
+      var ne_lng = bounds.getNorthEast().lng() / 57.2958
+      var c_lat = bounds.getCenter().lat() / 57.2958
+      var c_lng = bounds.getCenter().lng() / 57.2958
+      var r_km = r * Math.acos(
+        Math.sin(c_lat) * Math.sin(ne_lat) +
+        Math.cos(c_lat) * Math.cos(ne_lat) * Math.cos(ne_lng - c_lng)
+      )
+      this.listings$ = this.listingProvider.getListings(false, {
+        center: {
+          latitude: center.lat(),
+          longitude: center.lng()
+        },
+        radius: r_km
+      });
+      this.listings$.subscribe((listings: Listing[]) => {
+        this.isLoading = false;
+        this.listings = listings;
+        let marker;
+        _.forEach(this.markers, (_marker, i) => {
+          this.markers[i].setMap(null);
+        })
+        _.forEach(this.listings, (listing, i) => {
+          marker = new google.maps.Marker({
+            position: new google.maps.LatLng(listing.location.latlng.latitude, listing.location.latlng.longitude),
+            map: this.map
+          });
+          this.markers.push(marker);
+          google.maps.event.addListener(marker, 'click', ((marker, i) => () => {
+            this.activeListing = _.fill(Array(_.size(this.listings)), false);
+            this.activeListing[i] = true;
+            this.isDrawerActive = true;
+            this.slides.slideTo(i);
+          })(marker, i));
         });
       });
-    });
+    }, 250);
   }
 
   private loadMap() {
     var mapProp = {
       center: new google.maps.LatLng(this.DEFAULT_LATLNG.LAT, this.DEFAULT_LATLNG.LNG),
-      zoom: 12,
+      zoom: 11,
       disableDefaultUI: true,
       style: [{
         featureType: 'poi',
@@ -104,7 +141,7 @@ export class MapsComponent {
     };
     this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
     this.map.addListener('click', () => {
-      this.isDrawerActive = false;
+      this.isDrawerActive = !this.isDrawerActive;
     });
     this.map.addListener('bounds_changed', () => {
       this.showSearchBtn = true;
