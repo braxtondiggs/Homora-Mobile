@@ -23,7 +23,8 @@
 			<div class="msg-detail">
 				<div class="msg-content">
 					<span class="triangle"></span>
-					<p class="line-breaker ">{{chat.message}}</p>
+					<p class="line-breaker" *ngIf="chat.message">{{chat.message}}</p>
+					<img [attr.src]="chat.image" *ngIf="chat.image" alt="" />
 				</div>
 				<div class="msg-info">
 					<p>{{chat.created | amTimeAgo}}</p>
@@ -34,10 +35,11 @@
 </ion-content>
 <ion-footer no-border>
 	<div class="input-wrap">
-		<button ion-button clear icon-only item-right>
+		<input type="file" id="file" (change)="onFileChange($event)" #file>
+		<button (click)="addImage()" ion-button clear icon-only item-right>
 			<ion-icon name="camera"></ion-icon>
 		</button>
-		<textarea #chat_input placeholder="Write a message" [(ngModel)]="messageInput" (keyup.enter)="sendMessage()" (focusin)="onFocus()"></textarea>
+		<textarea #chat_input placeholder="Write a message" [(ngModel)]="messageInput" (keyup.enter)="sendMessage()" (focusin)="onFocus()" rows="1" maxLength="500" (keyup)="resize()"></textarea>
 		<button ion-button clear icon-only item-right (click)="sendMessage()">
 			<ion-icon name="send"></ion-icon>
 		</button>

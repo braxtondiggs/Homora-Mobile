@@ -1,5 +1,6 @@
 export interface Chats {
   created: Date;
-  message: string;
+  message?: string;
+  image?: string;
   sender: string;
 }

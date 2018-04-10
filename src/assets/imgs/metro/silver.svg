@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="300"
+   height="300"
+   id="svg49260">
+  <defs
+     id="defs49262" />
+  <metadata
+     id="metadata49265">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-752.36218)"
+     id="layer1">
+    <g
+       transform="translate(-559.53134,449.53134)"
+       id="g56148">
+      <g
+         transform="matrix(39.43736,0,0,-39.43736,559.53134,452.85056)"
+         id="g3534">
+        <path
+           d="M 0,0 C 0,2.1 1.703,3.804 3.804,3.804 5.904,3.804 7.607,2.1 7.607,0 7.607,-2.101 5.904,-3.803 3.804,-3.803 1.703,-3.803 0,-2.101 0,0"
+           id="path3536"
+           style="fill:#9c9e9b;fill-opacity:1;fill-rule:nonzero;stroke:none" />
+      </g>
+      <g
+         id="g56142">
+        <g
+           transform="matrix(39.43736,0,0,-39.43736,605.09317,471.57163)"
+           id="g3538">
+          <path
+             d="m 0,0 c 0.004,-0.744 0.594,-1.037 1.26,-1.037 0.638,0 1.265,0.236 1.265,0.972 0,0.524 -0.423,0.719 -0.842,0.837 C 1.26,0.89 0.841,0.931 0.841,1.154 c 0,0.191 0.203,0.249 0.367,0.249 0.231,0 0.479,-0.086 0.467,-0.351 l 0.756,0 C 2.427,1.707 1.846,1.987 1.268,1.987 0.724,1.987 0.086,1.74 0.086,1.105 0.086,0.573 0.521,0.386 0.935,0.268 1.354,0.151 1.769,0.101 1.769,-0.155 1.769,-0.37 1.533,-0.452 1.305,-0.452 0.984,-0.452 0.773,-0.342 0.756,0 L 0,0"
+             id="path3540"
+             style="fill:#231f20;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+        </g>
+        <g
+           transform="matrix(39.43736,0,0,-39.43736,813.98908,395.6036)"
+           id="g3542">
+          <path
+             d="m 0,0 -0.789,0 -0.568,-2.16 -0.009,0 -0.569,2.16 -0.789,0 0.915,-2.903 0.871,0"
+             id="path3544"
+             style="fill:#231f20;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

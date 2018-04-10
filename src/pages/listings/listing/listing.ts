@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { AlertController, LoadingController, NavParams, NavController, ModalController, ToastController, ViewController } from 'ionic-angular';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { DocumentReference } from '@firebase/firestore-types';
@@ -10,6 +10,7 @@ import { MessagePage } from '../../messages';
 import { AuthPage } from '../../auth';
 import { first, filter, join, omit, truncate, size, sortBy } from 'lodash';
 import { AppSettings } from '../../../app/app.constants';
+import { } from '@types/googlemaps';
 import moment from 'moment';
 
 @Component({
@@ -22,9 +23,13 @@ export class ListingPage {
   favorite: Favorite;
   accountType: string;
   preview: boolean = false;
+  listing: Listing;
+  map: google.maps.Map;
+  markers: google.maps.Marker[] = [];
   DEFAULT_LISTING_IMAGE: string = AppSettings.DEFAULT_LISTING_IMAGE;
   DEFAULT_USER_IMAGE: string = AppSettings.DEFAULT_USER_IMAGE;
   listing$: Observable<Listing>;
+  @ViewChild('gmap') gmapElement: any;
   private listingDoc: AngularFirestoreDocument<Listing>;
   private favoriteCollection: AngularFirestoreCollection<Favorite>;
   constructor(
@@ -121,6 +126,8 @@ export class ListingPage {
   }
 
   ionViewDidLoad() {
+    const loading = this.loading.create();
+    loading.present();
     this.key = this.navParams.get('key');
     this.preview = this.navParams.get('isPreview') || false;
     this.user = this.userProvider.get();
@@ -133,6 +140,11 @@ export class ListingPage {
         data.summaryTruncated = truncate(data.summary, { length: 250, separator: ' ' });
         return ({ $key: action.payload.id, ...data });
       });
+      this.listing$.subscribe((listing: Listing) => {
+        this.listing = listing;
+        this.loadMap();
+        loading.dismiss();
+      })
       if (this.user) {
         this.favoriteCollection = this.afs.collection<Favorite>('Favorites', (ref) => ref.where('user', '==', this.userProvider.getDoc().ref).where('listing', '==', this.listingDoc.ref));
         this.favoriteCollection.snapshotChanges().map((actions: any) => actions.map((action: any) => ({ $key: action.payload.doc.id, ...action.payload.doc.data() }))).subscribe((favorite: Favorite[]) => {
@@ -140,6 +152,41 @@ export class ListingPage {
         });
       }
     }
+  }
+  private loadMap() {
+    var mapProp = {
+      center: new google.maps.LatLng(this.listing.location.latlng.latitude, this.listing.location.latlng.longitude),
+      zoom: 13,
+      disableDefaultUI: true,
+      style: [{
+        featureType: 'poi',
+        elementType: 'labels',
+        stylers: [{
+          visibility: 'off'
+        }]
+      }]
+    };
+    setTimeout(() => {
+      this.map = new google.maps.Map(this.gmapElement.nativeElement, mapProp);
+      const center = new google.maps.LatLng(this.listing.location.latlng.latitude, this.listing.location.latlng.longitude)
+      if (this.listing.location.isPrivate) {
+        new google.maps.Circle({
+          strokeColor: '#008489',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#4DD2D7',
+          fillOpacity: 0.35,
+          map: this.map,
+          radius: 800,
+          center
+        });
+      } else {
+        new google.maps.Marker({
+          position: center,
+          map: this.map
+        });
+      }
+    });
   }
 }
 
