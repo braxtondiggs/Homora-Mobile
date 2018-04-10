@@ -30,7 +30,7 @@
 					</ion-col>
 					<ion-col (click)="viewProfile(createdBy.$key)" *ngIf="(listing.createdBy$ | async) as createdBy;" col-auto>
 						<ion-avatar class="avatar">
-							<img [attr.src]="(createdBy.images[0].src) ? createdBy.images[0].src : DEFAULT_USER_IMAGE" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
+							<img [attr.src]="(createdBy.images[0]) ? createdBy.images[0].src : DEFAULT_USER_IMAGE" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
 						</ion-avatar>
 						<p class="listing-createdby md-subhead">{{createdBy.firstName}}, {{ today | amDifference: createdBy.birthdate :'years'}}</p>
 					</ion-col>

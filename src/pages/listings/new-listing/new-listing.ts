@@ -137,7 +137,11 @@ export class NewListingPage {
     const loading = this.loading.create();
     loading.present();
     this.listing.images.splice(index, 1);
-    Observable.forkJoin([ref.delete(), this.listingDoc.update(this.listing)]).subscribe(() => loading.dismiss());
+    Observable.forkJoin([ref.delete(), this.listingDoc.update(this.listing)]).subscribe(() => {
+      loading.dismiss();
+      this.slides.update();
+      if (this.slides.isEnd()) this.slides.slideTo(this.slides.length());
+    });
   }
 
   onSlideChange() {

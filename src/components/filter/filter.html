@@ -17,9 +17,9 @@
 		<ion-item>
 			<ion-label>Sort By</ion-label>
 			<ion-select [(ngModel)]="listingProvider.sort" (ionChange)="sortChange()">
-				<ion-option>Best Match</ion-option>
-				<ion-option>Recent</ion-option>
-				<ion-option>Price</ion-option>
+				<ion-option value="Best Match">Best Match</ion-option>
+				<ion-option value="Recent">Recent</ion-option>
+				<ion-option value="Price">Price</ion-option>
 			</ion-select>
 		</ion-item>
 		<ion-list-header class="range-header">
@@ -52,7 +52,7 @@
 		</ion-item>
 		<ion-item>
 			<ion-label>Move-In Date</ion-label>
-			<ion-datetime displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minAvailability"></ion-datetime>
+			<ion-datetime displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minAvailability" [(ngModel)]="listingProvider.availability" placeholder="Immediately" (ionChange)="onChange()"></ion-datetime>
 		</ion-item>
 		<ion-list-header class="range-header">
 			<ion-label>Age</ion-label>

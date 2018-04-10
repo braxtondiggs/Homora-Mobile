@@ -6,7 +6,7 @@
 				<p>View and edit profile</p>
 			</div>
 			<ion-avatar class="avatar">
-				<img [attr.src]="(user.images[0].src) ? user.images[0].src : DEFAULT_USER_IMAGE" alt="{{user.firstName}} {{user.lastName}}">
+				<img [attr.src]="(user.images[0]) ? user.images[0].src : DEFAULT_USER_IMAGE" alt="{{user.firstName}} {{user.lastName}}">
 			</ion-avatar>
 		</button>
 	</div>

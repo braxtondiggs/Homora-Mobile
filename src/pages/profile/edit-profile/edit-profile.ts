@@ -110,7 +110,11 @@ export class EditProfilePage {
     const loading = this.loading.create();
     loading.present();
     this.user.images.splice(index, 1);
-    forkJoin([!isNull(name) ? ref.delete() : Observable.of({}), this.userDoc.update(this.user)]).subscribe(() => loading.dismiss());
+    forkJoin([!isNull(name) ? ref.delete() : Observable.of({}), this.userDoc.update(this.user)]).subscribe(() => {
+      loading.dismiss();
+      this.slides.update();
+      if (this.slides.isEnd()) this.slides.slideTo(this.slides.length());
+    });
   }
 
   ionViewDidLoad() {

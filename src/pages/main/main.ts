@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, Content } from 'ionic-angular';
+import { Content, Events, LoadingController, NavController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { User } from '../../interface';
 import { AuthPage } from '../auth';
@@ -16,7 +16,7 @@ export class MainPage {
   auth: any;
   user: User;
   accountType: string = 'basic';
-  loading: boolean = true;
+  isLoading: boolean = true;
   @ViewChild(Content) content: Content;
   ListingsTab: any;
   ListerTab: any;
@@ -24,36 +24,55 @@ export class MainPage {
   FavoritesTab: any;
   MessagesTab: any;
   ProfileTab: any;
-  constructor(private nav: NavController, private userProvider: UserProvider) {
+  constructor(private events: Events,
+    private nav: NavController,
+    private loading: LoadingController,
+    private userProvider: UserProvider) {
     this.ListingsTab = ListingsPage;
     this.ListerTab = ListerPage;
     this.NewListingTab = NewListingPage;
     this.FavoritesTab = FavoritesPage;
     this.MessagesTab = MessagesPage;
     this.ProfileTab = ProfilePage;
+
+    this.events.subscribe('switchAccount', () => {
+      const loading = this.loading.create();
+      loading.present();
+      this.init().then(() => {
+        loading.dismiss();
+      })
+    });
   }
 
   openAuthPage() {
     this.nav.push(AuthPage);
   }
 
-  ionViewDidLoad() {
-    this.userProvider.getAuth().subscribe((auth: any) => {
-      if (auth) {
-        this.accountType = this.userProvider.getAccountType();
-        this.userProvider.setAuth(auth);
-        this.content.resize();
-        this.userProvider.get$().subscribe((user: User) => {
-          this.loading = false;
+  init(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.userProvider.getAuth().subscribe((auth: any) => {
+        if (auth) {
+          this.accountType = this.userProvider.getAccountType();
+          this.userProvider.setAuth(auth);
+          this.content.resize();
+          this.userProvider.get$().subscribe((user: User) => {
+            this.isLoading = false;
+            this.auth = auth;
+            this.user = user
+            this.userProvider.set(user);
+            return resolve();
+          });
+        } else {
+          this.isLoading = false;
           this.auth = auth;
-          this.user = user
-          this.userProvider.set(user);
-        });
-      } else {
-        this.loading = false;
-        this.auth = auth;
-        this.content.resize();
-      }
+          this.content.resize();
+          return resolve();
+        }
+      });
     });
+  }
+
+  ionViewDidLoad() {
+    this.init();
   }
 }

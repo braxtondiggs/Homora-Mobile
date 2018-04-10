@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { Events, NavController } from 'ionic-angular';
 import { UserProvider } from '../../providers/user/user';
 import { User } from '../../interface';
 import { ProfileViewPage } from './view/profile-view';
@@ -13,11 +13,14 @@ import { AppSettings } from '../../app/app.constants';
 export class ProfilePage {
   user: User;
   DEFAULT_USER_IMAGE: string = AppSettings.DEFAULT_USER_IMAGE;
-  constructor(private nav: NavController, private userProvider: UserProvider) { }
+  constructor(private events: Events,
+    private nav: NavController,
+    private userProvider: UserProvider) { }
 
   viewProfile(key: string): void {
     this.nav.push(ProfileViewPage, { key, edit: true })
   }
+
   gotoSettings(): void {
     this.nav.push(SettingsPage, {});
   }
@@ -28,7 +31,7 @@ export class ProfilePage {
 
   switchAccount(): void {
     localStorage.setItem('account', localStorage.getItem('account') === 'lister' ? 'basic' : 'lister');
-    window.location.reload();
+    this.events.publish('switchAccount');
   }
 
   accountType(): boolean {

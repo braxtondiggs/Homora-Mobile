@@ -13,6 +13,6 @@
 	</ion-tabs>
 	<ion-nav [root]="ListingsTab" *ngIf="!auth"></ion-nav>
 </ion-content>
-<ion-footer *ngIf="!auth && !loading">
+<ion-footer *ngIf="!auth && !isLoading">
 	<button color="dark" (click)="openAuthPage()" ion-button full>Log in to access more features</button>
 </ion-footer>

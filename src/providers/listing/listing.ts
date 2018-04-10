@@ -6,13 +6,15 @@ import { ListingAmenities } from '../../interface/listing/amenities.interface';
 import { ListingRules } from '../../interface/listing/rules.interface';
 import { RoommateAge } from '../../interface/listing/roommate.interface';
 import * as _ from 'lodash';
-import * as firebase from 'firebase/app'
+import * as firebase from 'firebase/app';
+import * as moment from 'moment';
 
 @Injectable()
 export class ListingProvider {
   active: string;
   pristine: boolean;
   sort: string;
+  availability: string;
   price: { lower: number, upper: number };
   duration: { lower: number, upper: number };
   gender: string;
@@ -27,6 +29,7 @@ export class ListingProvider {
   resetFilter() {
     this.pristine = true;
     this.sort = 'Best Match';
+    this.availability = null;
     this.price = { lower: 0, upper: 10000 };
     this.duration = { lower: 0, upper: 12 };
     this.gender = 'all';
@@ -80,7 +83,7 @@ export class ListingProvider {
 
     const listingsCollection = this.afs.collection<Listing>('Listings', (ref) => ref.where('status', '==', 'published').where('location.latlng', '>', lesserGeopoint).where('location.latlng', '<', greaterGeopoint));
     return listingsCollection.snapshotChanges().map((actions: any) => {
-      return _.filter(actions.map((action: any) => {
+      const listings = _.filter(actions.map((action: any) => {
         const data = action.payload.doc.data();
         data.createdBy$ = this.afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
         return ({ $key: action.payload.doc.id, ...data });
@@ -90,8 +93,17 @@ export class ListingProvider {
           this.filterGender(o) &&
           this.filterAge(o) &&
           this.filterAmenities(o) &&
-          this.filterRules(o);
+          this.filterRules(o) &&
+          this.filterAvailability(o)
       });
+      switch (this.sort) {
+        case 'Best Match':
+          return _.orderBy(listings, ['created', 'availability'], ['asc', 'desc']);
+        case 'Recent':
+          return _.orderBy(listings, ['created'], ['asc']);
+        case 'Price':
+          return _.orderBy(listings, ['price'], ['asc']);
+      }
     });
   }
 
@@ -120,6 +132,11 @@ export class ListingProvider {
   filterRules(listing: Listing): boolean {
     if (!listing.rules) return false;
     return _.chain(this.rules).pickBy(_.identity).map((value, key) => value && listing.rules[key]).compact().size().value() > 0 || _.chain(this.rules).pickBy(_.identity).values().compact().size().value() === 0;
+  }
+
+  filterAvailability(listing: Listing): boolean {
+    if (_.isEmpty(this.availability) || moment(this.availability).isSame(moment(), 'day')) return true;
+    return moment(this.availability).isBefore(moment(listing.availability));
   }
 
   private boundingBoxCoordinates(center, radius) {

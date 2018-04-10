@@ -9,7 +9,7 @@
 			<ion-item-sliding *ngFor="let message of messages" (click)="viewMessage(message.$key)">
 				<ion-item>
 					<ion-avatar *ngIf="(message.user$ | async) as receiver;" item-start>
-						<img [attr.src]="(receiver.images[0].src) ? receiver.images[0].src : DEFAULT_USER_IMAGE" alt="{{receiver.firstName}}">
+						<img [attr.src]="(receiver.images[0]) ? receiver.images[0].src : DEFAULT_USER_IMAGE" alt="{{receiver.firstName}}">
 					</ion-avatar>
 					<h2 *ngIf="(message.user$ | async) as receiver;">{{receiver.firstName}}</h2>
 					<p>{{message.chats[message.chats.length - 1].message}}</p>
