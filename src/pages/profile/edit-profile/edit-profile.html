@@ -18,7 +18,7 @@
 					<ion-icon name="trash"></ion-icon>
 				</button>
 			</ion-slide>
-			<ion-slide *ngIf="!user.images[0]">
+			<ion-slide *ngIf="!hasProfileImage()">
 				<img [attr.src]="DEFAULT_USER_IMAGE" alt="Default User Image" />
 			</ion-slide>
 		</ion-slides>

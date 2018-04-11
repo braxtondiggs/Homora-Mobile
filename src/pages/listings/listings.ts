@@ -10,7 +10,7 @@ import { ListingPage } from './listing/listing';
 import { ProfileViewPage } from '../profile';
 import { AppSettings } from '../../app/app.constants';
 import * as moment from 'moment';
-import { findIndex, size } from 'lodash';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'listings',
@@ -43,7 +43,7 @@ export class ListingsPage {
   }
 
   toggleFavorite(key: string, $event: Event): void {
-    const index = findIndex(this.favorites, ['listing.path', `Listings/${key}`]);
+    const index = _.findIndex(this.favorites, ['listing.path', `Listings/${key}`]);
     if (index > -1) {
       this.afs.doc<Favorite>(`Favorites/${this.favorites[index].$key}`).delete();
     } else {
@@ -57,7 +57,7 @@ export class ListingsPage {
   }
 
   isFavorite(key: string): string {
-    return findIndex(this.favorites, ['listing.path', `Listings/${key}`]) > -1 ? 'heart' : 'heart-outline';
+    return _.findIndex(this.favorites, ['listing.path', `Listings/${key}`]) > -1 ? 'heart' : 'heart-outline';
   }
 
   openMaps(): void {
@@ -65,7 +65,7 @@ export class ListingsPage {
   }
 
   openFilter(): void {
-    const modal = this.modal.create(FilterComponent, { listingTotal: size(this.listings) });
+    const modal = this.modal.create(FilterComponent, { listingTotal: _.size(this.listings) });
     modal.onDidDismiss(() => {
       this.filter = !this.listingProvider.pristine;
       this.ionViewDidLoad();
@@ -81,6 +81,10 @@ export class ListingsPage {
 
   duration(lower: number, upper: number): string {
     return lower === upper ? `${upper} months` : `${lower}-${upper} months`;
+  }
+
+  hasListingImage(listing: Listing): boolean {
+    return !_.isEmpty(listing.images);
   }
 
   ionViewDidLoad() {

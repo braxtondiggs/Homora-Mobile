@@ -37,6 +37,10 @@ export class ProfileViewPage {
     this.nav.push(ListingPage, { key });
   }
 
+  hasProfileImage(images: any[]): boolean {
+    return !isEmpty(images);
+  }
+
   ionViewCanEnter() {
     return !isEmpty(this.navParams.get('key'));
   }

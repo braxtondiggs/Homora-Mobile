@@ -5,7 +5,7 @@
 	<ion-navbar>
 		<div class="sub-header" *ngIf="(listing$ | async) as listing;" (click)="viewListing(listing.$key)">
 			<ion-avatar>
-				<img [attr.src]="(listing.images) ? listing.images[0].src : DEFAULT_LISTING_IMAGE" alt="{{listing.title}}" />
+				<img [attr.src]="listing.images && listing.images[0] ? listing.images[0].src : DEFAULT_LISTING_IMAGE" alt="{{listing.title}}" />
 			</ion-avatar>
 			<div>
 				<h2>{{listing.title}}</h2>
@@ -18,8 +18,8 @@
 <ion-content>
 	<div class="message-wrap" *ngIf="user && receiver && message">
 		<div *ngFor="let chat of message.chats" class="message" [class.right]="chat.sender === user.$key" [class.left]="chat.sender === receiver.$key">
-			<img class="user-img" [attr.src]="(user.images[0]) ? user.images[0].src : DEFAULT_USER_IMAGE" alt="{{user.firstName}}" (click)="viewProfile(user.$key)" *ngIf="chat.sender === user.$key">
-			<img class="user-img" [attr.src]="(receiver.images[0]) ? receiver.images[0].src : DEFAULT_USER_IMAGE" alt="{{receiver.firstName}}" (click)="viewProfile(receiver.$key)" *ngIf="chat.sender === receiver.$key">
+			<img class="user-img" [attr.src]="user.images && user.images[0] ? user.images[0].src : DEFAULT_USER_IMAGE" alt="{{user.firstName}}" (click)="viewProfile(user.$key)" *ngIf="chat.sender === user.$key">
+			<img class="user-img" [attr.src]="receiver.images && receiver.images[0] ? receiver.images[0].src : DEFAULT_USER_IMAGE" alt="{{receiver.firstName}}" (click)="viewProfile(receiver.$key)" *ngIf="chat.sender === receiver.$key">
 			<div class="msg-detail">
 				<div class="msg-content">
 					<span class="triangle"></span>

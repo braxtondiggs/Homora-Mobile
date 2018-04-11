@@ -10,7 +10,7 @@
 				<ion-slide *ngFor="let listing of listings; let i = index" (click)="viewListing(listing.$key)">
 					<ion-card [ngClass]="{'active': activeListing && activeListing[i]}">
 						<div class="card-header">
-							<img [attr.src]="(listing.images)?listing.images[0].src:DEFAULT_LISTING_IMAGE" alt="{{listing.title}}" />
+							<img [attr.src]="listing.images && listing.images[0] ? listing.images[0].src : DEFAULT_LISTING_IMAGE" alt="{{listing.title}}" />
 							<div class="price-container">
 								<h2 class="price" color="light" ion-text>{{listing.price | currency:'USD':true:'1.0-3'}}</h2>
 							</div>

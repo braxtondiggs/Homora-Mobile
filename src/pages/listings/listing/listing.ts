@@ -8,7 +8,7 @@ import { ListingProvider, UserProvider } from '../../../providers';
 import { ProfileViewPage } from '../../profile';
 import { MessagePage } from '../../messages';
 import { AuthPage } from '../../auth';
-import { first, filter, join, omit, truncate, size, sortBy } from 'lodash';
+import { first, filter, join, omit, truncate, size, sortBy, isEmpty } from 'lodash';
 import { AppSettings } from '../../../app/app.constants';
 import { } from '@types/googlemaps';
 import moment from 'moment';
@@ -123,6 +123,10 @@ export class ListingPage {
 
   isFavorite(): string {
     return this.favorite && this.favorite.listing && this.favorite.listing.path === `Listings/${this.key}` ? 'heart' : 'heart-outline';
+  }
+
+  hasListingImage(): boolean {
+    return !isEmpty(this.listing.images);
   }
 
   ionViewDidLoad() {

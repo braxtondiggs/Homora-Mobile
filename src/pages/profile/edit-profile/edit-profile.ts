@@ -10,7 +10,7 @@ import { UserProvider } from '../../../providers/user/user';
 import { User } from '../../../interface';
 import { UserImage } from '../../../interface/user/image.interface';
 import { AppSettings } from '../../../app/app.constants';
-import { join, isEmpty, isNull, map, reject, startCase } from 'lodash';
+import * as _ from 'lodash';
 import * as  moment from 'moment';
 
 @Component({
@@ -65,11 +65,11 @@ export class EditProfilePage {
         })
       });
     } else {
-      const message = join(reject(map(this.profileForm.controls, (o: any, key: string) => {
-        return map(o.errors, (i, _key: string) => {
-          return (_key === 'required') ? `${startCase(key)} is required` : '';
+      const message = _.chain(this.profileForm.controls).map((o: any, key: string) => {
+        return _.map(o.errors, (i, _key: string) => {
+          return (_key === 'required') ? `${_.startCase(key)} is required` : '';
         })
-      }), isEmpty), '</li><li>');
+      }).reject(_.isEmpty).join('</li><li>').value();
       this.alert.create({
         title: 'Something is\'t right',
         message: `<p>Please correct the following fields:</p><ul><li>${message}</li></ul>`,
@@ -110,11 +110,15 @@ export class EditProfilePage {
     const loading = this.loading.create();
     loading.present();
     this.user.images.splice(index, 1);
-    forkJoin([!isNull(name) ? ref.delete() : Observable.of({}), this.userDoc.update(this.user)]).subscribe(() => {
+    forkJoin([!_.isNull(name) ? ref.delete() : Observable.of({}), this.userDoc.update(_.pickBy(this.user, _.identity))]).subscribe(() => {
       loading.dismiss();
       this.slides.update();
       if (this.slides.isEnd()) this.slides.slideTo(this.slides.length());
     });
+  }
+
+  hasProfileImage(): boolean {
+    return !_.isEmpty(this.user.images);
   }
 
   ionViewDidLoad() {
@@ -152,14 +156,14 @@ export class EditProfilePage {
     loading.present();
     const ref = this.storage.ref(`Users/${this.user.$key}/${key}`);
     const task = ref.putString(`data:${type};base64,${base64}`, 'data_url');
-    this.user.images = !isEmpty(this.user.images) ? this.user.images : [];
+    this.user.images = !_.isEmpty(this.user.images) ? this.user.images : [];
 
     task.downloadURL().subscribe((url: string) => {
       this.user.images.push({
         src: url,
         name: key
       } as UserImage);
-      this.userDoc.update(this.user).then(() => {
+      this.userDoc.update(_.pickBy(this.user, _.identity)).then(() => {
         this.slides.slideTo(this.slides.length());
         loading.dismiss();
       });
@@ -167,7 +171,7 @@ export class EditProfilePage {
   }
 
   private formatUser() {
-    this.user.birthdate = !isNull(this.user.birthdate) ? moment(this.user.birthdate).toDate() : null;
-    this.user.moveInDate = !isNull(this.user.moveInDate) ? moment(this.user.moveInDate).toDate() : null;
+    this.user.birthdate = !_.isNull(this.user.birthdate) ? moment(this.user.birthdate).toDate() : null;
+    this.user.moveInDate = !_.isNull(this.user.moveInDate) ? moment(this.user.moveInDate).toDate() : null;
   }
 }

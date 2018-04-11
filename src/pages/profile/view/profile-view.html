@@ -14,7 +14,7 @@
 			<ion-slide *ngFor="let image of user.images">
 				<img [attr.src]="image.src" alt="{{user.firstName}}" />
 			</ion-slide>
-			<ion-slide *ngIf="!user.images[0]">
+			<ion-slide *ngIf="!hasProfileImage(user.images)">
 				<img [attr.src]="DEFAULT_USER_IMAGE" alt="Default User Image" />
 			</ion-slide>
 		</ion-slides>
@@ -32,7 +32,7 @@
 					<ion-slides slidesPerView="2">
 						<ion-slide *ngFor="let listing of listings" (click)="viewListing(listing.$key)">
 							<ion-card>
-								<img [attr.src]="(listing.images)?listing.images[0].src:DEFAULT_LISTING_IMAGE" alt="{{listing.title}}" />
+								<img [attr.src]="listing.images ? listing.images[0].src : DEFAULT_LISTING_IMAGE" alt="{{listing.title}}" />
 								<ion-card-content>
 									<ion-card-title no-padding>{{listing.title}}</ion-card-title>
 								</ion-card-content>

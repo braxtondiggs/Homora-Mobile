@@ -7,6 +7,7 @@ import { Favorite, Listing, User } from '../../interface';
 import { ListingPage } from '../listings';
 import { ProfileViewPage } from '../profile';
 import { AppSettings } from '../../app/app.constants';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'favorites',
@@ -33,6 +34,10 @@ export class FavoritesPage {
   viewProfile(key: string, $event: Event): void {
     $event.stopPropagation();
     this.nav.push(ProfileViewPage, { key });
+  }
+
+  hasListingImage(images: any[]): boolean {
+    return _.isEmpty(images);
   }
 
   ionViewDidLoad() {

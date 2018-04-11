@@ -13,7 +13,7 @@
 			<ion-slide *ngFor="let image of listing.images">
 				<img [attr.src]="image.src" alt="{{listing.title}}" />
 			</ion-slide>
-			<ion-slide *ngIf="!listing.images">
+			<ion-slide *ngIf="!hasListingImage()">
 				<img [attr.src]="DEFAULT_LISTING_IMAGE" alt="Default Image" />
 			</ion-slide>
 		</ion-slides>
@@ -27,7 +27,7 @@
 					</ion-col>
 					<ion-col (click)="viewProfile(createdBy.$key)" *ngIf="(listing.createdBy$ | async) as createdBy;" col-auto>
 						<ion-avatar class="avatar">
-							<img [attr.src]="(createdBy.images[0]) ? createdBy.images[0].src : DEFAULT_USER_IMAGE" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
+							<img [attr.src]="createdBy.images && createdBy.images[0] ? createdBy.images[0].src : DEFAULT_USER_IMAGE" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
 						</ion-avatar>
 						<p class="listing-createdby md-subhead">{{createdBy.firstName}}, {{ today | amDifference: createdBy.birthdate :'years'}}</p>
 					</ion-col>
