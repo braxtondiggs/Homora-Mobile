@@ -1,11 +1,11 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyAevoBRNBeQt_U5KjnCfDSlMPbM5d54iOQ',
-    authDomain: 'open-house-bc3d9.firebaseapp.com',
-    databaseURL: 'https://open-house-bc3d9.firebaseio.com',
-    projectId: 'open-house-bc3d9',
-    storageBucket: 'open-house-bc3d9.appspot.com',
-    messagingSenderId: '599843324589'
+    apiKey: 'AIzaSyDPIeh9Gk24c2WWD8Bp3yXfyhpYL2aBCDI',
+    authDomain: 'homora-483ba.firebaseapp.com',
+    databaseURL: 'https://homora-483ba.firebaseio.com',
+    projectId: 'homora-483ba',
+    storageBucket: 'homora-483ba.appspot.com',
+    messagingSenderId: '103008606966'
   }
 };

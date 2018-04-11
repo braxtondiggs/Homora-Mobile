@@ -104,69 +104,67 @@ page-listing {
     }
   }
 
+  .custom-icon {
+    height: 32px;
+    margin: auto;
+    width: 32px;
+  }
+
   .metro {
-    ul {
-      list-style: none;
-      padding: 0;
+    .col[col-4] {
+      overflow: hidden;
+      text-align: center;
+      text-overflow: ellipsis;
 
-      li {
-        max-width: 100px;
-        min-width: 100px;
-        overflow: hidden;
-        text-align: center;
-        text-overflow: ellipsis;
+      .md-caption {
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: .02em;
+        white-space: nowrap;
+      }
 
-        .md-caption {
-          font-weight: bold;
-          white-space: nowrap;
+      .col-1 .metro-icon {
+        height: 75px;
+        width: 75px;
+      }
+
+      .col-2 .metro-icon,
+      .col-3 .metro-icon,
+      .col-4 .metro-icon {
+        height: 37.5px;
+        width: 37.5px;
+      }
+
+      .metro-icon {
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+        cursor: pointer;
+        display: block;
+        margin: auto;
+
+        &.RD {
+          background-image: url('../assets/imgs/metro/red.svg');
         }
 
-        .icon {
-          background-position: center;
-          background-repeat: no-repeat;
-          background-size: contain;
-          cursor: pointer;
-          display: block;
-          margin: auto;
+        &.OR {
+          background-image: url('../assets/imgs/metro/orange.svg');
+        }
 
-          &.flex-100 {
-            height: 75px;
-            width: 75px;
-          }
+        &.SV {
+          background-image: url('../assets/imgs/metro/silver.svg');
+        }
 
-          &.flex-50 {
-            height: 37.5px;
-            width: 37.5px;
-          }
+        &.BL {
+          background-image: url('../assets/imgs/metro/blue.svg');
+        }
 
-          &.flex-25 {
-            height: 25px;
-            width: 25px;
-          }
+        &.YL {
+          background-image: url('../assets/imgs/metro/yellow.svg');
+        }
 
-          &.RD {
-            background-image: url('../assets/images/metro/red.svg');
-          }
-
-          &.OR {
-            background-image: url('../assets/images/metro/orange.svg');
-          }
-
-          &.SV {
-            background-image: url('../assets/images/metro/silver.svg');
-          }
-
-          &.BL {
-            background-image: url('../assets/images/metro/blue.svg');
-          }
-
-          &.YL {
-            background-image: url('../assets/images/metro/yellow.svg');
-          }
-
-          &.GR {
-            background-image: url('../assets/images/metro/green.svg');
-          }
+        &.GR {
+          background-image: url('../assets/imgs/metro/green.svg');
         }
       }
     }

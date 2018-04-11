@@ -120,19 +120,19 @@
 				<ion-grid class="rules">
 					<ion-row>
 						<ion-col *ngIf="listing.rules.smoking" col-3>
-							<div class="icon-border-outer"></div>
+							<div class="custom-icon no-smoking"></div>
 							<h4>No Smoking</h4>
 						</ion-col>
 						<ion-col *ngIf="listing.rules.pets" col-3>
-							<div class="icon-border-outer"></div>
+							<div class="custom-icon no-pets"></div>
 							<h4>No Pets</h4>
 						</ion-col>
 						<ion-col *ngIf="listing.rules.drugs" col-3>
-							<div class="icon-border-outer"></div>
+							<div class="custom-icon no-drugs"></div>
 							<h4>No Drugs</h4>
 						</ion-col>
 						<ion-col *ngIf="listing.rules.drinking" col-3>
-							<div class="icon-border-outer"></div>
+							<div class="custom-icon no-alcohol"></div>
 							<h4>No Drinking</h4>
 						</ion-col>
 						<ion-col *ngIf="listing.rules.dogOk" col-3>
@@ -155,19 +155,23 @@
 				</ion-grid>
 			</div>
 			<div #gmap id="map_canvas"></div>
-			<div class="metro" *ngIf="listing.location.metro.length > 0">
-				<h5 class="md-body-2">NEARBY TRANSIT</h5>
-				<ul>
-					<li *ngFor="let metro of listing.location.metro">
-						<div style="height: 75px;">
-							<span *ngIf="metro.LineCode1" class="icon {{metro.LineCode1}}"></span>
-							<span *ngIf="metro.LineCode2" class="icon {{metro.LineCode2}}"></span>
-							<span *ngIf="metro.LineCode3" class="icon {{metro.LineCode3}}"></span>
-							<span *ngIf="metro.LineCode4" class="icon {{metro.LineCode4}}"></span>
-						</div>
-						<span class="md-caption">{{metro.Name}}</span>
-					</li>
-				</ul>
+			<div class="metro" *ngIf="listing.location && listing.location.metro && listing.location.metro.length > 0">
+				<h3 class="md-title title-border" ion-text>NEARBY TRANSIT</h3>
+				<ion-grid class="metro-grid">
+					<ion-row>
+						<ion-col *ngFor="let metro of listing.location.metro" col-4>
+							<ion-grid>
+								<ion-row style="height: 75px;" class="col-{{listing.location.metro.length}}">
+									<ion-col *ngIf="metro.LineCode1" class="metro-icon {{metro.LineCode1}}"></ion-col>
+									<ion-col *ngIf="metro.LineCode2" class="metro-icon {{metro.LineCode2}}"></ion-col>
+									<ion-col *ngIf="metro.LineCode3" class="metro-icon {{metro.LineCode3}}"></ion-col>
+									<ion-col *ngIf="metro.LineCode4" class="metro-icon {{metro.LineCode4}}"></ion-col>
+								</ion-row>
+							</ion-grid>
+							<span class="md-caption">{{metro.Name}}</span>
+						</ion-col>
+					</ion-row>
+				</ion-grid>
 			</div>
 		</div>
 		<ion-fab class="interested float" *ngIf="!preview && !isUserListing(listing.createdBy.id)" right bottom>

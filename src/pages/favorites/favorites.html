@@ -1,5 +1,5 @@
 <ion-content>
-	<div *ngIf="(favorites$ | async) as favorites; else loading">
+	<div *ngIf="(favorites$ | async) as favorites; else loading" style="height: 100%">
 		<ion-card *ngFor="let favorite of favorites">
 			<div *ngIf="(favorite.listing$ | async) as listing" (click)="viewListing(listing.$key)">
 				<div class="slide-container">
@@ -29,15 +29,20 @@
 				</ion-card-content>
 			</div>
 		</ion-card>
-	</div>
-	<ng-template #loading>
-		<ion-grid class="empty-favorite">
+		<ion-grid class="empty-favorite" *ngIf="favorites.length <= 0">
 			<ion-row justify-content-center align-items-center>
 				<div>
 					<h1 class="md-headline">No Favorites Yet!</h1>
 					<h3 class="md-subhead">Add Some Favorites</h3>
 					<button (click)="nav.parent.select(0)" ion-button round>Browse Listings</button>
 				</div>
+			</ion-row>
+		</ion-grid>
+	</div>
+	<ng-template #loading>
+		<ion-grid class="empty-favorite">
+			<ion-row justify-content-center align-items-center>
+				<ion-spinner></ion-spinner>
 			</ion-row>
 		</ion-grid>
 	</ng-template>

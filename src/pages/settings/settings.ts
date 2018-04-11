@@ -55,8 +55,12 @@ export class SettingsPage {
     });
   }
 
-  verifyPhone() {
-
+  verifyPhone(): void {
+    if (this.verifyAction === 'call') {
+      //TODO:
+    } else if (this.verifyAction === 'sms') {
+      //TODO:
+    }
   }
 
   closeAccount(user: User): void {

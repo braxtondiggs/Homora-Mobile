@@ -95,3 +95,26 @@
 .icon-border-outer:before {
   content: '\e9e0';
 }
+
+.custom-icon {
+  background-color: #606c76;
+  height: 20px;
+  vertical-align: middle;
+  width: 20px;
+
+  &.no-alcohol {
+    mask: url('../assets/icons/no-alcohol.svg');
+  }
+
+  &.no-pets {
+    mask: url('../assets/icons/no-animals.svg');
+  }
+
+  &.no-drugs {
+    mask: url('../assets/icons/no-drugs.svg');
+  }
+
+  &.no-smoking {
+    mask: url('../assets/icons/no-smoking.svg');
+  }
+}

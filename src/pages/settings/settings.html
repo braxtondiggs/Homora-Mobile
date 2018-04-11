@@ -37,10 +37,10 @@
 							<ion-label stacked text-uppercase>Phone Number</ion-label>
 							<ion-input formControlName="phone" type="text"></ion-input>
 						</ion-item>
-						<button type="submit" (click)="action='sms'" ion-button>
+						<button type="submit" (click)="verifyAction='sms'" ion-button>
 							Verify via SMS
 						</button>
-						<button type="submit" (click)="action='call'" ion-button>
+						<button type="submit" (click)="verifyAction='call'" ion-button>
 							Verify via Call
 						</button>
 					</form>
@@ -54,7 +54,7 @@
 			<button ion-item (click)="logout()">
 				Log Out
 			</button>
-			<button ion-item (click)="closeAccount(user)">
+			<button ion-item (click)="closeAccount(user)" *ngIf="false">
 				Deactivate Account
 			</button>
 		</ion-list>

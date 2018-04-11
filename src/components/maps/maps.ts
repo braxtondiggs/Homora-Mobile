@@ -19,7 +19,7 @@ export class MapsComponent {
   isDrawerActive: boolean = true;
   showSearchBtn: boolean = false;
   activeListing: boolean[];
-  isLoading: boolean;
+  isLoading: boolean = true;
   listings: Listing[];
   listings$: Observable<Listing[]>;
   DEFAULT_LISTING_IMAGE: string = AppSettings.DEFAULT_LISTING_IMAGE;
@@ -143,8 +143,10 @@ export class MapsComponent {
     this.map.addListener('click', () => {
       this.isDrawerActive = !this.isDrawerActive;
     });
+    let bounds_changed: number = 0;
     this.map.addListener('bounds_changed', () => {
-      this.showSearchBtn = true;
+      this.showSearchBtn = bounds_changed > 1
+      bounds_changed++;
     });
   }
 }
