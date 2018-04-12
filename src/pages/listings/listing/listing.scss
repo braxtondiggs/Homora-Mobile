@@ -140,8 +140,9 @@ page-listing {
         background-repeat: no-repeat;
         background-size: contain;
         cursor: pointer;
-        display: block;
+        display: inline-block;
         margin: auto;
+        vertical-align: middle;
 
         &.RD {
           background-image: url('../assets/imgs/metro/red.svg');

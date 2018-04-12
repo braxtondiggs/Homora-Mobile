@@ -8,7 +8,7 @@ import { ListingProvider, UserProvider } from '../../../providers';
 import { ProfileViewPage } from '../../profile';
 import { MessagePage } from '../../messages';
 import { AuthPage } from '../../auth';
-import { first, filter, join, omit, truncate, size, sortBy, isEmpty } from 'lodash';
+import * as _ from 'lodash';
 import { AppSettings } from '../../../app/app.constants';
 import { } from '@types/googlemaps';
 import moment from 'moment';
@@ -24,6 +24,7 @@ export class ListingPage {
   accountType: string;
   preview: boolean = false;
   listing: Listing;
+  metroTotal: number[] = [];
   map: google.maps.Map;
   markers: google.maps.Marker[] = [];
   DEFAULT_LISTING_IMAGE: string = AppSettings.DEFAULT_LISTING_IMAGE;
@@ -53,7 +54,7 @@ export class ListingPage {
 
   contact(createdBy: string, listing: string): void {
     if (this.user) {
-      const key = join(sortBy([createdBy, this.user.$key]), '') + listing;
+      const key = _.join(_.sortBy([createdBy, this.user.$key]), '') + listing;
       this.nav.push(MessagePage, { key, listing, createdBy });
     } else {
       this.alert.create({
@@ -81,7 +82,7 @@ export class ListingPage {
     const loading = this.loading.create();
     loading.present();
     listing.status = 'published';
-    this.listingDoc.update(omit(listing, ['createdBy$', 'summaryTruncated'])).then(() => {
+    this.listingDoc.update(_.omit(listing, ['createdBy$', 'summaryTruncated'])).then(() => {
       loading.dismiss();
       this.nav.pop().then(() => {
         this.nav.parent.select(0);
@@ -106,7 +107,7 @@ export class ListingPage {
   }
 
   hasFeatures(features: any): boolean {
-    return size(filter(features, (o) => o)) > 0;
+    return _.size(_.filter(features, (o) => o)) > 0;
   }
 
   toggleFavorite(): void {
@@ -126,7 +127,7 @@ export class ListingPage {
   }
 
   hasListingImage(): boolean {
-    return !isEmpty(this.listing.images);
+    return !_.isEmpty(this.listing.images);
   }
 
   ionViewDidLoad() {
@@ -141,22 +142,30 @@ export class ListingPage {
       this.listing$ = this.listingDoc.snapshotChanges().map((action: any) => {
         const data = action.payload.data();
         if (data.createdBy) data.createdBy$ = this.afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
-        data.summaryTruncated = truncate(data.summary, { length: 250, separator: ' ' });
+        data.summaryTruncated = _.truncate(data.summary, { length: 250, separator: ' ' });
         return ({ $key: action.payload.id, ...data });
       });
       this.listing$.subscribe((listing: Listing) => {
         this.listing = listing;
+        _.forEach(this.listing.location.metro, (metro, key) => {
+          let i;
+          for (i = 1; i <= 4; i++) {
+            if (_.hasIn(metro, `LineCode${i}`)) { continue; } else { break; };
+          }
+          this.metroTotal.push(i - 1);
+        });
         this.loadMap();
         loading.dismiss();
       })
       if (this.user) {
         this.favoriteCollection = this.afs.collection<Favorite>('Favorites', (ref) => ref.where('user', '==', this.userProvider.getDoc().ref).where('listing', '==', this.listingDoc.ref));
         this.favoriteCollection.snapshotChanges().map((actions: any) => actions.map((action: any) => ({ $key: action.payload.doc.id, ...action.payload.doc.data() }))).subscribe((favorite: Favorite[]) => {
-          this.favorite = first(favorite);
+          this.favorite = _.first(favorite);
         });
       }
     }
   }
+
   private loadMap() {
     var mapProp = {
       center: new google.maps.LatLng(this.listing.location.latlng.latitude, this.listing.location.latlng.longitude),

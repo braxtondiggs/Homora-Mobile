@@ -159,9 +159,9 @@
 				<h3 class="md-title title-border" ion-text>NEARBY TRANSIT</h3>
 				<ion-grid class="metro-grid">
 					<ion-row>
-						<ion-col *ngFor="let metro of listing.location.metro" col-4>
+						<ion-col *ngFor="let metro of listing.location.metro; let i = index" col-4>
 							<ion-grid>
-								<ion-row style="height: 75px;" class="col-{{listing.location.metro.length}}">
+								<ion-row style="height: 75px;" class="col-{{metroTotal[i]}}" justify-content-center align-items-center>
 									<ion-col *ngIf="metro.LineCode1" class="metro-icon {{metro.LineCode1}}"></ion-col>
 									<ion-col *ngIf="metro.LineCode2" class="metro-icon {{metro.LineCode2}}"></ion-col>
 									<ion-col *ngIf="metro.LineCode3" class="metro-icon {{metro.LineCode3}}"></ion-col>
