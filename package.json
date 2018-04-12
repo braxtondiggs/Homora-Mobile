@@ -1,8 +1,9 @@
 {
   "name": "Homora",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "version": "1.0.0",
+  "author": "Homora Team",
+  "description": "We are revolutionizing the rental market by giving you the information you need. Homora was born by the realization that other websites don't offer the detail needed to find the perfect group home, apartment or house for you.",
+  "homepage": "https://homora.com/",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
@@ -55,7 +56,6 @@
     "@types/lodash": "^4.14.106",
     "typescript": "2.4.2"
   },
-  "description": "An Ionic project",
   "cordova": {
     "plugins": {
       "cordova-plugin-whitelist": {},
