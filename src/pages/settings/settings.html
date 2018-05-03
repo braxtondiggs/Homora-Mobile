@@ -58,7 +58,7 @@
 				Deactivate Account
 			</button>
 		</ion-list>
-		<ion-list>
+		<ion-list *ngIf="platform.is('cordova')">
 			<ion-list-header>
 				Feedback
 			</ion-list-header>

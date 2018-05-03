@@ -12,6 +12,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Facebook } from '@ionic-native/facebook';
+import { EmailComposer } from '@ionic-native/email-composer';
 import { NativePageTransitions } from '@ionic-native/native-page-transitions';
 import { Camera } from '@ionic-native/camera';
 
@@ -45,6 +46,7 @@ import { GeoLocationProvider } from '../providers/geolocation/geolocation';
     SplashScreen,
     Geolocation,
     Facebook,
+    EmailComposer,
     Camera,
     NativePageTransitions,
     { provide: ErrorHandler, useClass: IonicErrorHandler },

@@ -55,7 +55,7 @@ export class GeoLocationProvider {
         const result = data.results;
         if (typeof multi !== 'undefined' || multi) {
           return resolve(result);
-        } else if (!_.isEmpty(result) && (_.includes(result[0].types, 'street_address') || _.includes(result[0].types, 'subpremise') || (typeof multi !== 'undefined'))) {
+        } else if (!_.isEmpty(result) && (_.includes(result[0].types, 'street_address') || _.includes(result[0].types, 'subpremise') || _.includes(result[0].types, 'premise') || (typeof multi !== 'undefined'))) {
           return resolve(result[0].geometry.location);
         } else {
           return reject('We could not find your address, please try again');

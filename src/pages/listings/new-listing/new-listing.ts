@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { AlertController, LoadingController, NavController, ToastController, Slides } from 'ionic-angular';
+import { AlertController, Content, LoadingController, NavController, ToastController, Slides } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { GeoLocationProvider, ListingProvider, UserProvider } from '../../../providers';
@@ -32,6 +32,7 @@ export class NewListingPage {
   labelMap: any;
   @ViewChild(Slides) slides: Slides;
   @ViewChild('file') file: ElementRef;
+  @ViewChild(Content) content: Content;
   private listingDoc: AngularFirestoreDocument<Listing>;
   constructor(
     private afs: AngularFirestore,
@@ -52,6 +53,7 @@ export class NewListingPage {
     } else {
       this.slides.lockSwipes(false);
       this.slides.slidePrev();
+      this.content.scrollToTop();
       this.slides.lockSwipes(true);
     }
   }
@@ -62,6 +64,7 @@ export class NewListingPage {
       if (!this.slides.isEnd()) {
         this.slides.lockSwipes(false);
         this.slides.slideNext();
+        this.content.scrollToTop();
         this.slides.lockSwipes(true);
       } else if (this.slides.isEnd() && this.listingForm.valid && _.size(this.listing.images) > 2) {
         this.submitted = true;
@@ -362,11 +365,13 @@ export class NewListingPage {
         }
         that.listing.location.latlng = new firebase.firestore.GeoPoint(latlng.lat, latlng.lng);
         return that.geoLocationProvider.getMetros(latlng).then(function(metros: Metro[]) {
-          that.listing.location.metro = metros;
-          _.forEach(that.listing.location.metro, function(metro: any, key: any) {
-            that.listing.location.metro[key].latlng = new firebase.firestore.GeoPoint(metro.Lat, metro.Lon);
-            that.listing.location.metro[key] = _.chain(metro).pickBy(_.identity).omit(['Lat', 'Lon']).value() as any;
-          });
+          if (!_.isEmpty(metros)) {
+            that.listing.location.metro = metros;
+            _.forEach(that.listing.location.metro, function(metro: any, key: any) {
+              that.listing.location.metro[key].latlng = new firebase.firestore.GeoPoint(metro.Lat, metro.Lon);
+              that.listing.location.metro[key] = _.chain(metro).pickBy(_.identity).omit(['Lat', 'Lon']).value() as any;
+            });
+          }
           return Promise.resolve();
         });
       }, (err) => {

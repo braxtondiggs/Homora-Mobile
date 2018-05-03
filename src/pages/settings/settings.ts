@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { AlertController, ToastController, NavController } from 'ionic-angular';
+import { AlertController, Platform, ToastController, NavController } from 'ionic-angular';
+import { EmailComposer } from '@ionic-native/email-composer';
 import { UserProvider } from '../../providers/user/user';
 import { AuthProvider } from '../../providers/auth/auth';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -20,7 +21,15 @@ export class SettingsPage {
   verify: FormGroup;
   authData: any;
   verifyAction: string;
-  constructor(private afAuth: AngularFireAuth, private alert: AlertController, private toast: ToastController, public nav: NavController, private userProvider: UserProvider, private auth: AuthProvider, private formBuilder: FormBuilder) {
+  constructor(private afAuth: AngularFireAuth,
+    private alert: AlertController,
+    private toast: ToastController,
+    public nav: NavController,
+    private userProvider: UserProvider,
+    private auth: AuthProvider,
+    public platform: Platform,
+    private formBuilder: FormBuilder,
+    private emailComposer: EmailComposer) {
     this.verify = this.formBuilder.group({
       phone: ['', Validators.required],
     });
@@ -105,7 +114,9 @@ export class SettingsPage {
   }
 
   contact() {
-    //TODO: Add Contact
+    this.emailComposer.open({
+      to: 'support@homora.com'
+    });
   }
 
   hasProvider(provider: string): boolean {
