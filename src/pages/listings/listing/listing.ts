@@ -199,6 +199,9 @@ export class ListingPage {
           map: this.map
         });
       }
+      google.maps.event.addListener(this.map, 'click', function() {
+        this.setOptions({ scrollwheel: true });
+      });
     });
   }
 }

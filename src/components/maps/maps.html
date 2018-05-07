@@ -24,7 +24,12 @@
 			</ion-slides>
 		</div>
 		<ng-template #no_listings>
-			<h2 class="md-title empty-listing" padding>There aren't ant available listings in this area. Try broading your search.</h2>
+			<h2 class="md-title empty-listing text-center" padding>There aren't ant available listings in this area. Try broading your search.</h2>
 		</ng-template>
 	</div>
+	<ion-grid class="empty-map-listing" *ngIf="isLoading">
+		<ion-row justify-content-center align-items-center>
+			<ion-spinner></ion-spinner>
+		</ion-row>
+	</ion-grid>
 </div>

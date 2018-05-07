@@ -23,7 +23,7 @@
 			</ion-select>
 		</ion-item>
 		<ion-list-header class="range-header">
-			<ion-label>Price</ion-label>
+			<ion-label>Price per month</ion-label>
 		</ion-list-header>
 		<ion-list-header class="range-header">
 			<div item-start>{{listingProvider.price.lower | currency:'USD':true:'1.0-3'}}</div>
@@ -33,7 +33,7 @@
 			<ion-range min="0" max="10000" debounce="500" dualKnobs="true" [(ngModel)]="listingProvider.price" (ionChange)="onChange()"></ion-range>
 		</ion-item>
 		<ion-list-header class="range-header">
-			<ion-label>Duration</ion-label>
+			<ion-label>Lease duration</ion-label>
 		</ion-list-header>
 		<ion-list-header class="range-header">
 			<div item-start>{{rangelLabel(listingProvider.duration.lower)}}</div>

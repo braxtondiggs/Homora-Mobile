@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, Platform, Slides, ToastController, ViewController } from 'ionic-angular';
+import { AlertController, NavController, Platform, Slides, ToastController, ViewController } from 'ionic-angular';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { GeoLocationProvider, ListingProvider } from '../../providers';
 import { ListingPage } from '../../pages/listings/listing/listing';
@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { AppSettings } from '../../app/app.constants';
 import { } from '@types/googlemaps';
 import * as _ from 'lodash';
+import geolib from 'geolib';
 
 @Component({
   selector: 'maps',
@@ -20,6 +21,7 @@ export class MapsComponent {
   showSearchBtn: boolean = false;
   activeListing: boolean[];
   isLoading: boolean = true;
+  hasPassedBoundaries: boolean = false;
   listings: Listing[];
   listings$: Observable<Listing[]>;
   DEFAULT_LISTING_IMAGE: string = AppSettings.DEFAULT_LISTING_IMAGE;
@@ -35,6 +37,7 @@ export class MapsComponent {
     private toast: ToastController,
     private platform: Platform,
     private view: ViewController,
+    private alert: AlertController,
     private nav: NavController) { }
 
   ionViewDidLoad() {
@@ -52,7 +55,6 @@ export class MapsComponent {
         this.locationProvider.getLocation().subscribe((location: Geoposition) => {
           this.updateMapLocation(location);
         }, (err) => {
-          console.log(err);
           this.updateListing();
         });
       }
@@ -147,6 +149,16 @@ export class MapsComponent {
     this.map.addListener('bounds_changed', () => {
       this.showSearchBtn = bounds_changed > 1
       bounds_changed++;
+      if (!this.hasPassedBoundaries) {
+        if (!geolib.isPointInside({ latitude: this.map.getCenter().lat(), longitude: this.map.getCenter().lng() }, AppSettings.MAP_BOUNDS)) {
+          this.hasPassedBoundaries = true;
+          this.alert.create({
+            title: 'Outside supported boundaries',
+            subTitle: 'We currently do not support areas outside of DC, we plan to expand shortly.',
+            buttons: ['Ok']
+          }).present();
+        }
+      }
     });
   }
 }

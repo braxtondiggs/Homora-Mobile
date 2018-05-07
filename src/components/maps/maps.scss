@@ -50,6 +50,7 @@ maps {
 
     img {
       height: 100%;
+      object-fit: cover;
       width: 100%;
     }
 
@@ -78,6 +79,19 @@ maps {
       color: #7f8c8d;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+  }
+
+  .empty-map-listing {
+    height: 100%;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%,-50%);
+
+    .row {
+      height: 100%;
+      text-align: center;
     }
   }
 }

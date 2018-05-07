@@ -7,4 +7,15 @@ page-messages {
       text-align: center;
     }
   }
+
+  .item-md {
+    &.unread h2,
+    &.unread p {
+      font-weight: bold;
+    }
+
+    ion-avatar img {
+      object-fit: cover;
+    }
+  }
 }

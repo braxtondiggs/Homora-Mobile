@@ -7,7 +7,7 @@
 	<div *ngIf="(messages$ | async) as messages; else loading" style="height: 100%">
 		<ion-list>
 			<ion-item-sliding *ngFor="let message of messages" (click)="viewMessage(message.$key)">
-				<ion-item>
+				<ion-item [ngClass]="{'unread': !message.read[user.$key]}">
 					<ion-avatar *ngIf="(message.user$ | async) as receiver;" item-start>
 						<img [attr.src]="receiver.images && receiver.images[0] ? receiver.images[0].src : DEFAULT_USER_IMAGE" alt="{{receiver.firstName}}">
 					</ion-avatar>

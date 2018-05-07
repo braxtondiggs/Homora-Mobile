@@ -6,5 +6,6 @@ export interface Message {
   created: Date;
   modified: Date;
   listing: DocumentReference;
+  read: any;
   users: any;
 }

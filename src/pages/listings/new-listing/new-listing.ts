@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { AlertController, Content, LoadingController, NavController, ToastController, Slides } from 'ionic-angular';
+import { AlertController, Content, LoadingController, NavController, Platform, ToastController, Slides } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { GeoLocationProvider, ListingProvider, UserProvider } from '../../../providers';
@@ -45,6 +45,7 @@ export class NewListingPage {
     private geoLocationProvider: GeoLocationProvider,
     private listingProvider: ListingProvider,
     private userProvider: UserProvider,
+    private platform: Platform,
     private loading: LoadingController) { }
 
   prev() {
@@ -109,17 +110,25 @@ export class NewListingPage {
   }
 
   editPhoto(): void {
-    this.alert.create({
-      title: 'Take Picture',
-      message: 'Take a new photo or select one from your existing photo library.',
-      buttons: [{
-        text: 'Gallery',
-        handler: () => this.openCamera('gallery')
-      }, {
-        text: 'Camera',
-        handler: () => this.openCamera('camera')
-      }]
-    }).present();
+    if (this.platform.is('cordova')) {
+      this.alert.create({
+        title: 'Take Picture',
+        message: 'Take a new photo or select one from your existing photo library.',
+        buttons: [{
+          text: 'Gallery',
+          handler: () => this.openCamera('gallery')
+        }, {
+          text: 'Camera',
+          handler: () => this.openCamera('camera')
+        }]
+      }).present();
+    } else {
+      this.alert.create({
+        title: 'Cordova Error',
+        subTitle: 'Looks like cordova is not properly installed or you are using the application on a desktop computer.',
+        buttons: ['Ok']
+      }).present();
+    }
   }
 
   onFileChange(event) {

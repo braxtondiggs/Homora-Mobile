@@ -65,6 +65,7 @@ export class MessagePage {
       message.message = this.messageInput;
     }
     if (this.message.chats) {
+      this.message.read[this.receiver.$key] = false
       this.message.modified = moment().toDate();
       this.message.chats.push(message);
       this.messageDoc.update(this.message).then(() => {
@@ -77,6 +78,10 @@ export class MessagePage {
         created: moment().toDate(),
         listing: this.listingDoc.ref as DocumentReference,
         modified: moment().toDate(),
+        read: {
+          [this.user.$key]: true,
+          [this.receiver.$key]: false
+        },
         users: {
           [this.user.$key]: true,
           [this.receiver.$key]: true
@@ -174,6 +179,10 @@ export class MessagePage {
         return ({ $key: action.payload.id, ...data });
       }).subscribe((message) => {
         this.message = message;
+        if (!this.message.read[this.user.$key]) {
+          this.message.read[this.user.$key] = true;
+          this.messageDoc.update(this.message);
+        }
         this.scrollToBottom();
       });
     }

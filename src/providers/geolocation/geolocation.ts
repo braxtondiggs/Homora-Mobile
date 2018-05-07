@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
+import { AppSettings } from '../../app/app.constants';
 import * as _ from 'lodash';
+import geolib from 'geolib';
 
 const GEOLOCATION_ERRORS = {
   'errors.location.unsupportedBrowser': 'Browser does not support location services',
@@ -53,12 +55,16 @@ export class GeoLocationProvider {
         }
       }).subscribe((data: any) => {
         const result = data.results;
-        if (typeof multi !== 'undefined' || multi) {
-          return resolve(result);
-        } else if (!_.isEmpty(result) && (_.includes(result[0].types, 'street_address') || _.includes(result[0].types, 'subpremise') || _.includes(result[0].types, 'premise') || (typeof multi !== 'undefined'))) {
-          return resolve(result[0].geometry.location);
+        if (geolib.isPointInside({ latitude: result[0].geometry.location.lat, longitude: result[0].geometry.location.lng }, AppSettings.MAP_BOUNDS)) {
+          if (typeof multi !== 'undefined' || multi) {
+            return resolve(result);
+          } else if (!_.isEmpty(result) && (_.includes(result[0].types, 'street_address') || _.includes(result[0].types, 'subpremise') || _.includes(result[0].types, 'premise') || (typeof multi !== 'undefined'))) {
+            return resolve(result[0].geometry.location);
+          } else {
+            return reject('We could not find your address, please try again');
+          }
         } else {
-          return reject('We could not find your address, please try again');
+          return reject('Look like you this address is outside of our supprted area. We will be expanding our supported areas soon.')
         }
       });
     });

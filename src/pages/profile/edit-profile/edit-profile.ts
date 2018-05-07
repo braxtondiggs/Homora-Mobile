@@ -79,17 +79,25 @@ export class EditProfilePage {
   }
 
   editPhoto(): void {
-    this.alert.create({
-      title: 'Take Picture',
-      message: 'Take a new photo or select one from your existing photo library.',
-      buttons: [{
-        text: 'Gallery',
-        handler: () => this.openCamera('gallery')
-      }, {
-        text: 'Camera',
-        handler: () => this.openCamera('camera')
-      }]
-    }).present();
+    if (this.platform.is('cordova')) {
+      this.alert.create({
+        title: 'Take Picture',
+        message: 'Take a new photo or select one from your existing photo library.',
+        buttons: [{
+          text: 'Gallery',
+          handler: () => this.openCamera('gallery')
+        }, {
+          text: 'Camera',
+          handler: () => this.openCamera('camera')
+        }]
+      }).present();
+    } else {
+      this.alert.create({
+        title: 'Cordova Error',
+        subTitle: 'Looks like cordova is not properly installed or you are using the application on a desktop computer.',
+        buttons: ['Ok']
+      }).present();
+    }
   }
 
   onFileChange(event) {
