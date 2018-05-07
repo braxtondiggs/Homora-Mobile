@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { isEmpty } from 'lodash';
+import authProvider = firebase.auth.AuthProvider;
 
 @Injectable()
 export class AuthProvider {
-  constructor(private afAuth: AngularFireAuth) { }
+  constructor(private afAuth: AngularFireAuth, private platform: Platform) { }
   skipIntro(): void {
     localStorage.setItem('intro', 'true');
   }
@@ -17,17 +19,18 @@ export class AuthProvider {
   credentials(user: any): Promise<any> {
     let provider = user.providerData[0];
     if (provider.providerId === 'google.com') {
-      return this.google();
+      return this.oAuthSignIn('google');
     } else if (provider.providerId === 'facebook.com') {
-      return this.facebook();
+      return this.oAuthSignIn('facebook');
     }
   }
 
-  facebook(): Promise<any> {
-    return this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
-  }
-
-  google(): Promise<any> {
-    return this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+  oAuthSignIn(action: string): Promise<any> {
+    const provider: authProvider = (action === 'google') ? new firebase.auth.GoogleAuthProvider() : new firebase.auth.FacebookAuthProvider()
+    if (!this.platform.is('cordova')) {
+      return this.afAuth.auth.signInWithPopup(provider);
+    } else {
+      return this.afAuth.auth.signInWithRedirect(provider).then(() => this.afAuth.auth.getRedirectResult())
+    }
   }
 }

@@ -19,14 +19,14 @@
 			<ion-item class="overflow">
 				<h2>Google</h2>
 				<p>Connect your Homora account to your Google account for simplicity and ease.</p>
-				<button (click)="connect('google', user)" *ngIf="!hasProvider('google')" item-end ion-button clear>Connect</button>
-				<button (click)="disconnect('google', user)" *ngIf="hasProvider('google')" item-end ion-button clear>Disconnect</button>
+				<button (click)="connect('google.com', user)" *ngIf="!hasProvider('google.com')" item-end ion-button clear>Connect</button>
+				<button (click)="disconnect('google.com', user)" *ngIf="hasProvider('google.com')" item-end ion-button clear>Disconnect</button>
 			</ion-item>
 			<ion-item class="overflow" item-content>
 				<h2>Facebook</h2>
 				<p>Sign in with Facebook and discover your trusted connections to hosts and guests all over the world.</p>
-				<button (click)="connect('facebook', user)" *ngIf="!hasProvider('facebook')" item-end ion-button clear>Connect</button>
-				<button (click)="disconnect('facebook', user)" *ngIf="hasProvider('facebook')" item-end ion-button clear>Disconnect</button>
+				<button (click)="connect('facebook.com', user)" *ngIf="!hasProvider('facebook.com')" item-end ion-button clear>Connect</button>
+				<button (click)="disconnect('facebook.com', user)" *ngIf="hasProvider('facebook.com')" item-end ion-button clear>Disconnect</button>
 			</ion-item>
 			<ion-item class="overflow verify-phone">
 				<div item-content>

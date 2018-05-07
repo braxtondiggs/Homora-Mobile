@@ -145,11 +145,10 @@ export class MapsComponent {
     this.map.addListener('click', () => {
       this.isDrawerActive = !this.isDrawerActive;
     });
-    let bounds_changed: number = 0;
+
     this.map.addListener('bounds_changed', () => {
-      this.showSearchBtn = bounds_changed > 1
-      bounds_changed++;
-      if (!this.hasPassedBoundaries) {
+      if (!this.isLoading) { this.showSearchBtn = true; }
+      if (!this.hasPassedBoundaries && !this.isLoading) {
         if (!geolib.isPointInside({ latitude: this.map.getCenter().lat(), longitude: this.map.getCenter().lng() }, AppSettings.MAP_BOUNDS)) {
           this.hasPassedBoundaries = true;
           this.alert.create({

@@ -11,6 +11,13 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <universal-links>
+        <host name="vr4nx.app.goo.gl" scheme="https" />
+        <host name="homora-483ba.firebaseapp.com" scheme="https">
+            <path url="/__/auth/callback" />
+        </host>
+    </universal-links>
+    <preference name="AndroidLaunchMode" value="singleTask" />
     <preference name="ScrollEnabled" value="false" />
     <preference name="android-minSdkVersion" value="16" />
     <preference name="BackupWebStorage" value="none" />
@@ -87,6 +94,16 @@
     <allow-navigation href="http://10.0.0.101:8100" />
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1" />
     <allow-navigation href="http://10.8.0.110:8100" />
-    <engine name="android" spec="7.0.0" />
     <plugin name="cordova-plugin-email-composer" spec="^0.8.15" />
+    <plugin name="cordova-plugin-inappbrowser" spec="^3.0.0" />
+    <plugin name="cordova-plugin-browsertab" spec="^0.2.0" />
+    <plugin name="cordova-plugin-buildinfo" spec="^2.0.1" />
+    <plugin name="cordova-plugin-customurlscheme" spec="^4.3.0">
+        <variable name="URL_SCHEME" value="com.firebase.cordova" />
+        <variable name="ANDROID_SCHEME" value=" " />
+        <variable name="ANDROID_HOST" value=" " />
+        <variable name="ANDROID_PATHPREFIX" value="/" />
+    </plugin>
+    <engine name="android" spec="7.0.0" />
+    <plugin name="cordova-universal-links-plugin" spec="https://github.com/besport/cordova-universal-links-plugin" />
 </widget>

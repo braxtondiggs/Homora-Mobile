@@ -3,7 +3,7 @@ import { UserNotifications } from './notifications.interface';
 
 export interface User {
   $key: string;
-  birthdate: Date | string;
+  birthdate?: Date | string;
   description?: string;
   email: string;
   firstName: string;

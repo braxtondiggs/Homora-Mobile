@@ -44,7 +44,7 @@ export class SettingsPage {
   }
 
   connect(providerType: string, user: User): void {
-    let provider = providerType === 'facebook' ? new firebase.auth.FacebookAuthProvider() : new firebase.auth.GoogleAuthProvider();
+    let provider = providerType === 'facebook.com' ? new firebase.auth.FacebookAuthProvider() : new firebase.auth.GoogleAuthProvider();
     this.authData.linkWithPopup(provider).then((result: any) => {
       user.providerData = result.user.providerData;
       this.userProvider.getDoc().update(user);
@@ -55,7 +55,7 @@ export class SettingsPage {
   }
 
   disconnect(providerType: string, user: User): void {
-    this.authData.unlink(`${providerType}.com`).then((result: any) => {
+    this.authData.unlink(providerType).then((result: any) => {
       user.providerData = result.providerData;
       this.userProvider.getDoc().update(user);
       this.showToast(`We successfully unlinked ${providerType} from your account.`);
