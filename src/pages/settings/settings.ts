@@ -2,15 +2,14 @@ import { Component } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AlertController, Platform, ToastController, NavController } from 'ionic-angular';
 import { EmailComposer } from '@ionic-native/email-composer';
-import { UserProvider } from '../../providers/user/user';
-import { AuthProvider } from '../../providers/auth/auth';
+import { AuthProvider, UserProvider } from '../../providers';
 import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase/app';
+// import * as firebase from 'firebase/app';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { Observable } from 'rxjs/Observable';
 import { User } from '../../interface';
 import { IntroPage } from '../intro';
-import { findIndex } from 'lodash';
+import { findIndex, size } from 'lodash';
 
 @Component({
   selector: 'page-settings',
@@ -44,8 +43,7 @@ export class SettingsPage {
   }
 
   connect(providerType: string, user: User): void {
-    let provider = providerType === 'facebook.com' ? new firebase.auth.FacebookAuthProvider() : new firebase.auth.GoogleAuthProvider();
-    this.authData.linkWithPopup(provider).then((result: any) => {
+    this.auth.oAuthLink(providerType).then((result: any) => {
       user.providerData = result.user.providerData;
       this.userProvider.getDoc().update(user);
       this.showToast(`We successfully linked ${providerType} to your account.`);
@@ -55,13 +53,17 @@ export class SettingsPage {
   }
 
   disconnect(providerType: string, user: User): void {
-    this.authData.unlink(providerType).then((result: any) => {
-      user.providerData = result.providerData;
-      this.userProvider.getDoc().update(user);
-      this.showToast(`We successfully unlinked ${providerType} from your account.`);
-    }).catch(function() {
-      this.showToast(`We could not unlink ${providerType} at this time, please try again later.`);
-    });
+    if (size(this.authData.providerData) > 1) {
+      this.authData.unlink(providerType).then((result: any) => {
+        user.providerData = result.providerData;
+        this.userProvider.getDoc().update(user);
+        this.showToast(`We successfully unlinked ${providerType} from your account.`);
+      }).catch((err) => {
+        this.showToast(`We could not unlink ${providerType} at this time, please try again later.`);
+      });
+    } else {
+      this.showToast('You cannot disconnect your only linked account.');
+    }
   }
 
   verifyPhone(): void {

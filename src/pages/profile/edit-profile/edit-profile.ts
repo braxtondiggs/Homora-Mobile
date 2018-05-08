@@ -118,7 +118,7 @@ export class EditProfilePage {
     const loading = this.loading.create();
     loading.present();
     this.user.images.splice(index, 1);
-    forkJoin([!_.isNull(name) || name === 'provider' ? ref.delete() : Observable.of({}), this.userDoc.update(_.pickBy(this.user, _.identity))]).subscribe(() => {
+    forkJoin([!_.isNull(name) && name !== 'provider' ? ref.delete() : Observable.of({}), this.userDoc.update(_.pickBy(this.user, _.identity))]).subscribe(() => {
       loading.dismiss();
       this.slides.update();
       if (this.slides.isEnd()) this.slides.slideTo(this.slides.length());

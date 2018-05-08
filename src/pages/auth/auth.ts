@@ -7,6 +7,7 @@ import { LoginPage } from './login/login';
 import { SignupPage } from './signup/signup';
 import { MainPage } from '../main';
 import { User } from '../../interface'
+import * as  moment from 'moment';
 
 @Component({
   selector: 'auth-page',
@@ -17,7 +18,7 @@ export class AuthPage {
     private nativePageTransitions: NativePageTransitions,
     private toast: ToastController,
     public auth: AuthProvider,
-    private afs: AngularFirestore, ) { }
+    private afs: AngularFirestore) { }
 
   login() {
     this.nav.push(LoginPage, {}, { animate: true, direction: 'forward' });
@@ -34,14 +35,17 @@ export class AuthPage {
         const userData: User = {
           $key: res.user.uid,
           email: res.additionalUserInfo.profile.email,
-          firstName: res.additionalUserInfo.profile.given_name,
-          lastName: res.additionalUserInfo.profile.family_name,
+          firstName: res.credential.providerId === 'facebook.com' ? res.additionalUserInfo.profile.first_name : res.additionalUserInfo.profile.given_name,
+          lastName: res.credential.providerId === 'facebook.com' ? res.additionalUserInfo.profile.last_name : res.additionalUserInfo.profile.family_name,
           gender: res.additionalUserInfo.profile.gender === 'female' ? 'Female' : 'Male',
           images: [{
-            src: res.additionalUserInfo.profile.picture,
+            src: res.credential.providerId === 'facebook.com' ? res.additionalUserInfo.profile.picture.data.url : res.additionalUserInfo.profile.picture,
             name: 'provider'
           }]
         };
+        if (res.additionalUserInfo.profile.birthday) {
+          userData.birthdate = moment(res.additionalUserInfo.profile.birthday).toDate();
+        }
         userDoc.set(userData).then(() => {
           this.continue();
         });
