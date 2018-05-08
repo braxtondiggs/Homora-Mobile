@@ -8,7 +8,8 @@ page-settings {
       text-overflow: initial;
     }
 
-    &.verify-phone > .item-inner > .input-wrapper {
+    &.verify-phone > .item-inner > .input-wrapper,
+    &.verify-token > .item-inner > .input-wrapper {
       margin: 13px 8px 13px 0;
 
       form .item {

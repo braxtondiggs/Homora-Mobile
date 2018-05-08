@@ -28,21 +28,39 @@
 				<button (click)="connect('facebook.com', user)" *ngIf="!hasProvider('facebook.com')" item-end ion-button clear>Connect</button>
 				<button (click)="disconnect('facebook.com', user)" *ngIf="hasProvider('facebook.com')" item-end ion-button clear>Disconnect</button>
 			</ion-item>
-			<ion-item class="overflow verify-phone">
+			<ion-item class="overflow verify-phone" *ngIf="!user.phoneVerified && !showVerifyToken">
 				<div item-content>
 					<h2>Phone number</h2>
 					<p>Make it easier to communicate with a verified phone number. We’ll send you a code by SMS or read it to you over the phone. Enter the code below to confirm that you’re the person on the other end.</p>
-					<form [formGroup]="verify" (ngSubmit)="verifyPhone()" novalidate>
+					<form [formGroup]="verifyPhoneForm" (ngSubmit)="verifyPhone(user)" novalidate>
 						<ion-item>
 							<ion-label stacked text-uppercase>Phone Number</ion-label>
-							<ion-input formControlName="phone" type="text"></ion-input>
+							<ion-input formControlName="phone" type="tel" [(ngModel)]="user.phone" mask="(999)-999-9999"></ion-input>
 						</ion-item>
 						<button type="submit" (click)="verifyAction='sms'" ion-button>
 							Verify via SMS
 						</button>
-						<button type="submit" (click)="verifyAction='call'" ion-button>
+						<button type="submit" (click)="verifyAction='phone'" ion-button>
 							Verify via Call
 						</button>
+					</form>
+				</div>
+			</ion-item>
+			<ion-item class="overflow verify-token" *ngIf="!user.phoneVerified && showVerifyToken">
+				<div style="width:100%" item-content>
+					<h2>We sent a verification code to: <strong>{{user.phone}}</strong></h2>
+					<p class="caption">Please enter the 4-digit code:</p>
+					<form [formGroup]="verifyTokenForm" (ngSubmit)="verifyToken(user)" novalidate>
+						<ion-item>
+							<ion-label stacked text-uppercase>Token</ion-label>
+							<ion-input formControlName="token" type="text"></ion-input>
+						</ion-item>
+						<button type="submit" ion-button>
+						Verify
+					</button>
+						<button type="button" color="light" (click)="showVerifyToken = false;" ion-button>
+						Cancel
+					</button>
 					</form>
 				</div>
 			</ion-item>

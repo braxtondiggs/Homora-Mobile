@@ -1,15 +1,16 @@
 import { Component } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { AlertController, Platform, ToastController, NavController } from 'ionic-angular';
+import { AlertController, LoadingController, Platform, ToastController, NavController } from 'ionic-angular';
+import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { AuthProvider, UserProvider } from '../../providers';
 import { AngularFireAuth } from 'angularfire2/auth';
-// import * as firebase from 'firebase/app';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { Observable } from 'rxjs/Observable';
 import { User } from '../../interface';
 import { IntroPage } from '../intro';
-import { findIndex, size } from 'lodash';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'page-settings',
@@ -17,20 +18,28 @@ import { findIndex, size } from 'lodash';
 })
 export class SettingsPage {
   user$: Observable<User>;
-  verify: FormGroup;
+  userDoc: AngularFirestoreDocument<User>;
+  verifyPhoneForm: FormGroup;
+  verifyTokenForm: FormGroup;
   authData: any;
+  showVerifyToken: boolean = false;
   verifyAction: string;
   constructor(private afAuth: AngularFireAuth,
     private alert: AlertController,
     private toast: ToastController,
     public nav: NavController,
+    private loading: LoadingController,
+    private http: HttpClient,
     private userProvider: UserProvider,
     private auth: AuthProvider,
     public platform: Platform,
     private formBuilder: FormBuilder,
     private emailComposer: EmailComposer) {
-    this.verify = this.formBuilder.group({
-      phone: ['', Validators.required],
+    this.verifyPhoneForm = this.formBuilder.group({
+      phone: ['', Validators.required]
+    });
+    this.verifyTokenForm = this.formBuilder.group({
+      token: ['', [Validators.required]]
     });
   }
 
@@ -53,7 +62,7 @@ export class SettingsPage {
   }
 
   disconnect(providerType: string, user: User): void {
-    if (size(this.authData.providerData) > 1) {
+    if (_.size(this.authData.providerData) > 1) {
       this.authData.unlink(providerType).then((result: any) => {
         user.providerData = result.providerData;
         this.userProvider.getDoc().update(user);
@@ -66,11 +75,52 @@ export class SettingsPage {
     }
   }
 
-  verifyPhone(): void {
-    if (this.verifyAction === 'call') {
-      //TODO:
-    } else if (this.verifyAction === 'sms') {
-      //TODO:
+  verifyPhone(user: User): void {
+    if (this.verifyPhoneForm.valid) {
+      const loader = this.loading.create();
+      const phone: string = (user.phone as String).replace(/\D/g, '');
+      loader.present();
+      this.http.post(`https://v2-homora.herokuapp.com/api/verify/${this.verifyAction}`, {}, {
+        headers: new HttpHeaders({
+          phone
+        })
+      }).subscribe((res) => {
+        user.phone = phone;
+        this.userDoc.update(user).then(() => {
+          this.showVerifyToken = true;
+          loader.dismiss();
+          this.showToast('We have sent a four digit code to your phone, please input the number below.');
+        });
+      }, () => {
+        this.showToast('We could not verify your phone at this time, please try again later.');
+      });
+    } else {
+      this.showToast('Must input a valid phone number.');
+    }
+  }
+
+  verifyToken(user: User): void {
+    if (this.verifyTokenForm.valid) {
+      const loader = this.loading.create();
+      const token: string = this.verifyTokenForm.value.token;
+      const phone: string = (user.phone as String).replace(/\D/g, '');
+      loader.present();
+      this.http.post('https://v2-homora.herokuapp.com/api/verify', {}, {
+        headers: new HttpHeaders({
+          phone,
+          token
+        })
+      }).subscribe((res) => {
+        user.phoneVerified = true;
+        this.userDoc.update(user).then(() => {
+          loader.dismiss();
+          this.showToast('You have successfully verified your phone number.');
+        });
+      }, () => {
+        this.showToast('We could not verify your phone at this time, please try again later.');
+      });
+    } else {
+      this.showToast('Must input a valid code number.')
     }
   }
 
@@ -122,7 +172,7 @@ export class SettingsPage {
   }
 
   hasProvider(provider: string): boolean {
-    return this.authData && findIndex(this.authData.providerData, ['providerId', provider]) > -1;
+    return this.authData && _.findIndex(this.authData.providerData, ['providerId', provider]) > -1;
   }
 
   showToast(message: string): void {
@@ -134,7 +184,8 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
-    this.user$ = this.userProvider.getDoc().valueChanges();
+    this.userDoc = this.userProvider.getDoc();
+    this.user$ = this.userDoc.valueChanges();
     this.authData = this.userProvider.getAuthData();
   }
 }

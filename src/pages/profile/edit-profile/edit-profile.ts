@@ -179,6 +179,7 @@ export class EditProfilePage {
   }
 
   private formatUser() {
+    this.user.phone = !_.isNull(this.user.phone) ? _.toNumber((this.user.phone as String).replace(/\D/g, '')) : null;
     this.user.birthdate = !_.isNull(this.user.birthdate) ? moment(this.user.birthdate).toDate() : null;
     this.user.moveInDate = !_.isNull(this.user.moveInDate) ? moment(this.user.moveInDate).toDate() : null;
   }

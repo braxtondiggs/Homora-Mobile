@@ -9,7 +9,8 @@ export interface User {
   firstName: string;
   images?: UserImage[];
   lastName: string;
-  phone?: number,
+  phone?: number | string,
+  phoneVerified?: boolean;
   moveInDate?: Date | string;
   location?: string;
   gender?: string;
