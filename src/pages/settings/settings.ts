@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AlertController, LoadingController, Platform, ToastController, NavController } from 'ionic-angular';
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestoreDocument } from 'angularfire2/firestore';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { AuthProvider, UserProvider } from '../../providers';
