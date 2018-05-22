@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { Push, PushObject, PushOptions } from '@ionic-native/push';
+import { Push } from '@ionic-native/push';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthProvider } from '../providers/auth/auth';
@@ -16,8 +16,8 @@ export class MyApp {
   rootPage: any;
   constructor(private fcm: FcmProvider,
     private push: Push,
+    private platform: Platform,
     auth: AuthProvider,
-    platform: Platform,
     statusBar: StatusBar,
     splashScreen: SplashScreen) {
     this.rootPage = auth.showIntro() ? IntroPage : MainPage;
@@ -30,9 +30,11 @@ export class MyApp {
   }
 
   private setupPushNotifications() {
-    this.push.hasPermission().then((res: any) => { });
-    this.fcm.listenToNotifications().pipe(tap((msg) => {
-      console.log(msg);
-    })).subscribe()
+    if (this.platform.is('cordova')) {
+      this.push.hasPermission().then((res: any) => { });
+      this.fcm.listenToNotifications().pipe(tap((msg) => {
+        console.log(msg);
+      })).subscribe();
+    }
   }
 }
