@@ -3,6 +3,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { Ionic2MaskDirective } from 'ionic2-mask-directive';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
@@ -24,7 +25,7 @@ import { AuthProvider, ListingProvider, UserProvider } from '../providers';
 import { GeoLocationProvider } from '../providers/geolocation/geolocation';
 
 @NgModule({
-  declarations: [MyApp],
+  declarations: [MyApp, Ionic2MaskDirective],
   imports: [
     PagesModule,
     ComponentsModule,

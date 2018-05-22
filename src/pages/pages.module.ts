@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { MomentModule } from 'angular2-moment';
-import { Ionic2MaskDirective } from 'ionic2-mask-directive';
 import { IonicModule } from 'ionic-angular';
 import { MainPage } from './main';
 import { IntroPage } from './intro';
@@ -14,7 +13,6 @@ import { SettingsPage, NotificationsPage } from './settings';
 @NgModule({
   imports: [IonicModule, MomentModule],
   declarations: [
-    Ionic2MaskDirective,
     MainPage,
     ListingsPage,
     FavoritesPage,
