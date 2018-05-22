@@ -12,6 +12,12 @@ page-lister {
     h2 {
       margin: 0 !important;
     }
+
+    img {
+      height: 100px;
+      object-fit: cover;
+      width: 100%;
+    }
   }
 
   h2 {
