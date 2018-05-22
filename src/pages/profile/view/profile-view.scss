@@ -11,6 +11,12 @@ page-profile-view {
     ion-slides {
       height: 230px;
 
+      img {
+        height: 150px;
+        object-fit: cover;
+        width: 100%;
+      }
+
       .card-title {
         font-size: 14px;
         font-weight: bold;
