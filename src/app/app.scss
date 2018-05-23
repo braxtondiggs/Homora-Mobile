@@ -5,8 +5,8 @@
   src: url('../assets/fonts/LinearIcons/Linearicons.ttf') format('truetype');
 }
 
-[class*=" icon-"]:not(.icon-md),
-[class^="icon-"]:not(.icon-md) {
+[class*=" icon-"]:not(.icon-md):not(.icon-ios),
+[class^="icon-"]:not(.icon-md):not(.icon-ios) {
   -moz-font-feature-settings: 'liga=1';
   -moz-font-feature-settings: 'liga';
   -moz-osx-font-smoothing: grayscale;
