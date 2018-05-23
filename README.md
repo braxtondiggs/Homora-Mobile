@@ -12,3 +12,11 @@ We are revolutionizing the rental market by giving you the information you need.
 Run `ionic serve` for a dev server. Navigate to `http://localhost:8100/`. The app will automatically reload if you change any of the source files.
 
 Install all Plugins & Platforms -> `ionic cordova prepare`
+
+To generate a release build for Android, we can use the following cordova cli command:
+
+`ionic cordova build --release android`
+
+`jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk alias_name`
+
+`../zipalign -v 4 platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk Homora.apk`
