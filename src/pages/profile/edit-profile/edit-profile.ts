@@ -71,7 +71,7 @@ export class EditProfilePage {
         })
       }).reject(_.isEmpty).join('</li><li>').value();
       this.alert.create({
-        title: 'Something is\'t right',
+        title: 'Something isn\'t right',
         message: `<p>Please correct the following fields:</p><ul><li>${message}</li></ul>`,
         buttons: ['Ok']
       }).present();

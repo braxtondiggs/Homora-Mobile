@@ -20,6 +20,10 @@ page-lister {
     }
   }
 
+  .card-ios .ion-ios-arrow-forward {
+    display: none;
+  }
+
   h2 {
     font-weight: bold;
     margin-top: 48px !important;
@@ -38,6 +42,10 @@ page-lister {
       font-size: 24px;
       margin-right: 24px;
       vertical-align: bottom;
+    }
+
+    .ion-ios-add {
+      vertical-align: middle;
     }
   }
 }
