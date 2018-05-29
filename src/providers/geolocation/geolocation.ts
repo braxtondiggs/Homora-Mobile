@@ -64,7 +64,7 @@ export class GeoLocationProvider {
             return reject('We could not find your address, please try again');
           }
         } else {
-          return reject('Look like you this address is outside of our supprted area. We will be expanding our supported areas soon.')
+          return reject('Looks like you this address is outside of our supprted area. We will be expanding our supported areas soon.')
         }
       });
     });
