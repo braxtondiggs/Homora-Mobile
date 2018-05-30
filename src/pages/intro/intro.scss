@@ -35,3 +35,14 @@ page-intro {
     }
   }
 }
+
+@media (max-width: 320px) {
+  page-intro .logo-container {
+    top: 15px;
+  }
+
+  page-intro .slide-zoom img {
+    margin-bottom: 0;
+    margin-top: 20px;
+  }
+}
