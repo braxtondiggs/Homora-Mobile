@@ -10,7 +10,6 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { StatusBar } from '@ionic-native/status-bar';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Facebook } from '@ionic-native/facebook';
 import { EmailComposer } from '@ionic-native/email-composer';
@@ -45,7 +44,6 @@ import { GeoLocationProvider } from '../providers/geolocation/geolocation';
   bootstrap: [IonicApp],
   entryComponents: [MyApp],
   providers: [
-    StatusBar,
     SplashScreen,
     Geolocation,
     Firebase,
