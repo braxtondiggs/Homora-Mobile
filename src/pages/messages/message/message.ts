@@ -179,7 +179,7 @@ export class MessagePage {
         return ({ $key: action.payload.id, ...data });
       }).subscribe((message) => {
         this.message = message;
-        if (!this.message.read[this.user.$key]) {
+        if (this.message.read && !this.message.read[this.user.$key]) {
           this.message.read[this.user.$key] = true;
           this.messageDoc.update(this.message);
         }
