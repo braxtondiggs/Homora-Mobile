@@ -51,12 +51,26 @@ export class NewListingPage {
   prev() {
     if (this.slides.isBeginning() && this.key) {
       this.nav.parent.select(0);
+    } else if (this.slides.getActiveIndex() === 1) {
+      this.save().then(() => {
+        this.goBack();
+      }).catch((err: any) => {
+        this.saving = false;
+        this.toast.create({
+          message: err,
+          duration: 3000
+        }).present();
+      });
     } else {
-      this.slides.lockSwipes(false);
-      this.slides.slidePrev();
-      this.content.scrollToTop();
-      this.slides.lockSwipes(true);
+      this.goBack();
     }
+  }
+
+  goBack() {
+    this.slides.lockSwipes(false);
+    this.slides.slidePrev();
+    this.content.scrollToTop();
+    this.slides.lockSwipes(true);
   }
 
   next() {
@@ -106,6 +120,7 @@ export class NewListingPage {
   }
 
   select(type: string, name: string): void {
+    this.listingForm.markAsDirty();
     this.listing[type][name] = !this.listing[type][name];
   }
 
@@ -233,6 +248,7 @@ export class NewListingPage {
       this.listing$ = this.listingDoc.valueChanges();
       this.listingProvider.setActive(null);
     } else {
+      this.listingDoc = null;
       this.listing$ = Observable.of({
         availability: moment().toDate(),
         amenities: {
@@ -337,6 +353,9 @@ export class NewListingPage {
         otherPetOk: [this.listing.rules.otherPetOk],
         couplesOk: [this.listing.rules.couplesOk]
       });
+      this.listingForm.markAsPristine();
+      this.listingForm.markAsUntouched();
+      this.listingForm.updateValueAndValidity();
       this.labelMap = [
         ['title', 'summary'],
         ['address1', 'city', 'state', 'zip'],
