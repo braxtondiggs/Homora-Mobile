@@ -203,6 +203,7 @@ export class NewListingPage {
 
   private openCamera(type: string): void {
     this.camera.getPicture({
+      allowEdit: true,
       quality: 75,
       destinationType: this.camera.DestinationType.DATA_URL,
       targetWidth: 1000,

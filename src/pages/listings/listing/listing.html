@@ -9,7 +9,7 @@
 </ion-header>
 <ion-content>
 	<div *ngIf="listing">
-		<ion-slides centeredSlides="false" autoplay="5000">
+		<ion-slides centeredSlides="false" autoplay="5000" pager="true">
 			<ion-slide *ngFor="let image of listing.images">
 				<img [attr.src]="image.src" alt="{{listing.title}}" />
 			</ion-slide>

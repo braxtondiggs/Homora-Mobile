@@ -34,26 +34,26 @@ export class ListingProvider {
     this.duration = { lower: 0, upper: 12 };
     this.gender = 'all';
     this.age = {
-      groupEarly20: true,
-      groupLate20: true,
-      group30: true,
+      groupEarly20: false,
+      groupLate20: false,
+      group30: false,
       group40older: false
     } as RoommateAge;
     this.amenities = {
-      washer: true,
-      wifi: true,
+      washer: false,
+      wifi: false,
       water: false,
       electricity: false,
       furnished: false,
       doorman: false,
-      air: true,
-      heating: true,
+      air: false,
+      heating: false,
       month: false,
-      gym: true,
+      gym: false,
       tv: false,
-      bathroom: true,
-      dog: true,
-      cat: true,
+      bathroom: false,
+      dog: false,
+      cat: false,
       otherPet: false
     } as ListingAmenities;
     this.rules = {

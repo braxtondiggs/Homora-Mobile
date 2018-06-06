@@ -86,6 +86,7 @@ page-new-listing {
     h4 {
       font-size: 1.25rem;
       margin: 8px 0;
+      min-width: 50px;
     }
 
     input {
@@ -170,6 +171,22 @@ page-new-listing {
           }
         }
       }
+    }
+  }
+
+  @media (max-width: 380px) {
+    ion-col[col-3] {
+      flex: 0 0 33.33333%;
+      max-width: 33.33333%;
+      width: 33.33333%;
+    }
+  }
+
+  @media (max-width: 240px) {
+    ion-col[col-3] {
+      flex: 0 0 50%;
+      max-width: 50%;
+      width: 50%;
     }
   }
 }
