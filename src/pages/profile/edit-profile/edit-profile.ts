@@ -183,5 +183,6 @@ export class EditProfilePage {
     this.user.phone = !_.isNull(this.user.phone) ? _.toNumber(this.user.phone.toString().replace(/\D/g, '')) : null;
     this.user.birthdate = !_.isNull(this.user.birthdate) ? moment(this.user.birthdate).toDate() : null;
     this.user.moveInDate = !_.isNull(this.user.moveInDate) ? moment(this.user.moveInDate).toDate() : null;
+    this.user = _.pickBy(this.user, _.identity) as User;
   }
 }

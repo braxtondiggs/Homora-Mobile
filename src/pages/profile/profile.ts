@@ -38,7 +38,7 @@ export class ProfilePage {
     return localStorage.getItem('account') === 'basic';
   }
 
-  ionViewDidLoad() {
+  ionViewWillEnter() {
     this.user = this.userProvider.get();
   }
 }
