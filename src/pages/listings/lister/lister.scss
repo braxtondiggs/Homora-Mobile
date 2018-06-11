@@ -48,4 +48,9 @@ page-lister {
       vertical-align: middle;
     }
   }
+
+  .divider {
+    height: 0;
+    min-height: initial;
+  }
 }

@@ -131,6 +131,31 @@ export class ListingPage {
     return !_.isEmpty(this.listing.images);
   }
 
+  expireListing(): void {
+    this.alert.create({
+      title: 'Expire this listing?',
+      subTitle: 'Are you sure you want to disable this listing, this action will make this listing only visible to you.',
+      buttons: [{
+        text: 'Cancel'
+      }, {
+        text: 'Expire',
+        handler: (data) => {
+          const loading = this.loading.create();
+          loading.present();
+          this.listing.status = 'expired';
+          this.listingDoc.update(_.omit(this.listing, ['createdBy$', 'summaryTruncated'])).then(() => this.nav.pop()).then(() => {
+            this.nav.parent.select(0);
+            this.toast.create({
+              message: 'Listing has been successfully expired',
+              duration: 3000
+            }).present();
+            loading.dismiss();
+          });
+        }
+      }]
+    }).present();
+  }
+
   ionViewDidLoad() {
     const loading = this.loading.create();
     loading.present();

@@ -34,6 +34,7 @@ export class AuthPage {
         let userDoc: AngularFirestoreDocument<User> = this.afs.collection<User>('Users').doc(res.user.uid);
         const userData: User = {
           $key: res.user.uid,
+          created: moment().toDate(),
           email: res.additionalUserInfo.profile.email,
           firstName: res.credential.providerId === 'facebook.com' ? res.additionalUserInfo.profile.first_name : res.additionalUserInfo.profile.given_name,
           lastName: res.credential.providerId === 'facebook.com' ? res.additionalUserInfo.profile.last_name : res.additionalUserInfo.profile.family_name,
@@ -41,7 +42,19 @@ export class AuthPage {
           images: [{
             src: res.credential.providerId === 'facebook.com' ? res.additionalUserInfo.profile.picture.data.url : res.additionalUserInfo.profile.picture,
             name: 'provider'
-          }]
+          }],
+          notifications: {
+            policy: {
+              text: false,
+              email: true,
+              push: true
+            },
+            messages: {
+              text: false,
+              email: true,
+              push: true
+            }
+          }
         };
         if (res.additionalUserInfo.profile.birthday) {
           userData.birthdate = moment(res.additionalUserInfo.profile.birthday).toDate();
