@@ -13,7 +13,7 @@
 					</ion-avatar>
 					<h2 *ngIf="(message.user$ | async) as receiver;">{{receiver.firstName}}</h2>
 					<p>{{message.chats[message.chats.length - 1].message}}</p>
-					<p item-end>{{message.modified | amTimeAgo}}</p>
+					<p item-end>{{message.modified.toDate() | amTimeAgo}}</p>
 				</ion-item>
 				<ion-item-options side="right">
 					<button ion-button color="danger" (click)="deleteMessage(message.$key);$event.stopPropagation()">

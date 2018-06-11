@@ -24,6 +24,7 @@ export class ListingPage {
   accountType: string;
   preview: boolean = false;
   listing: Listing;
+  isMapClicked: boolean = false;
   metroTotal: number[] = [];
   map: google.maps.Map;
   markers: google.maps.Marker[] = [];
@@ -190,7 +191,7 @@ export class ListingPage {
           fillColor: '#4DD2D7',
           fillOpacity: 0.35,
           map: this.map,
-          radius: 800,
+          radius: 1000,
           center
         });
       } else {

@@ -12,7 +12,7 @@
 						</ion-slide>
 					</ion-slides>
 					<div class="price-container">
-						<h2 class="price" color="light" ion-text>{{listing.price | currency:'USD':true:'1.0-3'}}</h2>
+						<h2 class="price" color="light" ion-text>{{listing.price | currency:'USD':'symbol':'1.0-3'}}</h2>
 					</div>
 					<button class="favorite" (click)="removeFavorite(favorite, $event)" ion-button icon-only clear>
 						<ion-icon name="heart"></ion-icon>
@@ -25,7 +25,7 @@
 						</ion-avatar>
 					</ion-card-header>
 					<ion-card-title>{{listing.title}}</ion-card-title>
-					<p class="sub-text">{{listing.availability | date: 'M/d'}} &#183; 1-12 Months Lease</p>
+					<p class="sub-text">{{availability(listing.availability.toDate())}} &#183; 1-12 Months Lease</p>
 				</ion-card-content>
 			</div>
 		</ion-card>

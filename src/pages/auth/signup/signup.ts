@@ -39,10 +39,23 @@ export class SignupPage {
         let userDoc: AngularFirestoreDocument<User> = this.afs.collection<User>('Users').doc(user.uid);
         const userData: User = {
           $key: user.uid,
+          created: moment().toDate(),
           birthdate: moment(this.signup.value.birthday).toDate(),
           email: this.signup.value.email,
           firstName: this.signup.value.firstName,
-          lastName: this.signup.value.lastName
+          lastName: this.signup.value.lastName,
+          notifications: {
+            policy: {
+              text: false,
+              email: true,
+              push: true
+            },
+            messages: {
+              text: false,
+              email: true,
+              push: true
+            }
+          }
         };
         userDoc.set(userData).then(() => {
           this.afAuth.auth.signInWithEmailAndPassword(this.signup.value.email, this.signup.value.password).then((user: any) => {

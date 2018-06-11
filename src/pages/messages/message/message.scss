@@ -43,6 +43,7 @@ page-message {
       h2 {
         font-size: 18px;
         margin: 0 0 2px;
+        max-width: 260px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;

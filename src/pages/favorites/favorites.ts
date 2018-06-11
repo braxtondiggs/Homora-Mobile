@@ -8,6 +8,7 @@ import { ListingPage } from '../listings';
 import { ProfileViewPage } from '../profile';
 import { AppSettings } from '../../app/app.constants';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
 @Component({
   selector: 'favorites',
@@ -38,6 +39,10 @@ export class FavoritesPage {
 
   hasListingImage(images: any[]): boolean {
     return _.isEmpty(images);
+  }
+
+  availability(date: Date): string {
+    return moment(date).isSameOrBefore(moment(), 'day') ? 'Available Now' : moment(date).format('MM/DD');
   }
 
   ionViewDidLoad() {

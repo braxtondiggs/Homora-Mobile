@@ -64,7 +64,17 @@ page-listing {
 
   #map_canvas {
     height: 300px;
+    position: relative;
     width: 100%;
+
+    &:not(.map-clicked)::after {
+      bottom: 0;
+      content: '';
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+    }
   }
 
   .interested::after,

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { Platform } from 'ionic-angular';
 // import { Push } from '@ionic-native/push';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -17,7 +18,9 @@ export class MyApp {
     // private push: Push,
     platform: Platform,
     auth: AuthProvider,
-    splashScreen: SplashScreen) {
+    splashScreen: SplashScreen,
+    afs: AngularFirestore) {
+    afs.app.firestore().settings({ timestampsInSnapshots: true });
     this.rootPage = auth.showIntro() ? IntroPage : MainPage;
     platform.ready().then(() => {
       // fcm.getToken();

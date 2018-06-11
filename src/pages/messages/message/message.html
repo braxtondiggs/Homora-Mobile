@@ -9,7 +9,7 @@
 			</ion-avatar>
 			<div>
 				<h2>{{listing.title}}</h2>
-				<p>{{listing.price | currency:'USD':true:'1.0-3'}}</p>
+				<p>{{listing.price | currency:'USD':'symbol':'1.0-3'}}</p>
 			</div>
 			<button ion-button clear>Details</button>
 		</div>
@@ -27,7 +27,7 @@
 					<img [attr.src]="chat.image" *ngIf="chat.image" alt="" />
 				</div>
 				<div class="msg-info">
-					<p>{{chat.created | amTimeAgo}}</p>
+					<p>{{convertToDate(chat.created) | amTimeAgo}}</p>
 				</div>
 			</div>
 		</div>
