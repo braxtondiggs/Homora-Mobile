@@ -1,4 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AlertController, Content, NavController, NavParams, Platform } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
@@ -38,7 +39,8 @@ export class MessagePage {
     private navParams: NavParams,
     private nav: NavController,
     private camera: Camera,
-    private platform: Platform) { }
+    private platform: Platform,
+    private http: HttpClient) { }
 
   viewListing(key: string): void {
     this.nav.push(ListingPage, { key });
@@ -54,6 +56,7 @@ export class MessagePage {
   }
 
   sendMessage(image?: string): void {
+    const headers = new HttpHeaders().set('id', this.key);
     if (!this.messageInput.trim() && _.isUndefined(image)) return;
     let message = {
       created: moment().toDate(),
@@ -69,6 +72,7 @@ export class MessagePage {
       this.message.modified = moment().toDate();
       this.message.chats.push(message);
       this.messageDoc.update(this.message).then(() => {
+        this.http.post('https://v2.homora.com/api/mail/notify', null, { headers }).subscribe();
         if (_.isUndefined(image)) this.messageInput = '';
         this.scrollToBottom();
       });
@@ -88,6 +92,7 @@ export class MessagePage {
         }
       };
       this.messageDoc.set(messageObj).then(() => {
+        this.http.post('https://v2.homora.com/api/mail/notify', null, { headers }).subscribe();
         if (_.isUndefined(image)) this.messageInput = '';
         this.scrollToBottom();
       });
@@ -124,6 +129,10 @@ export class MessagePage {
     }).present();
   }
 
+  convertToDate(date: any): Date {
+    return (!_.isDate(date)) ? date.toDate() : date;
+  }
+
   private openCamera(type: string): void {
     this.platform.ready().then(() => {
       this.camera.getPicture({
@@ -146,9 +155,11 @@ export class MessagePage {
 
   private scrollToBottom() {
     setTimeout(() => {
-      if (this.content.scrollToBottom) {
-        this.content.scrollToBottom();
-      }
+      try {
+        if (this.content && this.content.scrollToBottom) {
+          this.content.scrollToBottom();
+        }
+      } catch (e) { }
     }, 400)
   }
 

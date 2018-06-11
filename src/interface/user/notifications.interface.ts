@@ -1,10 +1,10 @@
 export interface UserNotifications {
-  messages?: NotifcationOptions;
-  policy?: NotifcationOptions;
+  messages: NotifcationOptions;
+  policy: NotifcationOptions;
 }
 
 export interface NotifcationOptions {
-  email?: boolean;
-  phone?: boolean;
-  text?: boolean;
+  email: boolean;
+  push: boolean;
+  text: boolean;
 }

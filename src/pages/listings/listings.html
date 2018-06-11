@@ -11,7 +11,7 @@
 					</ion-slide>
 				</ion-slides>
 				<div class="price-container">
-					<h2 class="price" color="light" ion-text>{{listing.price | currency:'USD':true:'1.0-3'}}</h2>
+					<h2 class="price" color="light" ion-text>{{listing.price | currency:'USD':'symbol':'1.0-3'}}</h2>
 				</div>
 				<button class="favorite" (click)="toggleFavorite(listing.$key, $event)" *ngIf="user" ion-button icon-only clear>
 					<ion-icon name="{{isFavorite(listing.$key)}}"></ion-icon>
@@ -24,7 +24,7 @@
 					</ion-avatar>
 				</ion-card-header>
 				<ion-card-title>{{listing.title}}</ion-card-title>
-				<p class="sub-text" *ngIf="listing.duration">{{listing.availability | date: 'M/d'}} &#183; {{duration(listing.duration.lower, listing.duration.upper)}}</p>
+				<p class="sub-text" *ngIf="listing.duration">{{availability(listing.availability.toDate())}} &#183; {{duration(listing.duration.lower, listing.duration.upper)}}</p>
 			</ion-card-content>
 		</ion-card>
 	</div>

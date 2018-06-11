@@ -24,7 +24,7 @@
 			<hr />
 			<p class="md-body">{{(user.description) ? user.description : user.firstName + " hasn't filled out a profile yet."}}</p>
 			<hr />
-			<p class="md-body">Member since {{user.created | amUtc | amDateFormat: 'MMM YYYY'}}</p>
+			<p class="md-body">Member since {{user.created.toDate() | amUtc | amDateFormat: 'MMM YYYY'}}</p>
 			<hr />
 			<div class="related-listings" *ngIf="(listings$ | async) as listings;">
 				<div *ngIf="listings.length > 0">

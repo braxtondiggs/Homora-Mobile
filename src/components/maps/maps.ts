@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { AppSettings } from '../../app/app.constants';
 import { } from '@types/googlemaps';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import geolib from 'geolib';
 
 @Component({
@@ -75,6 +76,10 @@ export class MapsComponent {
 
   duration(lower: number, upper: number): string {
     return lower === upper ? `${upper} months` : `${lower}-${upper} months`;
+  }
+
+  availability(date: Date): string {
+    return moment(date).isSameOrBefore(moment(), 'day') ? 'Available Now' : moment(date).format('MM/DD');
   }
 
   private updateMapLocation(location: Geoposition) {

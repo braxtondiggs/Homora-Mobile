@@ -87,6 +87,10 @@ export class ListingsPage {
     return !_.isEmpty(listing.images);
   }
 
+  availability(date: Date): string {
+    return moment(date).isSameOrBefore(moment(), 'day') ? 'Available Now' : moment(date).format('MM/DD');
+  }
+
   ionViewDidLoad() {
     const loader = this.loading.create({ content: 'Finding Listings...' });
     loader.present();

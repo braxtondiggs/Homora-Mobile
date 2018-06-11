@@ -22,20 +22,20 @@
 			<ion-grid no-padding>
 				<ion-row align-items-start padding-horizontal>
 					<ion-col>
-						<h3 class="price md-display-1" *ngIf="listing.price" no-margin>{{listing.price | currency:'USD':true:'1.0-3'}}<span>/&nbsp;month</span></h3>
+						<h3 class="price md-display-1" *ngIf="listing.price" no-margin>{{listing.price | currency:'USD':'symbol':'1.0-3'}}<span>/&nbsp;month</span></h3>
 						<h4 class="location md-subhead" *ngIf="listing.location.city && listing.location.state" no-margin><ion-icon name="pin"></ion-icon> {{listing.location.city}}, {{listing.location.state}}</h4>
 					</ion-col>
 					<ion-col (click)="viewProfile(createdBy.$key)" *ngIf="(listing.createdBy$ | async) as createdBy;" col-auto>
 						<ion-avatar class="avatar">
 							<img [attr.src]="createdBy.images && createdBy.images[0] ? createdBy.images[0].src : DEFAULT_USER_IMAGE" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
 						</ion-avatar>
-						<p class="listing-createdby md-subhead">{{createdBy.firstName}}, {{ today | amDifference: createdBy.birthdate :'years'}}</p>
+						<p class="listing-createdby md-subhead">{{createdBy.firstName}}, {{ today | amDifference: createdBy.birthdate.toDate() :'years'}}</p>
 					</ion-col>
 				</ion-row>
 				<ion-row class="more-info" align-items-center>
 					<ion-col>
 						<h3 class="md-subhead" no-margin><ion-icon name="home"></ion-icon>&nbsp;Move-in</h3>
-						<p no-margin>{{availability(listing.availability)}}</p>
+						<p no-margin>{{availability(listing.availability.toDate())}}</p>
 					</ion-col>
 					<ion-col *ngIf="listing.duration">
 						<h3 class="md-subhead" no-margin><ion-icon name="calendar"></ion-icon>&nbsp;Duration</h3>
@@ -43,7 +43,7 @@
 					</ion-col>
 					<ion-col>
 						<h3 class="md-subhead" no-margin><ion-icon name="cash"></ion-icon>&nbsp;Deposit</h3>
-						<p no-margin>{{listing.deposit | currency:'USD':true:'1.0-3'}}</p>
+						<p no-margin>{{listing.deposit | currency:'USD':'symbol':'1.0-3'}}</p>
 					</ion-col>
 				</ion-row>
 			</ion-grid>
@@ -154,7 +154,7 @@
 					</ion-row>
 				</ion-grid>
 			</div>
-			<div #gmap id="map_canvas"></div>
+			<div #gmap id="map_canvas" [ngClass]="{'map-clicked': isMapClicked }" (click)="isMapClicked = true" ng></div>
 			<div class="metro" *ngIf="listing.location && listing.location.metro && listing.location.metro.length > 0">
 				<h3 class="md-title title-border" ion-text>NEARBY TRANSIT</h3>
 				<ion-grid class="metro-grid">
