@@ -1,8 +1,11 @@
 <ion-header [ngClass]="{'transparent clear-btns': !preview }">
 	<ion-navbar>
-		<ion-buttons *ngIf="!preview" end>
-			<button *ngIf="user" (click)="toggleFavorite()" ion-button icon-only clear>
+		<ion-buttons *ngIf="listing" end>
+			<button *ngIf="user && !preview && !isUserListing(listing.createdBy.id)" (click)="toggleFavorite()" ion-button icon-only clear>
 				<ion-icon name="{{isFavorite()}}"></ion-icon>
+			</button>
+			<button *ngIf="isUserListing(listing.createdBy.id)" (click)="expireListing()" ion-button icon-only clear>
+				<ion-icon name="trash"></ion-icon>
 			</button>
 		</ion-buttons>
 	</ion-navbar>

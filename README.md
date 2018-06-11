@@ -11,6 +11,8 @@ We are revolutionizing the rental market by giving you the information you need.
 ## Development server
 Run `ionic serve` for a dev server. Navigate to `http://localhost:8100/`. The app will automatically reload if you change any of the source files.
 
+Build on local device:`ionic cordova run android --device`
+
 Install all Plugins & Platforms -> `ionic cordova prepare`
 
 To generate a release build for Android, we can use the following cordova cli command:
