@@ -16,13 +16,12 @@ import { EmailComposer } from '@ionic-native/email-composer';
 import { NativePageTransitions } from '@ionic-native/native-page-transitions';
 import { Camera } from '@ionic-native/camera';
 import { Firebase } from '@ionic-native/firebase';
-// import { Push } from '@ionic-native/push';
 
 import { MyApp } from './app.component';
 import { PagesModule } from '../pages/pages.module';
 import { ComponentsModule } from '../components/components.module';
 import { environment } from './app.environment';
-import { AuthProvider, ListingProvider, UserProvider } from '../providers';
+import { AuthProvider, FcmProvider, ListingProvider, UserProvider } from '../providers';
 import { GeoLocationProvider } from '../providers/geolocation/geolocation';
 
 @NgModule({
@@ -53,6 +52,7 @@ import { GeoLocationProvider } from '../providers/geolocation/geolocation';
     NativePageTransitions,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthProvider,
+    FcmProvider,
     ListingProvider,
     UserProvider,
     GeoLocationProvider
