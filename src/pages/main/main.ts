@@ -9,7 +9,6 @@ import { ListingsPage, ListerPage, NewListingPage } from '../listings';
 import { FavoritesPage } from '../favorites';
 import { MessagesPage } from '../messages';
 import { ProfilePage } from '../profile';
-import { tap } from 'rxjs/operators';
 import * as _ from 'lodash';
 
 @Component({
