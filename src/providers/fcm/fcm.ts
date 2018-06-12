@@ -3,6 +3,7 @@ import { Firebase } from '@ionic-native/firebase';
 import { Platform } from 'ionic-angular';
 import { Observable } from 'rxjs/Observable';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { DocumentReference } from '@firebase/firestore-types';
 
 @Injectable()
 export class FcmProvider {
@@ -13,7 +14,7 @@ export class FcmProvider {
   ) { }
 
   // Get permission from the user
-  async getToken() {
+  async getToken(userRef: DocumentReference) {
     let token;
     if (this.platform.is('android')) {
       token = await this.firebaseNative.getToken()
@@ -28,19 +29,16 @@ export class FcmProvider {
       //TODO: Add PWA support with angularfire2
     }
 
-    return this.saveTokenToFirestore(token);
+    return this.saveTokenToFirestore(token, userRef);
   }
 
   // Save the token to firestore
-  private saveTokenToFirestore(token: string): Promise<void> {
-    if (!token) return;
-    const devicesRef = this.afs.collection('devices');
-    const docData = {
+  private saveTokenToFirestore(token: string, user: DocumentReference): Promise<void> {
+    if (!token && user) return;
+    return this.afs.collection('Devices').doc(token).set({
       token,
-      userId: 'testUser' //TODO: change to user auth id
-    };
-
-    return devicesRef.doc(token).set(docData);
+      user
+    });
   }
 
   // Listen to incoming FCM messages
