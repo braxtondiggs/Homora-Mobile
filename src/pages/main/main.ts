@@ -1,12 +1,16 @@
 import { Component, ViewChild } from '@angular/core';
-import { Content, Events, LoadingController, NavController } from 'ionic-angular';
-import { UserProvider } from '../../providers/user/user';
-import { User } from '../../interface';
+import { Content, Events, LoadingController, NavController, Platform } from 'ionic-angular';
+import { DocumentReference } from '@firebase/firestore-types';
+import { AngularFirestore } from 'angularfire2/firestore';
+import { FcmProvider, UserProvider } from '../../providers';
+import { Message, User } from '../../interface';
 import { AuthPage } from '../auth';
 import { ListingsPage, ListerPage, NewListingPage } from '../listings';
 import { FavoritesPage } from '../favorites';
 import { MessagesPage } from '../messages';
 import { ProfilePage } from '../profile';
+import { tap } from 'rxjs/operators';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'main-home',
@@ -17,6 +21,7 @@ export class MainPage {
   user: User;
   accountType: string = 'basic';
   isLoading: boolean = true;
+  badgeNumber: number = null;
   @ViewChild(Content) content: Content;
   ListingsTab: any;
   ListerTab: any;
@@ -24,9 +29,12 @@ export class MainPage {
   FavoritesTab: any;
   MessagesTab: any;
   ProfileTab: any;
-  constructor(private events: Events,
-    private nav: NavController,
+  constructor(private afs: AngularFirestore,
+    private events: Events,
+    private fcm: FcmProvider,
     private loading: LoadingController,
+    private nav: NavController,
+    private platform: Platform,
     private userProvider: UserProvider) {
     this.ListingsTab = ListingsPage;
     this.ListerTab = ListerPage;
@@ -60,6 +68,11 @@ export class MainPage {
             this.auth = auth;
             this.user = user
             this.userProvider.set(user);
+            this.setupPushNotifications(this.userProvider.getDoc().ref);
+            this.afs.collection<Message>('Messages', ref => ref.where(`users.${this.user.$key}`, '==', true)).valueChanges().subscribe((messages: Message[]) => {
+              this.badgeNumber = _.size(_.filter(messages, [`read.${this.user.$key}`, false]));
+              this.badgeNumber = (this.badgeNumber <= 0) ? null : this.badgeNumber;
+            });
             return resolve();
           });
         } else {
@@ -70,6 +83,12 @@ export class MainPage {
         }
       });
     });
+  }
+
+  private setupPushNotifications(userId: DocumentReference) {
+    if (this.platform.is('cordova')) {
+      this.fcm.getToken(userId);
+    }
   }
 
   ionViewDidLoad() {
