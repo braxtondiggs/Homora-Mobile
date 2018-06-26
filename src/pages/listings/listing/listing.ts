@@ -195,7 +195,7 @@ export class ListingPage {
   private loadMap() {
     var mapProp = {
       center: new google.maps.LatLng(this.listing.location.latlng.latitude, this.listing.location.latlng.longitude),
-      zoom: 13,
+      zoom: 15,
       disableDefaultUI: true,
       style: [{
         featureType: 'poi',
@@ -216,7 +216,7 @@ export class ListingPage {
           fillColor: '#4DD2D7',
           fillOpacity: 0.35,
           map: this.map,
-          radius: 1000,
+          radius: 275,
           center
         });
       } else {
