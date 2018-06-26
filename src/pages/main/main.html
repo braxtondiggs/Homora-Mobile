@@ -1,17 +1,17 @@
 <ion-content>
-	<ion-tabs *ngIf="auth && accountType === 'basic'">
+	<ion-tabs *ngIf="auth && accountType === 'basic' && !isLoading">
 		<ion-tab tabTitle="EXPLORE" [root]="ListingsTab" tabIcon="search" tabsHideOnSubPages="true"></ion-tab>
 		<ion-tab tabTitle="SAVED" [root]="FavoritesTab" tabUrlPath="user" tabIcon="heart-outline" tabsHideOnSubPages="true"></ion-tab>
 		<ion-tab tabTitle="INBOX" [root]="MessagesTab" tabUrlPath="user" tabIcon="chatbubbles" tabsHideOnSubPages="true" [tabBadge]="badgeNumber" tabBadgeStyle="danger"></ion-tab>
 		<ion-tab tabTitle="PROFILE" [root]="ProfileTab" tabUrlPath="user" tabIcon="person" tabsHideOnSubPages="true"></ion-tab>
 	</ion-tabs>
-	<ion-tabs *ngIf="auth && accountType === 'lister'" selectedIndex="0">
+	<ion-tabs *ngIf="auth && accountType === 'lister' && !isLoading" selectedIndex="0">
 		<ion-tab tabTitle="MY LISTINGS" [root]="ListerTab" tabUrlPath="user" tabIcon="home" tabsHideOnSubPages="true"></ion-tab>
 		<ion-tab tabTitle="INBOX" [root]="MessagesTab" tabUrlPath="user" tabIcon="chatbubbles" tabsHideOnSubPages="true" [tabBadge]="badgeNumber" tabBadgeStyle="danger"></ion-tab>
 		<ion-tab tabTitle="NEW LISTING" [root]="NewListingTab" tabUrlPath="listing" tabIcon="add-circle" tabsHideOnSubPages="true"></ion-tab>
 		<ion-tab tabTitle="PROFILE" [root]="ProfileTab" tabUrlPath="user" tabIcon="person" tabsHideOnSubPages="true"></ion-tab>
 	</ion-tabs>
-	<ion-nav [root]="ListingsTab" *ngIf="!auth"></ion-nav>
+	<ion-nav [root]="ListingsTab" *ngIf="!auth && !isLoading"></ion-nav>
 </ion-content>
 <ion-footer *ngIf="!auth && !isLoading">
 	<button color="dark" (click)="openAuthPage()" ion-button full>Log in to access more features</button>
