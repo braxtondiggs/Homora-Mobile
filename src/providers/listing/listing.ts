@@ -8,6 +8,7 @@ import { RoommateAge } from '../../interface/listing/roommate.interface';
 import * as _ from 'lodash';
 import * as firebase from 'firebase/app';
 import * as moment from 'moment';
+import geolib from 'geolib';
 
 @Injectable()
 export class ListingProvider {
@@ -98,9 +99,12 @@ export class ListingProvider {
       });
       switch (this.sort) {
         case 'Best Match':
-          return _.orderBy(listings, ['created', 'availability'], ['asc', 'desc']);
+          return _.orderBy(listings, [(o) =>
+            geolib.getDistance(area.center, { latitude: o.location.latlng.latitude, longitude: o.location.latlng.longitude }),
+            'created'
+          ], ['asc', 'desc']);
         case 'Recent':
-          return _.orderBy(listings, ['created'], ['asc']);
+          return _.orderBy(listings, ['created'], ['desc']);
         case 'Price':
           return _.orderBy(listings, ['price'], ['asc']);
       }
@@ -136,7 +140,7 @@ export class ListingProvider {
 
   filterAvailability(listing: Listing): boolean {
     if (_.isEmpty(this.availability) || moment(this.availability).isSame(moment(), 'day')) return true;
-    return moment(this.availability).isBefore(moment(listing.availability));
+    return moment(this.availability).isAfter(moment(listing.availability));
   }
 
   private boundingBoxCoordinates(center, radius) {
