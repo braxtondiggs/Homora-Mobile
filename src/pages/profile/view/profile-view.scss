@@ -11,16 +11,28 @@ page-profile-view {
     ion-slides {
       height: 230px;
 
+      ion-slide {
+        max-width: 190px;
+      }
+
       img {
         height: 150px;
         object-fit: cover;
-        width: 100%;
+        width: 170px;
       }
 
-      .card-title {
-        font-size: 14px;
-        font-weight: bold;
-        text-align: left;
+      .card-content {
+        height: 80px;
+
+        .card-title {
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 3;
+          display: -webkit-box;
+          font-size: 14px;
+          font-weight: bold;
+          text-align: left;
+          overflow: hidden;
+        }
       }
     }
   }
