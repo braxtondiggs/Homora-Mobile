@@ -27,6 +27,9 @@
 				<p class="sub-text" *ngIf="listing.duration">{{availability(listing.availability.toDate())}} &#183; {{duration(listing.duration.lower, listing.duration.upper)}}</p>
 			</ion-card-content>
 		</ion-card>
+		<ion-infinite-scroll (ionInfinite)="$event.waitFor(doInfinite())" [enabled]="isScrollEnabled">
+			<ion-infinite-scroll-content></ion-infinite-scroll-content>
+		</ion-infinite-scroll>
 	</div>
 	<ng-template #empty_results>
 		<ion-grid *ngIf="!isLoading" class="empty-listings">

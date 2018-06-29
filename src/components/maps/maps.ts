@@ -102,7 +102,7 @@ export class MapsComponent {
         Math.sin(c_lat) * Math.sin(ne_lat) +
         Math.cos(c_lat) * Math.cos(ne_lat) * Math.cos(ne_lng - c_lng)
       )
-      this.listings$ = this.listingProvider.getListings(false, {
+      this.listings$ = this.listingProvider.getListings(null, false, {
         center: {
           latitude: center.lat(),
           longitude: center.lng()

@@ -1,9 +1,11 @@
+import * as firebase from 'firebase/app';
+
 export interface ListingLocation {
   address1: string;
   address2: string;
   city: string;
   country: string;
-  latlng: any;
+  latlng: firebase.firestore.GeoPoint;
   state: string;
   zip: string;
   metro: Metro[];
