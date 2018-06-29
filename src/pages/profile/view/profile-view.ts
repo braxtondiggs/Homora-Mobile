@@ -53,7 +53,7 @@ export class ProfileViewPage {
       this.user$ = this.userDoc.snapshotChanges().map((action: any) => {
         return ({ $key: action.payload.id, ...action.payload.data() });
       });
-      this.listingsCollection = this.afs.collection<Listing[]>('Listings', (ref) => ref.where('createdBy', '==', this.userDoc.ref).where('status', '==', 'published').orderBy('created', 'desc'));
+      this.listingsCollection = this.afs.collection<Listing[]>('Listings', (ref) => ref.where('createdBy', '==', this.userDoc.ref).where('status', '==', 'published').orderBy('created', 'desc').limit(25));
       this.listings$ = this.listingsCollection.snapshotChanges().map((actions: any) => {
         return actions.map((action: any) => {
           const data = action.payload.doc.data();

@@ -21,8 +21,10 @@ import geolib from 'geolib';
 export class ListingsPage {
   user: User;
   listings: Listing[];
+  location: Geoposition;
   filter: boolean = false;
   isLoading: boolean = true;
+  isScrollEnabled: boolean = true;
   favorites: Favorite[];
   listings$: Observable<Listing[]>;
   DEFAULT_LISTING_IMAGE: string = AppSettings.DEFAULT_LISTING_IMAGE;
@@ -98,9 +100,11 @@ export class ListingsPage {
     return moment(date).isSameOrBefore(moment(), 'day') ? 'Available Now' : moment(date).format('MM/DD');
   }
 
-  getListings(location: Geoposition, loader: Loading) {
-    if (!_.isNull(location) && !this.hasPassedBoundaries(location)) {
-      this.listings$ = this.listingProvider.getListings(false, {
+  getListings(location: Geoposition, loader: Loading): Promise<void> {
+    const last: Listing = _.last(this.listings);
+    const lastPoint = (last) ? last.location.latlng : undefined;
+    if (!_.isEmpty(location) && !this.hasPassedBoundaries(location)) {
+      this.listings$ = this.listingProvider.getListings(lastPoint, false, {
         center: {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude
@@ -108,28 +112,44 @@ export class ListingsPage {
         radius: 27
       });
     } else {
-      this.listings$ = this.listingProvider.getListings();
-      this.alert.create({
-        title: 'Outside supported boundaries',
-        subTitle: 'We currently do not support areas outside of DC, we plan to expand shortly.',
-        buttons: ['Ok']
-      }).present();
-    }
-    this.listings$.subscribe((listings: Listing[]) => {
-      this.listings = listings;
-      loader.dismiss();
-      this.isLoading = false;
-      if (this.user) {
-        this.favoriteCollection = this.afs.collection<Favorite>('Favorites', (ref) => ref.where('user', '==', this.userProvider.getDoc().ref));
-        this.favoriteCollection.snapshotChanges().map((actions: any) => actions.map((action: any) => ({ $key: action.payload.doc.id, ...action.payload.doc.data() }))).subscribe((favorites: Favorite[]) => {
-          this.favorites = favorites;
-        });
+      this.listings$ = this.listingProvider.getListings(lastPoint, false);
+      if (_.isEmpty(last)) {
+        this.alert.create({
+          title: 'Outside supported boundaries',
+          subTitle: 'We currently do not support areas outside of DC, we plan to expand shortly.',
+          buttons: ['Ok']
+        }).present();
       }
+    }
+
+    return new Promise((resolve) => {
+      return this.listings$.take(1).toPromise().then((listings: Listing[]) => {
+        const listingSize = _.size(this.listings);
+        this.listings = !_.isEmpty(last) ? _.chain(this.listings).union(listings).uniqBy('$key').value() : listings;
+        loader.dismiss();
+        this.isLoading = false;
+        this.isScrollEnabled = listingSize !== _.size(this.listings);
+        resolve();
+        if (this.user) {
+          this.favoriteCollection = this.afs.collection<Favorite>('Favorites', (ref) => ref.where('user', '==', this.userProvider.getDoc().ref));
+          this.favoriteCollection.snapshotChanges().map((actions: any) => actions.map((action: any) => ({ $key: action.payload.doc.id, ...action.payload.doc.data() }))).subscribe((favorites: Favorite[]) => {
+            this.favorites = favorites;
+          });
+        }
+      });
     });
   }
 
   hasPassedBoundaries(location: Geoposition): boolean {
     return !geolib.isPointInside({ latitude: location.coords.latitude, longitude: location.coords.longitude }, AppSettings.MAP_BOUNDS)
+  }
+
+  doInfinite(): Promise<void> {
+    return new Promise((resolve) => {
+      const loader: Loading = this.loading.create({ content: 'Loading...' });
+      loader.present();
+      this.getListings(this.location, loader).then(() => resolve());
+    });
   }
 
   ionViewDidLoad() {
@@ -144,17 +164,19 @@ export class ListingsPage {
           timeout: 5000,
           enableHighAccuracy: true
         }).then((location: Geoposition) => {
+          this.location = location;
           this.getListings(location, loader);
         }).catch((error: any) => {
           this.toast.create({ message: error.toString(), duration: 3000 }).present();
-          this.getListings(null, loader);
+          this.getListings(this.location, loader);
         });
       } else {
         this.locationProvider.getLocation().subscribe((location: Geoposition) => {
+          this.location = location;
           this.getListings(location, loader);
         }, (error: any) => {
           this.toast.create({ message: error.toString(), duration: 3000 }).present();
-          this.getListings(null, loader);
+          this.getListings(this.location, loader);
         });
       }
     });
