@@ -1,10 +1,11 @@
 import { UserImage } from './image.interface';
 import { UserNotifications } from './notifications.interface';
+import { Timestamp } from '@firebase/firestore-types';
 
 export interface User {
   $key: string;
-  created: Date | string,
-  birthdate?: Date | string;
+  created: Timestamp | Date,
+  birthdate?: Timestamp | Date;
   description?: string;
   email: string;
   firstName: string;
@@ -12,7 +13,7 @@ export interface User {
   lastName: string;
   phone?: number | string,
   phoneVerified?: boolean;
-  moveInDate?: Date | string;
+  moveInDate?: Timestamp | Date;
   location?: string;
   gender?: string;
   notifications?: UserNotifications;

@@ -1,8 +1,8 @@
-import { DocumentReference } from '@firebase/firestore-types';
+import { DocumentReference, Timestamp } from '@firebase/firestore-types';
 
 export interface Favorite {
   $key?: string,
-  created: Date;
+  created: Timestamp | Date;
   listing: DocumentReference;
   user: DocumentReference;
 }

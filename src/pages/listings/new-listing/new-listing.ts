@@ -9,7 +9,7 @@ import { ListingPage } from '../listing/listing';
 import { Listing } from '../../../interface';
 import { Metro } from '../../../interface/listing/location.interface';
 import { Observable } from 'rxjs/Rx';
-import { DocumentReference } from '@firebase/firestore-types';
+import { DocumentReference, Timestamp } from '@firebase/firestore-types';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import * as firebase from 'firebase/app'
@@ -308,6 +308,7 @@ export class NewListingPage {
       } as Listing)
     }
     this.listing$.subscribe((listing) => {
+      const availability = listing.availability ? (listing.availability as Timestamp).toDate() : moment().toDate();
       listing.createdBy = _.isEmpty(listing.createdBy) ? this.userProvider.getDoc().ref as DocumentReference : listing.createdBy as DocumentReference;
       this.listing = listing;
       this.rangeLabelLower = this.rangelLabel(this.listing.duration.lower);
@@ -328,7 +329,7 @@ export class NewListingPage {
         group40older: [this.listing.roommate.age.group40older],
         price: [this.listing.price, Validators.required],
         deposit: [this.listing.deposit, Validators.required],
-        availability: [moment(this.listing.availability).format('YYYY-MM-DD'), Validators.required],
+        availability: [moment(availability).format('YYYY-MM-DD'), Validators.required],
         duration: [this.listing.duration, Validators.required],
         washer: [this.listing.amenities.washer],
         wifi: [this.listing.amenities.wifi],
