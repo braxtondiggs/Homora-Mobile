@@ -10,6 +10,7 @@ import { UserProvider } from '../../../providers/user/user';
 import { User } from '../../../interface';
 import { UserImage } from '../../../interface/user/image.interface';
 import { AppSettings } from '../../../app/app.constants';
+import * as firebase from 'firebase';
 import * as _ from 'lodash';
 import * as  moment from 'moment';
 
@@ -22,8 +23,10 @@ export class EditProfilePage {
   userDoc: AngularFirestoreDocument<User>;
   profileForm: FormGroup;
   DEFAULT_USER_IMAGE: string = AppSettings.DEFAULT_USER_IMAGE;
-  maxBirthDate: string = moment().subtract(18, 'y').format();
-  minMoveDate: string = moment().format();
+  email: string;
+  authData: firebase.User;
+  maxBirthDate: string = moment().subtract(18, 'y').format('YYYY-MM-DD');
+  minMoveDate: string = moment().format('YYYY-MM-DD');
   @ViewChild('file') file: ElementRef;
   @ViewChild(Slides) slides: Slides;
   constructor(
@@ -38,31 +41,43 @@ export class EditProfilePage {
     private camera: Camera,
     private platform: Platform) {
     this.profileForm = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      gender: ['', Validators.required],
-      email: ['', Validators.required],
-      phone: ['', Validators.required],
-      birthdate: ['', Validators.required],
+      firstName: ['', Validators.compose([Validators.required])],
+      lastName: ['', Validators.compose([Validators.required])],
+      gender: ['', Validators.compose([Validators.required])],
+      email: ['', Validators.compose([Validators.required])],
+      phone: ['', Validators.compose([Validators.required])],
+      birthdate: ['', Validators.compose([Validators.required])],
       location: [''],
-      description: ['', Validators.required],
+      description: ['', Validators.compose([Validators.required])],
       moveInDate: ['']
     });
   }
 
   saveProfile(): void {
     if (this.profileForm.valid) {
-      this.formatUser();
       const loader = this.loading.create();
       loader.present();
-      this.userDoc.update(this.user).then(() => {
+      this.email = this.user.email;
+      this.userDoc.update(this.formatUser(this.profileForm.value)).then(async () => {
         loader.dismiss();
-        this.nav.pop().then(() => {
-          this.toast.create({
-            message: 'Profile successfully updated.',
-            duration: 3000
-          }).present();
-        })
+        this.saveEmail().then(() => {
+          this.nav.pop().then(() => {
+            this.toast.create({
+              message: 'Profile successfully updated.',
+              duration: 3000
+            }).present();
+          });
+        }).catch((error) => {
+          this.user.email = this.email;
+          this.profileForm.patchValue(this.user);
+          this.userDoc.update(this.formatUser(this.profileForm.value));
+          if (error) {
+            this.toast.create({
+              message: error.message,
+              duration: 3000
+            }).present();
+          }
+        });
       });
     } else {
       const message = _.chain(this.profileForm.controls).map((o: any, key: string) => {
@@ -129,12 +144,55 @@ export class EditProfilePage {
     return !_.isEmpty(this.user.images);
   }
 
+  isEmailDisabled(): boolean {
+    console.log(this.authData);
+    return this.authData && !(_.findIndex(this.authData.providerData, ['providerId', 'password']) > -1);
+  }
+
   ionViewDidLoad() {
     this.userDoc = this.userProvider.getDoc();
-    this.userDoc.valueChanges().subscribe((user) => {
+    this.userDoc.valueChanges().subscribe((user: any) => {
       this.user = user;
-      this.user.birthdate = moment(user.birthdate).format('YYYY-MM-DD');
-      this.user.moveInDate = moment(user.moveInDate).format('YYYY-MM-DD');
+      this.authData = this.userProvider.getAuthData();
+      const birthdate = user.birthdate ? user.birthdate.toDate() : this.maxBirthDate;
+      const moveInDate = user.moveInDate ? user.moveInDate.toDate() : this.minMoveDate;
+      user.birthdate = moment(birthdate).format('YYYY-MM-DD');
+      user.moveInDate = moment(moveInDate).format('YYYY-MM-DD');
+      this.profileForm.patchValue(user);
+    });
+  }
+
+  private saveEmail(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (this.profileForm.controls.email.dirty && this.profileForm.value.email !== this.email) {
+        this.alert.create({
+          title: 'Confirm Password',
+          subTitle: 'Please re-enter your password to update your email address.',
+          inputs: [{
+            name: 'password',
+            placeholder: 'Confirm Password',
+            type: 'password'
+          }],
+          buttons: [{
+            text: 'Cancel',
+            role: 'cancel',
+            handler: (() => reject())
+          }, {
+            text: 'Update',
+            handler: (response: any) => {
+              const user = firebase.auth().currentUser;
+              const credentials = firebase.auth.EmailAuthProvider.credential(user.email, response.password);
+              this.authData.reauthenticateWithCredential(credentials).then(() => {
+                this.authData.updateEmail(this.profileForm.value.email).then(() =>
+                  resolve()
+                ).catch((error) => reject(error));
+              }).catch((error) => reject(error));
+            }
+          }]
+        }).present();
+      } else {
+        resolve();
+      }
     });
   }
 
@@ -179,10 +237,11 @@ export class EditProfilePage {
     });
   }
 
-  private formatUser() {
-    this.user.phone = !_.isNull(this.user.phone) ? _.toNumber(this.user.phone.toString().replace(/\D/g, '')) : null;
-    this.user.birthdate = !_.isNull(this.user.birthdate) ? moment(this.user.birthdate).toDate() : null;
-    this.user.moveInDate = !_.isNull(this.user.moveInDate) ? moment(this.user.moveInDate).toDate() : null;
-    this.user = _.pickBy(this.user, _.identity) as User;
+  private formatUser(user: User): User {
+    user.phone = !_.isNull(user.phone) ? _.toNumber(user.phone.toString().replace(/\D/g, '')) : null;
+    user.birthdate = !_.isNull(user.birthdate) ? moment(user.birthdate).toDate() : null;
+    user.moveInDate = !_.isNull(user.moveInDate) ? moment(user.moveInDate).toDate() : null;
+    user = _.pickBy(user, _.identity) as User;
+    return user;
   }
 }

@@ -1,10 +1,10 @@
 import { Chats } from './chats.interface';
-import { DocumentReference } from '@firebase/firestore-types';
+import { DocumentReference, Timestamp } from '@firebase/firestore-types';
 
 export interface Message {
   chats: Chats[],
-  created: Date;
-  modified: Date;
+  created: Timestamp | Date;
+  modified: Timestamp | Date;
   listing: DocumentReference;
   read: any;
   users: any;

@@ -1,5 +1,7 @@
+import { Timestamp } from '@firebase/firestore-types';
+
 export interface Chats {
-  created: Date;
+  created: Timestamp | Date;
   message?: string;
   image?: string;
   sender: string;

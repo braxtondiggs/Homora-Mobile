@@ -3,6 +3,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { User } from '../../interface';
+import * as firebase from 'firebase';
 
 @Injectable()
 export class UserProvider {
@@ -16,16 +17,16 @@ export class UserProvider {
     return this.afAuth.authState;
   }
 
-  setAuth(user: any): void {
+  setAuth(user: firebase.User): void {
     this.userData = user;
     if (user) this.set$(user);
   }
 
-  getAuthData(): any {
+  getAuthData(): firebase.User {
     return this.userData;
   }
 
-  set$(user: any): void {
+  set$(user: firebase.User): void {
     this.userDoc = this.afs.doc<User>(`Users/${user.uid}`);
     this.user$ = this.userDoc.snapshotChanges().map((action: any) => {
       return ({ $key: action.payload.id, ...action.payload.data() });
