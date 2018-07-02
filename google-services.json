@@ -8,6 +8,37 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:103008606966:android:da745b3d6db4b25a",
+        "android_client_info": {
+          "package_name": "com.homora.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "103008606966-5f2nipp0pqlkbk3ei9idjv39082j5b2p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNKkZgPLszyhCZ8rfvQ9XpvDH7zwQiYu8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:103008606966:android:5aa3609e37179276",
         "android_client_info": {
           "package_name": "com.ionic.homora"

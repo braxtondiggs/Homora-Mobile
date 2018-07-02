@@ -7,9 +7,9 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>103008606966-m04h8k1silocndtk526sj2uo3f96nfhl.apps.googleusercontent.com</string>
+	<string>103008606966-lij524pu4uh8rckdba0abl0hovdos20p.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.103008606966-m04h8k1silocndtk526sj2uo3f96nfhl</string>
+	<string>com.googleusercontent.apps.103008606966-lij524pu4uh8rckdba0abl0hovdos20p</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCV6eGHxMUMGJJlJSYP4mVneYwjAlH5mb8</string>
 	<key>GCM_SENDER_ID</key>
@@ -17,7 +17,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.ionic.homora</string>
+	<string>com.homora.app</string>
 	<key>PROJECT_ID</key>
 	<string>homora-483ba</string>
 	<key>STORAGE_BUCKET</key>
@@ -33,7 +33,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:103008606966:ios:5aa3609e37179276</string>
+	<string>1:103008606966:ios:da745b3d6db4b25a</string>
 	<key>DATABASE_URL</key>
 	<string>https://homora-483ba.firebaseio.com</string>
 </dict>
