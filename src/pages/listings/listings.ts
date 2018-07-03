@@ -103,7 +103,7 @@ export class ListingsPage {
   getListings(location: Geoposition, loader: Loading): Promise<void> {
     const last: Listing = _.last(this.listings);
     const lastPoint = (last) ? last.location.latlng : undefined;
-    if (!_.isEmpty(location) && !this.hasPassedBoundaries(location)) {
+    if (location && !this.hasPassedBoundaries(location)) {
       this.listings$ = this.listingProvider.getListings(lastPoint, false, {
         center: {
           latitude: location.coords.latitude,
