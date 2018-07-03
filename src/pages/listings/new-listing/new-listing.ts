@@ -251,7 +251,7 @@ export class NewListingPage {
     } else {
       this.listingDoc = null;
       this.listing$ = Observable.of({
-        availability: moment().toDate(),
+        availability: null,
         amenities: {
           washer: false,
           wifi: false,
