@@ -38,7 +38,7 @@ export class MessagesPage {
 
   ionViewDidLoad() {
     this.user = this.userProvider.get();
-    this.messagesCollection = this.afs.collection<Message>('Messages', ref => ref.where(`users.${this.user.$key}`, '==', true));
+    this.messagesCollection = this.afs.collection<Message>('Messages', ref => ref.where(`users.${this.user.$key}`, '==', true).orderBy('modified'));
     this.messages$ = this.messagesCollection.snapshotChanges().map((actions: any) => {
       return actions.map((action: any) => {
         const data = action.payload.doc.data();

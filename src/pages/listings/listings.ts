@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { Favorite, Listing, User } from '../../interface';
 import { GeoLocationProvider, ListingProvider, UserProvider } from '../../providers';
 import { ListingPage } from './listing/listing';
-import { ProfileViewPage } from '../profile';
+import { ProfileViewPage, ProfileViewFakePage } from '../profile';
 import { AppSettings } from '../../app/app.constants';
 import * as moment from 'moment';
 import * as _ from 'lodash';
@@ -49,6 +49,11 @@ export class ListingsPage {
   viewProfile(key: string, $event: Event): void {
     $event.stopPropagation();
     this.nav.push(ProfileViewPage, { key });
+  }
+
+  viewProfileFake(key: string, $event: Event): void {
+    $event.stopPropagation();
+    this.nav.push(ProfileViewFakePage, { key });
   }
 
   toggleFavorite(key: string, $event: Event): void {
