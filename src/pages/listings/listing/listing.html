@@ -28,11 +28,19 @@
 						<h3 class="price md-display-1" *ngIf="listing.price" no-margin>{{listing.price | currency:'USD':'symbol':'1.0-3'}}<span>/&nbsp;month</span></h3>
 						<h4 class="location md-subhead" *ngIf="listing.location.city && listing.location.state" no-margin><ion-icon name="pin"></ion-icon> {{listing.location.city}}, {{listing.location.state}}</h4>
 					</ion-col>
-					<ion-col (click)="viewProfile(createdBy.$key)" *ngIf="(listing.createdBy$ | async) as createdBy;" col-auto>
+					<ion-col (click)="viewProfile(createdBy.$key)" *ngIf="!listing.scrape" col-auto>
+						<div *ngIf="(listing.createdBy$ | async) as createdBy;">
+							<ion-avatar class="avatar">
+								<img [attr.src]="createdBy.images && createdBy.images[0] ? createdBy.images[0].src : DEFAULT_USER_IMAGE" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
+							</ion-avatar>
+							<p class="listing-createdby md-subhead">{{createdBy.firstName}}, {{ today | amDifference: createdBy.birthdate.toDate() :'years'}}</p>
+						</div>
+					</ion-col>
+					<ion-col (click)="viewProfileFake(listing.$key)" *ngIf="listing.scrape" col-auto>
 						<ion-avatar class="avatar">
-							<img [attr.src]="createdBy.images && createdBy.images[0] ? createdBy.images[0].src : DEFAULT_USER_IMAGE" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
+							<img [attr.src]="listing.user.images[0].src" alt="{{listing.user.firstName}} {{listing.user.lastName}}">
 						</ion-avatar>
-						<p class="listing-createdby md-subhead">{{createdBy.firstName}}, {{ today | amDifference: createdBy.birthdate.toDate() :'years'}}</p>
+						<p class="listing-createdby md-subhead">{{listing.user.firstName}}, {{ today | amDifference: listing.user.birthdate.toDate() :'years'}}</p>
 					</ion-col>
 				</ion-row>
 				<ion-row class="more-info" align-items-center>

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Rx';
 import { UserProvider } from '../../providers';
 import { Favorite, Listing, User } from '../../interface';
 import { ListingPage } from '../listings';
-import { ProfileViewPage } from '../profile';
+import { ProfileViewPage, ProfileViewFakePage } from '../profile';
 import { AppSettings } from '../../app/app.constants';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -35,6 +35,11 @@ export class FavoritesPage {
   viewProfile(key: string, $event: Event): void {
     $event.stopPropagation();
     this.nav.push(ProfileViewPage, { key });
+  }
+
+  viewProfileFake(key: string, $event: Event): void {
+    $event.stopPropagation();
+    this.nav.push(ProfileViewFakePage, { key });
   }
 
   hasListingImage(images: any[]): boolean {

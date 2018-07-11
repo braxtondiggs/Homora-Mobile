@@ -19,9 +19,16 @@
 			</div>
 			<ion-card-content>
 				<ion-card-header class="profile" no-padding>
-					<ion-avatar class="avatar" (click)="viewProfile(createdBy.$key, $event)" *ngIf="(listing.createdBy$ | async) as createdBy;">
-						<img [attr.src]="createdBy.images && createdBy.images[0] ? createdBy.images[0].src : DEFAULT_USER_IMAGE" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
-					</ion-avatar>
+					<div *ngIf="!listing.scrape">
+						<ion-avatar class="avatar" (click)="viewProfile(createdBy.$key, $event)" *ngIf="(listing.createdBy$ | async) as createdBy;">
+							<img [attr.src]="createdBy.images && createdBy.images[0] ? createdBy.images[0].src : DEFAULT_USER_IMAGE" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
+						</ion-avatar>
+					</div>
+					<div *ngIf="listing.scrape">
+						<ion-avatar class="avatar" (click)="viewProfileFake(listing.$key, $event)">
+							<img [attr.src]="listing.user.images[0].src" alt="{{listing.user.firstName}} {{listing.user.lastName}}">
+						</ion-avatar>
+					</div>
 				</ion-card-header>
 				<ion-card-title>{{listing.title}}</ion-card-title>
 				<p class="sub-text" *ngIf="listing.duration">{{availability(listing.availability.toDate())}} &#183; {{duration(listing.duration.lower, listing.duration.upper)}}</p>

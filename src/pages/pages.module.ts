@@ -5,7 +5,7 @@ import { MainPage } from './main';
 import { IntroPage } from './intro';
 import { ListingsPage, ListingPage, ListingReadMore, ListerPage, NewListingPage } from './listings';
 import { FavoritesPage } from './favorites';
-import { ProfilePage, EditProfilePage, ProfileViewPage } from './profile';
+import { ProfilePage, EditProfilePage, ProfileViewPage, ProfileViewFakePage } from './profile';
 import { MessagesPage, MessagePage } from './messages';
 import { AuthPage, SignupPage, LoginPage, ResetPage } from './auth';
 import { SettingsPage, NotificationsPage } from './settings';
@@ -24,6 +24,7 @@ import { SettingsPage, NotificationsPage } from './settings';
     ProfilePage,
     EditProfilePage,
     ProfileViewPage,
+    ProfileViewFakePage,
     MessagesPage,
     MessagePage,
     AuthPage,
@@ -45,6 +46,7 @@ import { SettingsPage, NotificationsPage } from './settings';
     ProfilePage,
     EditProfilePage,
     ProfileViewPage,
+    ProfileViewFakePage,
     MessagesPage,
     MessagePage,
     AuthPage,

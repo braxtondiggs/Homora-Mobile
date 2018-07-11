@@ -5,7 +5,7 @@ import { DocumentReference } from '@firebase/firestore-types';
 import { Observable } from 'rxjs/Observable';
 import { Favorite, Listing, User } from '../../../interface';
 import { ListingProvider, UserProvider } from '../../../providers';
-import { ProfileViewPage } from '../../profile';
+import { ProfileViewPage, ProfileViewFakePage } from '../../profile';
 import { MessagePage } from '../../messages';
 import { AuthPage } from '../../auth';
 import * as _ from 'lodash';
@@ -51,6 +51,10 @@ export class ListingPage {
 
   viewProfile(key: string): void {
     this.nav.push(ProfileViewPage, { key });
+  }
+
+  viewProfileFake(key: string): void {
+    this.nav.push(ProfileViewFakePage, { key });
   }
 
   contact(createdBy: string, listing: string): void {
