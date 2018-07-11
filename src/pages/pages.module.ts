@@ -9,6 +9,7 @@ import { ProfilePage, EditProfilePage, ProfileViewPage, ProfileViewFakePage } fr
 import { MessagesPage, MessagePage } from './messages';
 import { AuthPage, SignupPage, LoginPage, ResetPage } from './auth';
 import { SettingsPage, NotificationsPage } from './settings';
+import { MessagePipe } from '../pipes';
 
 @NgModule({
   imports: [IonicModule, MomentModule],
@@ -32,7 +33,8 @@ import { SettingsPage, NotificationsPage } from './settings';
     LoginPage,
     ResetPage,
     SettingsPage,
-    NotificationsPage
+    NotificationsPage,
+    MessagePipe
   ],
   entryComponents: [
     MainPage,

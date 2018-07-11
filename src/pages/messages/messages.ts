@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Rx';
 import { Message, User } from '../../interface';
 import { UserProvider } from '../../providers';
 import { AppSettings } from '../../app/app.constants';
-import { findKey } from 'lodash';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'page-messages',
@@ -38,11 +38,11 @@ export class MessagesPage {
 
   ionViewDidLoad() {
     this.user = this.userProvider.get();
-    this.messagesCollection = this.afs.collection<Message>('Messages', ref => ref.where(`users.${this.user.$key}`, '==', true).orderBy('modified'));
+    this.messagesCollection = this.afs.collection<Message>('Messages', ref => ref.where(`users.${this.user.$key}`, '==', true));
     this.messages$ = this.messagesCollection.snapshotChanges().map((actions: any) => {
       return actions.map((action: any) => {
         const data = action.payload.doc.data();
-        const userRef = findKey(data.users, (o, key) => this.user.$key !== key);
+        const userRef = _.findKey(data.users, (o, key) => this.user.$key !== key);
         data.user$ = this.afs.doc<User>(`Users/${userRef}`).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
         return ({ $key: action.payload.doc.id, ...data });
       });
