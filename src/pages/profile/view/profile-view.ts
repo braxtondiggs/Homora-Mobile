@@ -16,11 +16,11 @@ export class ProfileViewPage {
   key: string;
   edit: boolean;
   user$: Observable<User>;
-  listings$: Observable<Listing>;
+  listings$: Observable<Listing[]>;
   DEFAULT_USER_IMAGE: string = AppSettings.DEFAULT_USER_IMAGE;
   DEFAULT_LISTING_IMAGE: string = AppSettings.DEFAULT_LISTING_IMAGE;
   private userDoc: AngularFirestoreDocument<User>;
-  private listingsCollection: AngularFirestoreCollection<Listing[]>;
+  private listingsCollection: AngularFirestoreCollection<Listing>;
   constructor(private afs: AngularFirestore,
     private navParams: NavParams,
     private nav: NavController) { }
@@ -50,16 +50,9 @@ export class ProfileViewPage {
     this.edit = this.navParams.get('edit');
     if (this.key) {
       this.userDoc = this.afs.doc<User>(`Users/${this.key}`);
-      this.user$ = this.userDoc.snapshotChanges().map((action: any) => {
-        return ({ $key: action.payload.id, ...action.payload.data() });
-      });
-      this.listingsCollection = this.afs.collection<Listing[]>('Listings', (ref) => ref.where('createdBy', '==', this.userDoc.ref).where('status', '==', 'published').orderBy('created', 'desc').limit(25));
-      this.listings$ = this.listingsCollection.snapshotChanges().map((actions: any) => {
-        return actions.map((action: any) => {
-          const data = action.payload.doc.data();
-          return ({ $key: action.payload.doc.id, ...data });
-        });
-      });
+      this.user$ = this.userDoc.valueChanges();
+      this.listingsCollection = this.afs.collection<Listing>('Listings', (ref) => ref.where('createdBy', '==', this.userDoc.ref).where('status', '==', 'published').orderBy('created', 'desc').limit(25));
+      this.listings$ = this.listingsCollection.valueChanges();
     }
   }
 }

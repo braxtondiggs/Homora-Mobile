@@ -6,7 +6,7 @@ import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firesto
 import { DocumentReference } from '@firebase/firestore-types';
 import { Observable } from 'rxjs/Observable';
 import { ListingPage } from '../../listings/listing/listing';
-import { ProfileViewPage } from '../../profile/view/profile-view';
+import { ProfileViewPage, ProfileViewFakePage } from '../../profile/';
 import { Listing, Message, User } from '../../../interface';
 import { Chats } from '../../../interface/message/chats.interface';
 import { UserProvider } from '../../../providers';
@@ -22,7 +22,6 @@ export class MessagePage {
   key: string;
   messageInput: string = '';
   user: User;
-  receiver: User;
   message: Message;
   listing$: Observable<Listing>;
   receiver$: Observable<User>
@@ -50,12 +49,16 @@ export class MessagePage {
     this.nav.push(ProfileViewPage, { key });
   }
 
+  viewProfileFake(key: string): void {
+    this.nav.push(ProfileViewFakePage, { key });
+  }
+
   onFocus() {
     this.content.resize();
     this.scrollToBottom();
   }
 
-  sendMessage(image?: string): void {
+  sendMessage(receiver: User, image?: string): void {
     const headers = new HttpHeaders().set('id', this.key);
     if (!this.messageInput.trim() && _.isUndefined(image)) return;
     let message = {
@@ -68,7 +71,7 @@ export class MessagePage {
       message.message = this.messageInput;
     }
     if (this.message.chats) {
-      this.message.read[this.receiver.$key] = false
+      this.message.read[receiver.$key] = false
       this.message.modified = moment().toDate();
       this.message.chats.push(message);
       this.messageDoc.update(this.message).then(() => {
@@ -84,11 +87,11 @@ export class MessagePage {
         modified: moment().toDate(),
         read: {
           [this.user.$key]: true,
-          [this.receiver.$key]: false
+          [receiver.$key]: false
         },
         users: {
           [this.user.$key]: true,
-          [this.receiver.$key]: true
+          [receiver.$key]: true
         }
       };
       this.messageDoc.set(messageObj).then(() => {
@@ -104,27 +107,27 @@ export class MessagePage {
     this.chatInput.nativeElement.style.height = `${this.chatInput.nativeElement.scrollHeight}px`;
   }
 
-  onFileChange(event) {
+  onFileChange(event: any, receiver: User) {
     let reader = new FileReader();
     if (event.target.files && event.target.files.length > 0) {
       let file = event.target.files[0];
       reader.readAsDataURL(file);
       reader.onload = () => {
-        this.sendMessage(`data:${file.type};base64,${reader.result.split(',')[1]}`);
+        this.sendMessage(receiver, `data:${file.type};base64,${reader.result.split(',')[1]}`);
       };
     }
   }
 
-  addImage() {
+  addImage(receiver: User) {
     this.alert.create({
       title: 'Take Picture',
       message: 'Take a new photo or select one from your existing photo library.',
       buttons: [{
         text: 'Gallery',
-        handler: () => this.openCamera('gallery')
+        handler: () => this.openCamera('gallery', receiver)
       }, {
         text: 'Camera',
-        handler: () => this.openCamera('camera')
+        handler: () => this.openCamera('camera', receiver)
       }]
     }).present();
   }
@@ -133,7 +136,7 @@ export class MessagePage {
     return (!_.isDate(date)) ? date.toDate() : date;
   }
 
-  private openCamera(type: string): void {
+  private openCamera(type: string, receiver: User): void {
     this.platform.ready().then(() => {
       this.camera.getPicture({
         quality: 75,
@@ -144,7 +147,7 @@ export class MessagePage {
         correctOrientation: type === 'camera',
         encodingType: this.camera.EncodingType.JPEG
       } as CameraOptions).then((image) => {
-        this.sendMessage(`data:image/jpeg;base64,${image}`);
+        this.sendMessage(receiver, `data:image/jpeg;base64,${image}`);
       }, (err) => {
         if (err === 'cordova_not_available') {
           this.file.nativeElement.click();
@@ -165,7 +168,6 @@ export class MessagePage {
 
   ionViewDidLoad() {
     this.key = this.navParams.get('key');
-    this.resize();
     if (this.key) {
       this.user = this.userProvider.get();
       this.messageDoc = this.afs.doc<Message>(`Messages/${this.key}`);
@@ -180,14 +182,10 @@ export class MessagePage {
           userRef = this.navParams.get('createdBy');
           listingRef = `Listings/${this.navParams.get('listing')}`;
         }
-        this.receiver$ = this.afs.doc<User>(`Users/${userRef}`).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
-        this.listingDoc = this.afs.doc<Listing>(listingRef);
-        this.listing$ = this.listingDoc.snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
+        this.receiver$ = this.afs.doc<User>(`Users/${userRef}`).valueChanges();
+        this.listing$ = this.afs.doc<Listing>(listingRef).valueChanges();
         this.content.resize();
-        this.receiver$.subscribe((receiver) => {
-          this.receiver = receiver;
-        });
-        return ({ $key: action.payload.id, ...data });
+        return data;
       }).subscribe((message) => {
         this.message = message;
         if (this.message.read && !this.message.read[this.user.$key]) {

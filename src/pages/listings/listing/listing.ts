@@ -171,9 +171,9 @@ export class ListingPage {
       this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
       this.listing$ = this.listingDoc.snapshotChanges().map((action: any) => {
         const data = action.payload.data();
-        if (data.createdBy) data.createdBy$ = this.afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
+        if (data.createdBy) data.createdBy$ = this.afs.doc<User>(data.createdBy.path).valueChanges();
         data.summaryTruncated = _.truncate(data.summary, { length: 250, separator: ' ' });
-        return ({ $key: action.payload.id, ...data });
+        return data;
       });
       this.listing$.subscribe((listing: Listing) => {
         this.listing = listing;
@@ -189,7 +189,7 @@ export class ListingPage {
       })
       if (this.user) {
         this.favoriteCollection = this.afs.collection<Favorite>('Favorites', (ref) => ref.where('user', '==', this.userProvider.getDoc().ref).where('listing', '==', this.listingDoc.ref));
-        this.favoriteCollection.snapshotChanges().map((actions: any) => actions.map((action: any) => ({ $key: action.payload.doc.id, ...action.payload.doc.data() }))).subscribe((favorite: Favorite[]) => {
+        this.favoriteCollection.valueChanges().subscribe((favorite: Favorite[]) => {
           this.favorite = _.first(favorite);
         });
       }

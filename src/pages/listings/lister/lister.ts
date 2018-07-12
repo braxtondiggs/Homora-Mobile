@@ -72,12 +72,11 @@ export class ListerPage {
   ionViewDidLoad() {
     this.user = this.userProvider.get();
     this.listingsCollection = this.afs.collection<Listing[]>('Listings', (ref) => ref.where('createdBy', '==', this.userProvider.getDoc().ref).orderBy('created', 'desc'));
-    this.listings$ = this.listingsCollection.snapshotChanges().map((actions: any) => {
-      return _.groupBy(actions.map((action: any) => {
+    this.listings$ = this.listingsCollection.snapshotChanges().map((actions: any) =>
+      _.groupBy(actions.map((action: any) => {
         const data = action.payload.doc.data();
-        data.createdBy$ = this.afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
-        return ({ $key: action.payload.doc.id, ...data });
-      }), 'status');
-    });
+        data.createdBy$ = this.afs.doc<User>(data.createdBy.path).valueChanges();
+        return data;
+      }), 'status'));
   }
 }

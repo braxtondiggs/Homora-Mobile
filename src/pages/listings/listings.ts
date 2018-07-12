@@ -134,13 +134,13 @@ export class ListingsPage {
         loader.dismiss();
         this.isLoading = false;
         this.isScrollEnabled = listingSize !== _.size(this.listings);
-        resolve();
         if (this.user) {
           this.favoriteCollection = this.afs.collection<Favorite>('Favorites', (ref) => ref.where('user', '==', this.userProvider.getDoc().ref));
-          this.favoriteCollection.snapshotChanges().map((actions: any) => actions.map((action: any) => ({ $key: action.payload.doc.id, ...action.payload.doc.data() }))).subscribe((favorites: Favorite[]) => {
+          this.favoriteCollection.valueChanges().subscribe((favorites: Favorite[]) => {
             this.favorites = favorites;
           });
         }
+        resolve();
       });
     });
   }
