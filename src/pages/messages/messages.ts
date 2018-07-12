@@ -3,7 +3,7 @@ import { NavController, ToastController } from 'ionic-angular';
 import { MessagePage } from './message/message';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Rx';
-import { Message, User } from '../../interface';
+import { Listing, Message, User } from '../../interface';
 import { UserProvider } from '../../providers';
 import { AppSettings } from '../../app/app.constants';
 import * as _ from 'lodash';
@@ -43,8 +43,9 @@ export class MessagesPage {
       return actions.map((action: any) => {
         const data = action.payload.doc.data();
         const userRef = _.findKey(data.users, (o, key) => this.user.$key !== key);
-        data.user$ = this.afs.doc<User>(`Users/${userRef}`).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
-        return ({ $key: action.payload.doc.id, ...data });
+        data.user$ = this.afs.doc<User>(`Users/${userRef}`).valueChanges();
+        data.listing$ = this.afs.doc<Listing>(data.listing.path).valueChanges();
+        return data;
       });
     });
   }

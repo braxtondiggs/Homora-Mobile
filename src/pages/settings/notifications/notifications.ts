@@ -31,7 +31,7 @@ export class NotificationsPage {
           messages: data.notifications && data.notifications.messages ? data.notifications.messages : this.defaultCheckbox(),
           policy: data.notifications && data.notifications.policy ? data.notifications.policy : this.defaultCheckbox()
         };
-        return ({ $key: action.payload.id, ...data });
+        return data;
       });
     }
   }

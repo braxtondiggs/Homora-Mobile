@@ -57,10 +57,10 @@ export class FavoritesPage {
         const data = action.payload.doc.data();
         data.listing$ = this.afs.doc<Listing>(data.listing.path).snapshotChanges().map((action: any) => {
           const data = action.payload.data();
-          data.createdBy$ = this.afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
-          return ({ $key: action.payload.id, ...data });
+          data.createdBy$ = this.afs.doc<User>(data.createdBy.path).valueChanges();
+          return data;
         });
-        return ({ $key: action.payload.doc.id, ...data });
+        return data;
       });
     });
   }
