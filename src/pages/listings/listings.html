@@ -2,9 +2,10 @@
 	<div *ngIf="listings && listings.length > 0; else empty_results">
 		<ion-card *ngFor="let listing of listings" (click)="viewListing(listing.$key)">
 			<div class="slide-container">
-				<ion-slides pager="true">
-					<ion-slide *ngFor="let image of listing.images">
-						<img [attr.src]="image.src" alt="{{listing.title}}" />
+				<ion-slides pager="true" #listingSlider>
+					<ion-slide *ngFor="let image of listing.images; let isFirst = first">
+						<img [src]="image.src" (load)="image.loaded = true;" [ngClass]="{ 'item-img-default-size': !image.loaded }" *ngIf="isFirst" alt="{{listing.title}}">
+						<img src="assets/imgs/listing-placeholder.png" alt="{{listing.title}}" *ngIf="!isFirst" [lazyLoad]="image.src" [scrollObservable]="listingSlider.ionSlideDrag" />
 					</ion-slide>
 					<ion-slide *ngIf="!hasListingImage(listing)">
 						<img [attr.src]="DEFAULT_LISTING_IMAGE" alt="Default Image" />

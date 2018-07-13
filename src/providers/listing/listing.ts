@@ -88,6 +88,7 @@ export class ListingProvider {
     return listingsCollection.snapshotChanges().map((actions: any) => {
       const listings = _.filter(actions.map((action: any) => {
         const data = action.payload.doc.data();
+        data.images = _.map(data.images, (o) => _.merge(o, { loaded: false }));
         data.createdBy$ = this.afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
         return ({ $key: action.payload.doc.id, ...data });
       }), (o) => {
