@@ -4,11 +4,11 @@
 			<div class="slide-container">
 				<ion-slides pager="true" #listingSlider>
 					<ion-slide *ngFor="let image of listing.images; let isFirst = first">
-						<img [src]="image.src" (load)="image.loaded = true;" [ngClass]="{ 'item-img-default-size': !image.loaded }" *ngIf="isFirst" alt="{{listing.title}}">
+						<img-loader [src]="image.src" *ngIf="isFirst"></img-loader>
 						<img src="assets/imgs/listing-placeholder.png" alt="{{listing.title}}" *ngIf="!isFirst" [lazyLoad]="image.src" [scrollObservable]="listingSlider.ionSlideDrag" />
 					</ion-slide>
 					<ion-slide *ngIf="!hasListingImage(listing)">
-						<img [attr.src]="DEFAULT_LISTING_IMAGE" alt="Default Image" />
+						<img-loader [src]="DEFAULT_LISTING_IMAGE"></img-loader>
 					</ion-slide>
 				</ion-slides>
 				<div class="price-container">
@@ -22,12 +22,12 @@
 				<ion-card-header class="profile" no-padding>
 					<div *ngIf="!listing.scrape">
 						<ion-avatar class="avatar" (click)="viewProfile(createdBy.$key, $event)" *ngIf="(listing.createdBy$ | async) as createdBy;">
-							<img [attr.src]="createdBy.images && createdBy.images[0] ? createdBy.images[0].src : DEFAULT_USER_IMAGE" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
+							<img-loader [src]="createdBy.images && createdBy.images[0] ? createdBy.images[0].src : DEFAULT_USER_IMAGE"></img-loader>
 						</ion-avatar>
 					</div>
 					<div *ngIf="listing.scrape">
 						<ion-avatar class="avatar" (click)="viewProfileFake(listing.$key, $event)">
-							<img [attr.src]="listing.user.images[0].src" alt="{{listing.user.firstName}} {{listing.user.lastName}}">
+							<img-loader [src]="listing.user.images[0].src"></img-loader>
 						</ion-avatar>
 					</div>
 				</ion-card-header>
