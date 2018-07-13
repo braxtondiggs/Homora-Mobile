@@ -21,8 +21,7 @@ import { MyApp } from './app.component';
 import { PagesModule } from '../pages/pages.module';
 import { ComponentsModule } from '../components/components.module';
 import { environment } from './app.environment';
-import { AuthProvider, FcmProvider, ListingProvider, UserProvider } from '../providers';
-import { GeoLocationProvider } from '../providers/geolocation/geolocation';
+import { AuthProvider, FcmProvider, GeoLocationProvider, ListingProvider, UserProvider } from '../providers';
 
 @NgModule({
   declarations: [MyApp, Ionic2MaskDirective],

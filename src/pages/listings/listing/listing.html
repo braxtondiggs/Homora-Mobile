@@ -12,9 +12,10 @@
 </ion-header>
 <ion-content>
 	<div *ngIf="listing">
-		<ion-slides centeredSlides="false" autoplay="5000" pager="true">
-			<ion-slide *ngFor="let image of listing.images">
-				<img [attr.src]="image.src" alt="{{listing.title}}" />
+		<ion-slides centeredSlides="false" autoplay="5000" pager="true" #listingSlider>
+			<ion-slide *ngFor="let image of listing.images; let isFirst = first">
+				<img [src]="image.src" (load)="image.loaded = true;" [ngClass]="{ 'item-img-default-size': !image.loaded }" *ngIf="isFirst" alt="{{listing.title}}">
+				<img src="assets/imgs/listing-placeholder.png" alt="{{listing.title}}" *ngIf="!isFirst" [lazyLoad]="image.src" [scrollObservable]="listingSlider.ionSlideDidChange" />
 			</ion-slide>
 			<ion-slide *ngIf="!hasListingImage()">
 				<img [attr.src]="DEFAULT_LISTING_IMAGE" alt="Default Image" />
