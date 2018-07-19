@@ -49,10 +49,10 @@
     </platform>
     <platform name="ios">
         <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
-            <string>need photo library access to get pictures from there</string>
+            <string>App would like to access your photo gallery for your profile photo upload. Your photos wont be shared without your permission.</string>
         </edit-config>
         <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
-            <string>need camera access to take pictures</string>
+            <string>App would like to access your camera for your profile photo upload.</string>
         </edit-config>
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
