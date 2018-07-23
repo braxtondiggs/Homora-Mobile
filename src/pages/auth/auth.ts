@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController } from 'ionic-angular';
+import { NavController, ToastController, Platform } from 'ionic-angular';
 import { NativePageTransitions, NativeTransitionOptions } from '@ionic-native/native-page-transitions';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { AuthProvider } from '../../providers/auth/auth';
@@ -18,7 +18,8 @@ export class AuthPage {
     private nativePageTransitions: NativePageTransitions,
     private toast: ToastController,
     public auth: AuthProvider,
-    private afs: AngularFirestore) { }
+    private afs: AngularFirestore,
+    public platform: Platform) { }
 
   login() {
     this.nav.push(LoginPage, {}, { animate: true, direction: 'forward' });
@@ -78,16 +79,18 @@ export class AuthPage {
   }
 
   ionViewDidLoad() {
-    this.nativePageTransitions.slide({
-      direction: 'up',
-      duration: 500,
-      slowdownfactor: 3,
-      slidePixels: 20,
-      iosdelay: 100,
-      androiddelay: 150,
-      fixedPixelsTop: 0,
-      fixedPixelsBottom: 60
-    } as NativeTransitionOptions);
+    this.platform.ready().then(() => {
+      this.nativePageTransitions.slide({
+        direction: 'up',
+        duration: 500,
+        slowdownfactor: 3,
+        slidePixels: 20,
+        iosdelay: 100,
+        androiddelay: 150,
+        fixedPixelsTop: 0,
+        fixedPixelsBottom: 60
+      } as NativeTransitionOptions);
+    });
   }
 
   showToast(message: string): void {
