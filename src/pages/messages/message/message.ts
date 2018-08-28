@@ -70,7 +70,7 @@ export class MessagePage {
     } else {
       message.message = this.messageInput;
     }
-    if (this.message.chats) {
+    if (this.message && this.message.chats) {
       this.message.read[receiver.$key] = false
       this.message.modified = moment().toDate();
       this.message.chats.push(message);
@@ -81,6 +81,7 @@ export class MessagePage {
       });
     } else {
       const messageObj: Message = {
+        $key: this.key,
         chats: [message],
         created: moment().toDate(),
         listing: this.listingDoc.ref as DocumentReference,
@@ -183,12 +184,13 @@ export class MessagePage {
           listingRef = `Listings/${this.navParams.get('listing')}`;
         }
         this.receiver$ = this.afs.doc<User>(`Users/${userRef}`).valueChanges();
-        this.listing$ = this.afs.doc<Listing>(listingRef).valueChanges();
+        this.listingDoc = this.afs.doc<Listing>(listingRef);
+        this.listing$ = this.listingDoc.valueChanges();
         this.content.resize();
         return data;
       }).subscribe((message) => {
         this.message = message;
-        if (this.message.read && !this.message.read[this.user.$key]) {
+        if (this.message && this.message.read && !this.message.read[this.user.$key]) {
           this.message.read[this.user.$key] = true;
           this.messageDoc.update(this.message);
         }
