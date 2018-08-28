@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.homora.app" version="0.3.7" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.homora.app" version="0.3.10" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Homora</name>
     <description>We are revolutionizing the rental market by giving you the information you need. Homora was born by the realization that other websites don't offer the detail needed to find the perfect group home, apartment or house for you.</description>
     <author email="support@homora.com" href="http://homora.com/">Homora Team</author>

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { MomentModule } from 'angular2-moment';
 import { IonicModule } from 'ionic-angular';
 import { LazyLoadImageModule } from 'ng-lazyload-image/dist';
-import { IonicImageLoader } from 'ionic-image-loader';
 import { MainPage } from './main';
 import { IntroPage } from './intro';
 import { ListingsPage, ListingPage, ListingReadMore, ListerPage, NewListingPage } from './listings';
@@ -14,7 +13,7 @@ import { SettingsPage, NotificationsPage } from './settings';
 import { MessagePipe } from '../pipes';
 
 @NgModule({
-  imports: [IonicModule, MomentModule, LazyLoadImageModule, IonicImageLoader],
+  imports: [IonicModule, MomentModule, LazyLoadImageModule],
   declarations: [
     MainPage,
     ListingsPage,

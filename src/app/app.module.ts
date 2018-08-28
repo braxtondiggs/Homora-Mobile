@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { Ionic2MaskDirective } from 'ionic2-mask-directive';
-import { IonicImageLoader } from 'ionic-image-loader';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
@@ -38,7 +37,6 @@ import { AuthProvider, FcmProvider, GeoLocationProvider, ListingProvider, UserPr
     IonicModule.forRoot(MyApp, {
       preloadModules: true
     }),
-    IonicImageLoader.forRoot(),
     AngularFireModule.initializeApp(environment.firebase)
   ],
   bootstrap: [IonicApp],
