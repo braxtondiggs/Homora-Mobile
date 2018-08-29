@@ -126,17 +126,25 @@ export class NewListingPage {
 
   editPhoto(): void {
     if (this.platform.is('cordova')) {
-      this.alert.create({
-        title: 'Take Picture',
-        message: 'Take a new photo or select one from your existing photo library.',
-        buttons: [{
-          text: 'Gallery',
-          handler: () => this.openCamera('gallery')
-        }, {
-          text: 'Camera',
-          handler: () => this.openCamera('camera')
-        }]
-      }).present();
+      if (this.listing.images.length <= 15) {
+        this.alert.create({
+          title: 'Take Picture',
+          message: 'Take a new photo or select one from your existing photo library.',
+          buttons: [{
+            text: 'Gallery',
+            handler: () => this.openCamera('gallery')
+          }, {
+            text: 'Camera',
+            handler: () => this.openCamera('camera')
+          }]
+        }).present();
+      } else {
+        this.alert.create({
+          title: 'Image limit reached!',
+          subTitle: 'Sorry, we have a limit of max 15 images per listing.',
+          buttons: ['Ok']
+        }).present();
+      }
     } else {
       this.alert.create({
         title: 'Cordova Error',
@@ -187,6 +195,7 @@ export class NewListingPage {
         } else {
           this.key = this.afs.collection('Listings').ref.doc().id;
           this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
+          this.listing.$key = this.key;
           return this.listingDoc.set(this.listing)
         }
       }).catch((err) => {
@@ -251,6 +260,7 @@ export class NewListingPage {
     } else {
       this.listingDoc = null;
       this.listing$ = Observable.of({
+        $key: null,
         availability: null,
         amenities: {
           washer: false,
@@ -308,7 +318,7 @@ export class NewListingPage {
       } as Listing)
     }
     this.listing$.subscribe((listing) => {
-      const availability = listing.availability ? (listing.availability as Timestamp).toDate() : moment().toDate();
+      listing.availability = listing.availability ? (listing.availability as Timestamp).toDate().toISOString() : moment().toDate().toISOString();
       listing.createdBy = _.isEmpty(listing.createdBy) ? this.userProvider.getDoc().ref as DocumentReference : listing.createdBy as DocumentReference;
       this.listing = listing;
       this.rangeLabelLower = this.rangelLabel(this.listing.duration.lower);
@@ -327,9 +337,9 @@ export class NewListingPage {
         groupLate20: [this.listing.roommate.age.groupLate20],
         group30: [this.listing.roommate.age.group30],
         group40older: [this.listing.roommate.age.group40older],
-        price: [this.listing.price, Validators.required],
-        deposit: [this.listing.deposit, Validators.required],
-        availability: [moment(availability).format('YYYY-MM-DD'), Validators.required],
+        price: [this.listing.price, [Validators.required, Validators.min(100), Validators.max(10000)]],
+        deposit: [this.listing.deposit, [Validators.required, Validators.min(0), Validators.max(10000)]],
+        availability: [this.listing.availability, Validators.required],
         duration: [this.listing.duration, Validators.required],
         washer: [this.listing.amenities.washer],
         wifi: [this.listing.amenities.wifi],
@@ -371,6 +381,10 @@ export class NewListingPage {
     });
   }
 
+  showImagesError(): boolean {
+    return _.isEmpty(this.listing.images) && this.submitted || this.listing.images && this.listing.images.length <= 2 && this.submitted;
+  }
+
   ionViewDidLeave() {
     if (this.slides && this.slides.length() > 0 && _.isNull(this.listingProvider.getActive())) {
       this.slides.lockSwipes(false);
@@ -382,7 +396,7 @@ export class NewListingPage {
   private formatListing(): Promise<void> {
     this.listing.price = !_.isNull(this.listing.price) ? _.toNumber(this.listing.price) : null;
     this.listing.deposit = !_.isNull(this.listing.deposit) ? _.toNumber(this.listing.deposit) : null;
-    this.listing.availability = moment(this.listing.availability).toDate();
+    this.listing.availability = moment(this.listing.availability as any).toDate();
     let that = this;
     if (this.listingForm.controls.address1.dirty || this.listingForm.controls.address2.dirty || this.listingForm.controls.city.dirty || this.listingForm.controls.state.dirty || this.listingForm.controls.zip.dirty) {
       const address = `${this.listing.location.address1} ${!_.isEmpty(this.listing.location.address2) ? this.listing.location.address2 : ''}

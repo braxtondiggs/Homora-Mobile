@@ -115,17 +115,17 @@
 						<ion-label stacked>Monthly Rent</ion-label>
 						<ion-input formControlName="price" [(ngModel)]="listing.price" [class.invalid]="!listingForm.controls.price.valid && (listingForm.controls.price.dirty || submitted)" type="number"></ion-input>
 					</ion-item>
-					<p *ngIf="!listingForm.controls.price.valid && (listingForm.controls.price.dirty || submitted)" class="danger error">Price is not valid.</p>
+					<p *ngIf="!listingForm.controls.price.valid && (listingForm.controls.price.dirty || submitted)" class="danger error">Price is not valid. Must be between $100 - $10,000</p>
 					<ion-item>
 						<ion-label stacked>Deposit</ion-label>
 						<ion-input formControlName="deposit" [(ngModel)]="listing.deposit" [class.invalid]="!listingForm.controls.deposit.valid && (listingForm.controls.deposit.dirty || submitted)" type="number"></ion-input>
 					</ion-item>
-					<p *ngIf="!listingForm.controls.deposit.valid && (listingForm.controls.deposit.dirty || submitted)" class="danger error">Deposit is not valid.</p>
+					<p *ngIf="!listingForm.controls.deposit.valid && (listingForm.controls.deposit.dirty || submitted)" class="danger error">Deposit is not valid. Must be between $0 - $10,000</p>
 					<ion-item>
 						<ion-label stacked>Start Date</ion-label>
 						<ion-datetime formControlName="availability" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minAvailability" [(ngModel)]="listing.availability" [class.invalid]="!listingForm.controls.availability.valid && (listingForm.controls.availability.dirty || submitted)"></ion-datetime>
 					</ion-item>
-					<p *ngIf="!listingForm.controls.availability.valid && (listingForm.controls.availability.dirty || submitted)" class="danger error">Svailability date is not valid.</p>
+					<p *ngIf="!listingForm.controls.availability.valid && (listingForm.controls.availability.dirty || submitted)" class="danger error">Availability date is not valid.</p>
 					<ion-list-header class="range-header">
 						<h3 text-center><strong>Lease Duration</strong></h3>
 					</ion-list-header>
@@ -269,7 +269,7 @@
 			</ion-slide>
 			<ion-slide padding>
 				<h1>Add some photos of your place.</h1>
-				<p *ngIf="listing.images && listing.images.length <= 2 && submitted" class="danger error image-error">Please include atleast 3 images for your listing.</p>
+				<p *ngIf="showImagesError()" class="danger error image-error">Please include atleast 3 images for your listing.</p>
 				<input type="file" id="file" (change)="onFileChange($event)" #file>
 				<ion-grid class="photo-container">
 					<ion-row class="header-image">

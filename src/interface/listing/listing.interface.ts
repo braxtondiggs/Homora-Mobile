@@ -6,7 +6,7 @@ import { ListingAmenities } from './amenities.interface';
 import { ListingRules } from './rules.interface';
 
 export interface Listing {
-  availability: Timestamp | Date;
+  availability: Timestamp | Date | String;
   created: Timestamp | Date;
   createdBy: DocumentReference;
   $key?: string;

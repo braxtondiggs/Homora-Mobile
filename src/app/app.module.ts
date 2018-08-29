@@ -15,6 +15,7 @@ import { Facebook } from '@ionic-native/facebook';
 import { EmailComposer } from '@ionic-native/email-composer';
 import { NativePageTransitions } from '@ionic-native/native-page-transitions';
 import { Camera } from '@ionic-native/camera';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Firebase } from '@ionic-native/firebase';
 
 import { MyApp } from './app.component';
@@ -48,6 +49,7 @@ import { AuthProvider, FcmProvider, GeoLocationProvider, ListingProvider, UserPr
     Facebook,
     EmailComposer,
     Camera,
+    InAppBrowser,
     NativePageTransitions,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthProvider,
