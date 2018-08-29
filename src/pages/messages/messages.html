@@ -12,7 +12,7 @@
 						<img [attr.src]="data.receiver.images && data.receiver.images[0] ? data.receiver.images[0].src : DEFAULT_USER_IMAGE" alt="{{data.receiver.firstName}}" *ngIf="data.listing && !data.listing.scrape">
 						<img [attr.src]="data.listing.user.images[0].src" alt="{{data.listing.user.firstName}}" *ngIf="data.listing && data.listing.scrape">
 					</ion-avatar>
-					<h2 *ngIf="data.listing && !data.listing.scrape">{{data.receiver.firstName}}</h2>
+					<h2 *ngIf="data.listing && !data.listing.scrape && data.receiver">{{data.receiver.firstName}}</h2>
 					<h2 *ngIf="data.listing && data.listing.scrape">{{data.listing.user.firstName}}</h2>
 					<p>{{message.chats[message.chats.length - 1].message}}</p>
 					<p item-end>{{message.modified.toDate() | amTimeAgo}}</p>

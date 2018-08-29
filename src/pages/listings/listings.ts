@@ -61,7 +61,9 @@ export class ListingsPage {
     if (index > -1) {
       this.afs.doc<Favorite>(`Favorites/${this.favorites[index].$key}`).delete();
     } else {
-      this.favoriteCollection.add({
+      const $key = this.afs.createId();
+      this.favoriteCollection.doc($key).set({
+        $key,
         listing: this.afs.doc<Listing>(`Listings/${key}`).ref as DocumentReference,
         created: moment().toDate(),
         user: this.userProvider.getDoc().ref as DocumentReference
@@ -82,6 +84,7 @@ export class ListingsPage {
     const modal = this.modal.create(FilterComponent, { listingTotal: _.size(this.listings) });
     modal.onDidDismiss(() => {
       this.filter = !this.listingProvider.pristine;
+      if (this.filter) { this.listings = null; }
       this.ionViewDidLoad();
     });
     modal.present();
@@ -109,7 +112,7 @@ export class ListingsPage {
     const last: Listing = _.last(this.listings);
     const lastPoint = (last) ? last.location.latlng : undefined;
     if (location && !this.hasPassedBoundaries(location)) {
-      this.listings$ = this.listingProvider.getListings(lastPoint, false, {
+      this.listings$ = this.listingProvider.getListings(lastPoint, false, true, {
         center: {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude
@@ -117,7 +120,7 @@ export class ListingsPage {
         radius: 27
       });
     } else {
-      this.listings$ = this.listingProvider.getListings(lastPoint, false);
+      this.listings$ = this.listingProvider.getListings(lastPoint, false, true);
       if (_.isEmpty(last)) {
         this.alert.create({
           title: 'Outside supported boundaries',

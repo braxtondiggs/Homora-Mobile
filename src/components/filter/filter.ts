@@ -52,7 +52,7 @@ export class FilterComponent {
   }
 
   private getListings(filter: boolean): void {
-    this.listingProvider.getListings(null, filter).subscribe((listings: Listing[]) => {
+    this.listingProvider.getListings(null, filter, false).subscribe((listings: Listing[]) => {
       this.loading = false;
       this.listingTotal = size(listings);
     });
