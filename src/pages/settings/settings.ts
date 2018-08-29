@@ -4,6 +4,7 @@ import { AlertController, LoadingController, Platform, ToastController, NavContr
 import { AngularFirestoreDocument } from 'angularfire2/firestore';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { EmailComposer } from '@ionic-native/email-composer';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { AuthProvider, UserProvider } from '../../providers';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { forkJoin } from 'rxjs/observable/forkJoin';
@@ -34,7 +35,8 @@ export class SettingsPage {
     private auth: AuthProvider,
     public platform: Platform,
     private formBuilder: FormBuilder,
-    private emailComposer: EmailComposer) {
+    private emailComposer: EmailComposer,
+    private iab: InAppBrowser) {
     this.verifyPhoneForm = this.formBuilder.group({
       phone: ['', Validators.required]
     });
@@ -181,6 +183,14 @@ export class SettingsPage {
       duration: 3000,
       position: 'bottom'
     }).present();
+  }
+
+  openUrl(url: string): void {
+    if (this.platform.is('cordova')) {
+      this.iab.create(url, '_system').show();
+    } else {
+      window.open(url, '_system', 'location=yes');
+    }
   }
 
   ionViewDidLoad() {

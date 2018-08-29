@@ -175,7 +175,7 @@ export class ListingsPage {
           this.location = location;
           this.getListings(location, loader);
         }).catch((error: any) => {
-          this.toast.create({ message: error.toString(), duration: 3000 }).present();
+          this.toast.create({ message: error.message.toString(), duration: 3000 }).present();
           this.getListings(this.location, loader);
         });
       } else {
@@ -183,7 +183,7 @@ export class ListingsPage {
           this.location = location;
           this.getListings(location, loader);
         }, (error: any) => {
-          this.toast.create({ message: error.toString(), duration: 3000 }).present();
+          this.toast.create({ message: error.message.toString(), duration: 3000 }).present();
           this.getListings(this.location, loader);
         });
       }

@@ -67,6 +67,17 @@
 		</ion-list>
 		<ion-list>
 			<ion-list-header>
+				About
+			</ion-list-header>
+			<button ion-item (click)="openUrl('https://v2.homora.com/policy/terms')" detail-push>
+				Terms of Service
+			</button>
+			<button ion-item (click)="openUrl('https://v2.homora.com/policy/privacy')" detail-push>
+				Privacy Policy
+			</button>
+		</ion-list>
+		<ion-list>
+			<ion-list-header>
 				Other
 			</ion-list-header>
 			<button ion-item (click)="logout()">

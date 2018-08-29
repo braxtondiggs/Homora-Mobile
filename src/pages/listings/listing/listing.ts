@@ -119,7 +119,9 @@ export class ListingPage {
     if (this.isFavorite() === 'heart') {
       this.afs.doc<Favorite>(`Favorites/${this.favorite.$key}`).delete();
     } else {
+      const $key = this.afs.createId();
       this.favoriteCollection.add({
+        $key,
         listing: this.afs.doc<Listing>(`Listings/${this.key}`).ref as DocumentReference,
         created: moment().toDate(),
         user: this.userProvider.getDoc().ref as DocumentReference
