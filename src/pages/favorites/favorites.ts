@@ -43,7 +43,7 @@ export class FavoritesPage {
   }
 
   hasListingImage(images: any[]): boolean {
-    return _.isEmpty(images);
+    return !_.isEmpty(images);
   }
 
   availability(date: Date): string {

@@ -77,14 +77,15 @@ export class ListingProvider {
     this.active = key;
   }
 
-  getListings(lastPoint: firebase.firestore.GeoPoint, filterList: boolean = false, area: any = { center: { latitude: 38.8256989, longitude: -77.0306601 }, radius: 27 }): Observable<Listing[]> {
+  getListings(lastPoint: firebase.firestore.GeoPoint, filterList: boolean = false, limit: boolean = true, area: any = { center: { latitude: 38.8256989, longitude: -77.0306601 }, radius: 27 }): Observable<Listing[]> {
+    const limitValue: number = limit ? 25 : 1000;
     const box = this.boundingBoxCoordinates(area.center, area.radius);
     const lesserGeopoint = new firebase.firestore.GeoPoint(box.swCorner.latitude, box.swCorner.longitude);
     const greaterGeopoint = new firebase.firestore.GeoPoint(box.neCorner.latitude, box.neCorner.longitude);
     const listingsCollection = this.afs.collection<Listing>('Listings', (ref) =>
       lastPoint ?
-        ref.where('status', '==', 'published').where('location.latlng', '>', lesserGeopoint).where('location.latlng', '<', greaterGeopoint).orderBy('location.latlng').startAfter(lastPoint).limit(25) :
-        ref.where('status', '==', 'published').where('location.latlng', '>', lesserGeopoint).where('location.latlng', '<', greaterGeopoint).orderBy('location.latlng').limit(25));
+        ref.where('status', '==', 'published').where('location.latlng', '>', lesserGeopoint).where('location.latlng', '<', greaterGeopoint).orderBy('location.latlng').startAfter(lastPoint).limit(limitValue) :
+        ref.where('status', '==', 'published').where('location.latlng', '>', lesserGeopoint).where('location.latlng', '<', greaterGeopoint).orderBy('location.latlng').limit(limitValue));
     return listingsCollection.snapshotChanges().map((actions: any) => {
       const listings = _.filter(actions.map((action: any) => {
         const data = action.payload.doc.data();
