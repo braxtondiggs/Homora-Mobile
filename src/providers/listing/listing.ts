@@ -78,7 +78,7 @@ export class ListingProvider {
   }
 
   getListings(lastPoint: firebase.firestore.GeoPoint, filterList: boolean = false, limit: boolean = true, area: any = { center: { latitude: 38.8256989, longitude: -77.0306601 }, radius: 27 }): Observable<Listing[]> {
-    const limitValue: number = limit ? 25 : 1000;
+    const limitValue: number = limit ? 50 : 1000;
     const box = this.boundingBoxCoordinates(area.center, area.radius);
     const lesserGeopoint = new firebase.firestore.GeoPoint(box.swCorner.latitude, box.swCorner.longitude);
     const greaterGeopoint = new firebase.firestore.GeoPoint(box.neCorner.latitude, box.neCorner.longitude);
@@ -134,17 +134,17 @@ export class ListingProvider {
 
   filterAmenities(listing: Listing): boolean {
     if (!listing.amenities) return false;
-    return _.chain(this.amenities).pickBy(_.identity).map((value, key) => value && listing.amenities[key]).compact().size().value() > 0 || _.chain(this.amenities).pickBy(_.identity).values().compact().size().value() === 0;
+    return _.chain(this.amenities).pickBy(_.identity).map((value, key) => value && listing.amenities[key]).compact().size().value() === _.chain(this.amenities).pickBy(_.identity).values().compact().size().value() || _.chain(this.amenities).pickBy(_.identity).values().compact().size().value() === 0;
   }
 
   filterRules(listing: Listing): boolean {
     if (!listing.rules) return false;
-    return _.chain(this.rules).pickBy(_.identity).map((value, key) => value && listing.rules[key]).compact().size().value() > 0 || _.chain(this.rules).pickBy(_.identity).values().compact().size().value() === 0;
+    return _.chain(this.rules).pickBy(_.identity).map((value, key) => value && listing.rules[key]).compact().size().value() === _.chain(this.rules).pickBy(_.identity).values().compact().size().value() || _.chain(this.rules).pickBy(_.identity).values().compact().size().value() === 0;
   }
 
   filterAvailability(listing: Listing): boolean {
     if (_.isEmpty(this.availability) || moment(this.availability).isSame(moment(), 'day')) return true;
-    return moment(this.availability).isAfter(moment(listing.availability));
+    return moment(this.availability).isAfter(moment(listing.availability as any));
   }
 
   private boundingBoxCoordinates(center, radius) {

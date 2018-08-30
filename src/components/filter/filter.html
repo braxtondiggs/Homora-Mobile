@@ -118,9 +118,9 @@
 			</ion-item>
 			<ion-item col-6 no-border>
 				<ion-label>
-					<div class="icon-hand-waving"></div>Doorman
+					<div class="icon-bathtub"></div>Private Bathroom
 				</ion-label>
-				<ion-checkbox [(ngModel)]="listingProvider.amenities.doorman" (ionChange)="onChange()"></ion-checkbox>
+				<ion-checkbox [(ngModel)]="listingProvider.amenities.bathroom" (ionChange)="onChange()"></ion-checkbox>
 			</ion-item>
 		</ion-row>
 		<ion-row class="checkbox-container checkbox-icon">
@@ -146,17 +146,17 @@
 			</ion-item>
 			<ion-item col-6 no-border>
 				<ion-label>
-					<div class="icon-tv"></div>Television
+					<div class="icon-tv"></div>Cable Included
 				</ion-label>
 				<ion-checkbox [(ngModel)]="listingProvider.amenities.tv" (ionChange)="onChange()"></ion-checkbox>
 			</ion-item>
 		</ion-row>
-		<ion-row class="checkbox-container checkbox-icon">
+		<!--<ion-row class="checkbox-container checkbox-icon">
 			<ion-item col-6 no-border>
 				<ion-label>
-					<div class="icon-bathtub"></div>Private Bathroom
+					<div class="icon-hand-waving"></div>Doorman
 				</ion-label>
-				<ion-checkbox [(ngModel)]="listingProvider.amenities.bathroom" (ionChange)="onChange()"></ion-checkbox>
+				<ion-checkbox [(ngModel)]="listingProvider.amenities.doorman" (ionChange)="onChange()"></ion-checkbox>
 			</ion-item>
 			<ion-item col-6 no-border>
 				<ion-label>
@@ -178,7 +178,7 @@
 				</ion-label>
 				<ion-checkbox [(ngModel)]="listingProvider.amenities.otherPet" (ionChange)="onChange()"></ion-checkbox>
 			</ion-item>
-		</ion-row>
+		</ion-row>-->
 		<ion-item-divider></ion-item-divider>
 		<ion-list-header class="range-header">
 			<ion-label>Rules</ion-label>
@@ -243,7 +243,7 @@
 </ion-content>
 <ion-footer>
 	<button [disabled]="loading" (click)="close()" ion-button rounded block>
-		<span *ngIf="!loading">Show {{formatTotal(listingTotal)}} Rooms</span>
+		<span *ngIf="!loading">Show {{listingTotal}} Rooms</span>
 		<ion-spinner name="dots" *ngIf="loading" color="light"></ion-spinner>
 	</button>
 </ion-footer>

@@ -26,6 +26,7 @@ export class FilterComponent {
   reset(): void {
     this.loading = true;
     this.listingProvider.resetFilter();
+    this.listingProvider.pristine = false;
     setTimeout(() => {
       this.getListings(true);
     }, 600);
@@ -45,10 +46,6 @@ export class FilterComponent {
       this.listingProvider.pristine = false;
       this.getListings(false);
     }
-  }
-
-  formatTotal(total: number): string {
-    return total > 0 ? `${total}+` : total.toString()
   }
 
   private getListings(filter: boolean): void {
