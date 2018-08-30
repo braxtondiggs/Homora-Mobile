@@ -126,7 +126,7 @@ export class NewListingPage {
 
   editPhoto(): void {
     if (this.platform.is('cordova')) {
-      if (this.listing.images.length <= 15) {
+      if (_.isEmpty(this.listing.images) || this.listing.images && this.listing.images.length <= 15) {
         this.alert.create({
           title: 'Take Picture',
           message: 'Take a new photo or select one from your existing photo library.',

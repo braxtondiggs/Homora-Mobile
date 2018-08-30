@@ -84,8 +84,10 @@ export class ListingsPage {
     const modal = this.modal.create(FilterComponent, { listingTotal: _.size(this.listings) });
     modal.onDidDismiss(() => {
       this.filter = !this.listingProvider.pristine;
-      if (this.filter) { this.listings = null; }
-      this.ionViewDidLoad();
+      if (this.filter) {
+        this.listings = null;
+        this.ionViewDidLoad();
+      }
     });
     modal.present();
   }
@@ -112,7 +114,7 @@ export class ListingsPage {
     const last: Listing = _.last(this.listings);
     const lastPoint = (last) ? last.location.latlng : undefined;
     if (location && !this.hasPassedBoundaries(location)) {
-      this.listings$ = this.listingProvider.getListings(lastPoint, false, true, {
+      this.listings$ = this.listingProvider.getListings(lastPoint, false, false, {
         center: {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude
@@ -183,7 +185,7 @@ export class ListingsPage {
           this.location = location;
           this.getListings(location, loader);
         }, (error: any) => {
-          this.toast.create({ message: error.message.toString(), duration: 3000 }).present();
+          this.toast.create({ message: error.toString(), duration: 3000 }).present();
           this.getListings(this.location, loader);
         });
       }
