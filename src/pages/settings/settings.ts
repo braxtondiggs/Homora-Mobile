@@ -187,7 +187,7 @@ export class SettingsPage {
 
   openUrl(url: string): void {
     if (this.platform.is('cordova')) {
-      this.iab.create(url, '_system').show();
+      this.iab.create(url).show();
     } else {
       window.open(url, '_system', 'location=yes');
     }
