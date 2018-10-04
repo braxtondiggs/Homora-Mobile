@@ -1,4 +1,9 @@
 favorites {
+  .slide-container > img {
+    height: 200px;
+    object-fit: cover;
+  }
+
   .empty-favorite.grid {
     height: 100%;
 

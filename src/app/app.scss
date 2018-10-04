@@ -5,6 +5,16 @@
   src: url('../assets/fonts/LinearIcons/Linearicons.ttf') format('truetype');
 }
 
+.slide-zoom {
+  height: 100%;
+
+  img {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
+}
+
 [class*=" icon-"]:not(.icon-md):not(.icon-ios),
 [class^="icon-"]:not(.icon-md):not(.icon-ios) {
   -moz-font-feature-settings: 'liga=1';
