@@ -3,14 +3,15 @@
 		<ion-card *ngFor="let favorite of favorites">
 			<div *ngIf="(favorite.listing$ | async) as listing" (click)="viewListing(listing.$key)">
 				<div class="slide-container">
-					<ion-slides pager="true">
+					<!--<ion-slides pager="true">
 						<ion-slide *ngFor="let image of listing.images">
 							<img [attr.src]="image.src" alt="{{listing.title}}" />
 						</ion-slide>
 						<ion-slide *ngIf="!hasListingImage(listing.images)">
 							<img [attr.src]="DEFAULT_LISTING_IMAGE" alt="Default Image" />
 						</ion-slide>
-					</ion-slides>
+					</ion-slides>-->
+					<img [src]="hasListingImage(listing) ? listing.images[0].src : DEFAULT_LISTING_IMAGE" alt="" />
 					<div class="price-container">
 						<h2 class="price" color="light" ion-text>{{listing.price | currency:'USD':'symbol':'1.0-3'}}</h2>
 					</div>
