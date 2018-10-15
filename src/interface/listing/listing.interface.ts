@@ -7,6 +7,7 @@ import { ListingRules } from './rules.interface';
 
 export interface Listing {
   availability: Timestamp | Date | String;
+  craigslist: boolean;
   created: Timestamp | Date;
   createdBy: DocumentReference;
   $key?: string;

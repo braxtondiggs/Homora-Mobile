@@ -136,6 +136,10 @@
 					<ion-item>
 						<ion-range formControlName="duration" [(ngModel)]="listing.duration" (ionChange)="durationChange()" min="1" max="12" dualKnobs="true" [class.invalid]="!listingForm.controls.duration.valid && (listingForm.controls.duration.dirty || submitted)"></ion-range>
 					</ion-item>
+					<ion-item>
+						<ion-label style="white-space:normal">Give permission for Homora to complementary copy this list onto Craigslist</ion-label>
+						<ion-checkbox formControlName="craigslist" [(ngModel)]="listing.craigslist"></ion-checkbox>
+					</ion-item>
 				</ion-list>
 			</ion-slide>
 			<ion-slide padding>
