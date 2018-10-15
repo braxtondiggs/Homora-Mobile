@@ -74,6 +74,22 @@ export class GeoLocationProvider {
     });
   }
 
+  public async reverseGeocode(coords: { latitude: number, longitude: number }): Promise<string> {
+    return new Promise<any>((resolve, reject) => {
+      this.http.get('https://maps.googleapis.com/maps/api/geocode/json', {
+        params: {
+          key: 'AIzaSyBzeUk8oXwjrV1HfG7wlIx_tTocekPb8SU',
+          latlng: `${coords.latitude}, ${coords.longitude}`
+        }
+      }).subscribe((data: any) => {
+        const result = data.results;
+        if (result && result[0]) {
+          return resolve(`${result[0].address_components[2].short_name} ${result[0].address_components[4].short_name}, ${result[0].address_components[5].short_name} ${result[0].address_components[6].short_name}`);
+        }
+      });
+    });
+  }
+
   public getMetros(latlng: { lat: number, lng: number }): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       let that = this;

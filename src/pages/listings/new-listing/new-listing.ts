@@ -279,6 +279,7 @@ export class NewListingPage {
           cat: false,
           otherPet: false
         },
+        craigslist: false,
         created: moment().toDate(),
         duration: { lower: 1, upper: 12 },
         location: {
@@ -341,6 +342,7 @@ export class NewListingPage {
         deposit: [this.listing.deposit, [Validators.required, Validators.min(0), Validators.max(10000)]],
         availability: [this.listing.availability, Validators.required],
         duration: [this.listing.duration, Validators.required],
+        craigslist: [this.listing.craigslist],
         washer: [this.listing.amenities.washer],
         wifi: [this.listing.amenities.wifi],
         water: [this.listing.amenities.water],
