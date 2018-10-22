@@ -6,6 +6,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { DocumentReference } from '@firebase/firestore-types';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import { GeoLocationProvider } from '../geolocation/geolocation';
+import * as moment from 'moment';
 
 @Injectable()
 export class FcmProvider {
@@ -40,6 +41,8 @@ export class FcmProvider {
   private saveTokenToFirestore(token: string, user: DocumentReference, location: string): Promise<void> {
     if (!token && user) return;
     return this.afs.collection('Devices').doc(token).set({
+      created: moment().toDate(),
+      platform: this.platform.platforms(),
       token,
       user,
       location
