@@ -125,8 +125,8 @@ export class ListingsPage {
       this.listings$ = this.listingProvider.getListings(lastPoint, false, true);
       if (_.isEmpty(last)) {
         this.alert.create({
-          title: 'Outside supported boundaries',
-          subTitle: 'We currently do not support areas outside of DC, we plan to expand shortly.',
+          title: 'Service Area',
+          subTitle: 'Homora currently operates in the Baltimore-Washington Metro Area. We plan to expand to other states shortly.',
           buttons: ['Ok']
         }).present();
       }
