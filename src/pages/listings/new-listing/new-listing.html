@@ -285,12 +285,12 @@
 							</button>
 						</ion-col>
 					</ion-row>
-					<ion-row class="additional-images" *ngIf="listing.images">
-						<ion-col *ngFor="let image of listing.images; let i = index; let first = first;" [ngClass]="{'first': first, 'hasImage': image}" (click)="editPhoto()" col-4>
+					<ion-row class="additional-images" *ngIf="listing.images" dragula="VAMPIRES">
+						<ion-col *ngFor="let image of listing.images; let i = index; let first = first;" [ngClass]="{'first': first, 'hasImage': image}" col-4>
 							<img [attr.src]="image.src" alt="{{listing.title}}" />
-							<button (click)="deleteImage(i, $event)" *ngIf="image.src" color="danger" class="trash" ion-button icon-only>
+							<!--<button (click)="deleteImage(i, $event)" *ngIf="image.src" color="danger" class="trash" ion-button icon-only>
 								<ion-icon name="trash"></ion-icon>
-							</button>
+							</button>-->
 						</ion-col>
 						<ion-col class="empty-photo" (click)="editPhoto()" col-4>
 							<ion-icon name="images"></ion-icon>

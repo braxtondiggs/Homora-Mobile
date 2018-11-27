@@ -9,6 +9,7 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireStorageModule } from 'angularfire2/storage';
+import { DragulaModule } from 'ng2-dragula';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Facebook } from '@ionic-native/facebook';
@@ -35,6 +36,7 @@ import { AuthProvider, FcmProvider, GeoLocationProvider, ListingProvider, UserPr
     AngularFireAuthModule,
     AngularFireStorageModule,
     HttpClientModule,
+    DragulaModule.forRoot(),
     IonicModule.forRoot(MyApp, {
       preloadModules: true
     }),
