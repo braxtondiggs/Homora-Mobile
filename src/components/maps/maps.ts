@@ -1,10 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { AlertController, NavController, Platform, Slides, ToastController, ViewController } from 'ionic-angular';
-import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { GeoLocationProvider, ListingProvider } from '../../providers';
 import { ListingPage } from '../../pages/listings/listing/listing';
 import { Listing } from '../../interface';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { AppSettings } from '../../app/app.constants';
 import { } from '@types/googlemaps';
 import * as _ from 'lodash';

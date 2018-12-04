@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { AlertController, LoadingController, NavController, ToastController } from 'ionic-angular';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { AngularFireStorage } from 'angularfire2/storage';
-import { Observable } from 'rxjs/Observable';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { forkJoin, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ListingPage } from '../listing/listing';
 import { ListingProvider, UserProvider } from '../../../providers';
 import { Listing, User } from '../../../interface';
@@ -57,7 +58,7 @@ export class ListerPage {
             promise.push(this.storage.storage.refFromURL(image.src).delete())
           });
           promise.push(this.afs.doc<Listing>(`Listings/${listing.$key}`).delete());
-          Observable.forkJoin(promise).subscribe(() => {
+          forkJoin(promise).subscribe(() => {
             this.toast.create({
               message: 'Listing has been successfully deleted',
               duration: 3000
@@ -72,11 +73,11 @@ export class ListerPage {
   ionViewDidLoad() {
     this.user = this.userProvider.get();
     this.listingsCollection = this.afs.collection<Listing[]>('Listings', (ref) => ref.where('createdBy', '==', this.userProvider.getDoc().ref).orderBy('created', 'desc'));
-    this.listings$ = this.listingsCollection.snapshotChanges().map((actions: any) =>
+    this.listings$ = this.listingsCollection.snapshotChanges().pipe(map((actions: any) =>
       _.groupBy(actions.map((action: any) => {
         const data = action.payload.doc.data();
         data.createdBy$ = this.afs.doc<User>(data.createdBy.path).valueChanges();
         return data;
-      }), 'status'));
+      }), 'status')));
   }
 }

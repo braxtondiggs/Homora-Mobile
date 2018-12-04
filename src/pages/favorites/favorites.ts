@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Observable } from 'rxjs/Rx';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { UserProvider } from '../../providers';
 import { Favorite, Listing, User } from '../../interface';
 import { ListingPage } from '../listings';
@@ -52,16 +53,16 @@ export class FavoritesPage {
 
   ionViewDidLoad() {
     this.favoriteCollection = this.afs.collection<Favorite>('Favorites', (ref) => ref.where('user', '==', this.userProvider.getDoc().ref));
-    this.favorites$ = this.favoriteCollection.snapshotChanges().map((actions: any) => {
+    this.favorites$ = this.favoriteCollection.snapshotChanges().pipe(map((actions: any) => {
       return actions.map((action: any) => {
         const data = action.payload.doc.data();
-        data.listing$ = this.afs.doc<Listing>(data.listing.path).snapshotChanges().map((action: any) => {
+        data.listing$ = this.afs.doc<Listing>(data.listing.path).snapshotChanges().pipe(map((action: any) => {
           const data = action.payload.data();
           data.createdBy$ = this.afs.doc<User>(data.createdBy.path).valueChanges();
           return data;
-        });
+        }));
         return data;
       });
-    });
+    }));
   }
 }

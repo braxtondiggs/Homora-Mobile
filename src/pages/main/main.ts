@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Content, Events, LoadingController, NavController, Platform } from 'ionic-angular';
 import { DocumentReference } from '@firebase/firestore-types';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { FcmProvider, UserProvider } from '../../providers';
 import { Message, User } from '../../interface';
 import { AuthPage } from '../auth';

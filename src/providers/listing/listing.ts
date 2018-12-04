@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { Observable } from 'rxjs/Observable';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Listing, User } from '../../interface';
 import { ListingAmenities } from '../../interface/listing/amenities.interface';
 import { ListingRules } from '../../interface/listing/rules.interface';
@@ -86,11 +87,11 @@ export class ListingProvider {
       lastPoint ?
         ref.where('status', '==', 'published').where('location.latlng', '>', lesserGeopoint).where('location.latlng', '<', greaterGeopoint).orderBy('location.latlng').startAfter(lastPoint).limit(limitValue) :
         ref.where('status', '==', 'published').where('location.latlng', '>', lesserGeopoint).where('location.latlng', '<', greaterGeopoint).orderBy('location.latlng').limit(limitValue));
-    return listingsCollection.snapshotChanges().map((actions: any) => {
+    return listingsCollection.snapshotChanges().pipe(map((actions: any) => {
       const listings = _.filter(actions.map((action: any) => {
         const data = action.payload.doc.data();
         data.images = _.map(data.images, (o) => _.merge(o, { loaded: false }));
-        data.createdBy$ = this.afs.doc<User>(data.createdBy.path).snapshotChanges().map((action: any) => ({ $key: action.payload.id, ...action.payload.data() }));
+        data.createdBy$ = this.afs.doc<User>(data.createdBy.path).snapshotChanges().pipe(map((action: any) => ({ $key: action.payload.id, ...action.payload.data() })));
         return ({ $key: action.payload.doc.id, ...data });
       }), (o) => {
         return filterList || this.filterPrice(o) &&
@@ -112,7 +113,7 @@ export class ListingProvider {
         case 'Price':
           return _.orderBy(listings, ['price'], ['asc']);
       }
-    });
+    }));
   }
 
   filterPrice(listing: Listing): boolean {

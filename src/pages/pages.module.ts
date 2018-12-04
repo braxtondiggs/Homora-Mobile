@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { MomentModule } from 'angular2-moment';
+import { MomentModule } from 'ngx-moment';
 import { IonicModule } from 'ionic-angular';
 import { LazyLoadImageModule } from 'ng-lazyload-image/dist';
 import { MainPage } from './main';

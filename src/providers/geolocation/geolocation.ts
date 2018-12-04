@@ -1,9 +1,9 @@
+import { forkJoin, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { AppSettings } from '../../app/app.constants';
 import * as _ from 'lodash';
-import geolib from 'geolib';
+import * as geolib from 'geolib';
 
 const GEOLOCATION_ERRORS = {
   'errors.location.unsupportedBrowser': 'Browser does not support location services',
@@ -108,7 +108,7 @@ export class GeoLocationProvider {
           _.forEach(metros, function(metro) {
             promises.push(that.getMetro(metro));
           });
-          return resolve(Observable.forkJoin(promises).toPromise());
+          return resolve(forkJoin(promises).toPromise());
         }
         return resolve();
       });

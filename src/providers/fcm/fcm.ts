@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Firebase } from '@ionic-native/firebase';
 import { Platform } from 'ionic-angular';
-import { Observable } from 'rxjs/Observable';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { Observable } from 'rxjs';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { DocumentReference } from '@firebase/firestore-types';
-import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+import { Firebase } from '@ionic-native/firebase/ngx';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { GeoLocationProvider } from '../geolocation/geolocation';
 import * as moment from 'moment';
 

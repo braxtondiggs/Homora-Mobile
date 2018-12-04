@@ -94,7 +94,6 @@
     </platform>
     <allow-navigation href="http://10.0.0.101:8100" />
     <allow-navigation href="http://10.8.0.110:8100" />
-    <plugin name="com.telerik.plugins.nativepagetransitions" spec="^0.6.5" />
     <plugin name="cordova-plugin-browsertab" spec="^0.2.0" />
     <plugin name="cordova-plugin-buildinfo" spec="^2.0.1" />
     <plugin name="cordova-plugin-camera" spec="^4.0.3" />

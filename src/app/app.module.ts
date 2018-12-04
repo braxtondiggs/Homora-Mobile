@@ -5,18 +5,17 @@ import { HttpClientModule } from '@angular/common/http';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { Ionic2MaskDirective } from 'ionic2-mask-directive';
 
-import { AngularFireModule } from 'angularfire2';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { AngularFireAuthModule } from 'angularfire2/auth';
-import { AngularFireStorageModule } from 'angularfire2/storage';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { Geolocation } from '@ionic-native/geolocation';
-import { Facebook } from '@ionic-native/facebook';
-import { EmailComposer } from '@ionic-native/email-composer';
-import { NativePageTransitions } from '@ionic-native/native-page-transitions';
-import { Camera } from '@ionic-native/camera';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
-import { Firebase } from '@ionic-native/firebase';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { Facebook } from '@ionic-native/facebook/ngx';
+import { EmailComposer } from '@ionic-native/email-composer/ngx';
+import { Camera } from '@ionic-native/camera/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { Firebase } from '@ionic-native/firebase/ngx';
 
 import { MyApp } from './app.component';
 import { PagesModule } from '../pages/pages.module';
@@ -50,7 +49,6 @@ import { AuthProvider, FcmProvider, GeoLocationProvider, ListingProvider, UserPr
     EmailComposer,
     Camera,
     InAppBrowser,
-    NativePageTransitions,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     AuthProvider,
     FcmProvider,

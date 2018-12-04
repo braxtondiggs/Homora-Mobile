@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import * as firebase from 'firebase/app';
 import { UserProvider } from '../user/user';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { isEmpty } from 'lodash';
 import authProvider = firebase.auth.AuthProvider;
 

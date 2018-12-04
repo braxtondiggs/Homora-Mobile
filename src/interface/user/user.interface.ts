@@ -4,6 +4,7 @@ import { Timestamp } from '@firebase/firestore-types';
 
 export interface User {
   $key: string;
+  uid?: string;
   created: Timestamp | Date,
   birthdate?: Timestamp | Date;
   description?: string;

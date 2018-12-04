@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
 import { AlertController, LoadingController, NavParams, NavController, ModalController, ToastController, ViewController } from 'ionic-angular';
-import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { DocumentReference } from '@firebase/firestore-types';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Favorite, Listing, User } from '../../../interface';
 import { ListingProvider, UserProvider } from '../../../providers';
 import { ProfileViewPage, ProfileViewFakePage } from '../../profile';
@@ -171,12 +172,12 @@ export class ListingPage {
     this.accountType = this.userProvider.getAccountType();
     if (this.key) {
       this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
-      this.listing$ = this.listingDoc.snapshotChanges().map((action: any) => {
+      this.listing$ = this.listingDoc.snapshotChanges().pipe(map((action: any) => {
         const data = action.payload.data();
         if (data.createdBy) data.createdBy$ = this.afs.doc<User>(data.createdBy.path).valueChanges();
         data.summaryTruncated = _.truncate(data.summary, { length: 250, separator: ' ' });
         return data;
-      });
+      }));
       this.listing$.subscribe((listing: Listing) => {
         this.listing = listing;
         _.forEach(this.listing.location.metro, (metro, key) => {

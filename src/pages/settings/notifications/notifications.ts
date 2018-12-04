@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { UserProvider } from '../../../providers/user/user';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { User } from '../../../interface';
 
 @Component({
@@ -25,14 +26,14 @@ export class NotificationsPage {
 
   ionViewDidLoad() {
     if (this.userProvider.getDoc()) {
-      this.user$ = this.userProvider.getDoc().snapshotChanges().map((action: any) => {
+      this.user$ = this.userProvider.getDoc().snapshotChanges().pipe(map((action: any) => {
         const data = action.payload.data();
         data.notifications = {
           messages: data.notifications && data.notifications.messages ? data.notifications.messages : this.defaultCheckbox(),
           policy: data.notifications && data.notifications.policy ? data.notifications.policy : this.defaultCheckbox()
         };
         return data;
-      });
+      }));
     }
   }
 }

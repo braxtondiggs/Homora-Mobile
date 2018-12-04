@@ -1,11 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AlertController, LoadingController, NavController, Platform, ToastController, Slides } from 'ionic-angular';
-import { Camera, CameraOptions } from '@ionic-native/camera';
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
-import { AngularFireStorage } from 'angularfire2/storage';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
-import { forkJoin } from 'rxjs/observable/forkJoin';
+import { of, forkJoin } from 'rxjs';
 import { UserProvider } from '../../../providers/user/user';
 import { User } from '../../../interface';
 import { UserImage } from '../../../interface/user/image.interface';
@@ -133,7 +132,7 @@ export class EditProfilePage {
     const loading = this.loading.create();
     loading.present();
     this.user.images.splice(index, 1);
-    forkJoin([!_.isNull(name) && name !== 'provider' ? ref.delete() : Observable.of({}), this.userDoc.update(_.pickBy(this.user, _.identity))]).subscribe(() => {
+    forkJoin([!_.isNull(name) && name !== 'provider' ? ref.delete() : of({}), this.userDoc.update(_.pickBy(this.user, _.identity))]).subscribe(() => {
       loading.dismiss();
       this.slides.update();
       if (this.slides.isEnd()) this.slides.slideTo(this.slides.length());
@@ -221,11 +220,10 @@ export class EditProfilePage {
     const key = this.afs.collection('Users').ref.doc().id;
     const loading = this.loading.create();
     loading.present();
-    const ref = this.storage.ref(`Users/${this.user.$key}/${key}`);
-    const task = ref.putString(`data:${type};base64,${base64}`, 'data_url');
     this.user.images = !_.isEmpty(this.user.images) ? this.user.images : [];
-
-    task.downloadURL().subscribe((url: string) => {
+    const ref = this.storage.ref(`Users/${this.user.$key}/${key}`);
+    ref.putString(`data:${type};base64,${base64}`, 'data_url');
+    ref.getDownloadURL().subscribe((url: string) => {
       this.user.images.push({
         src: url,
         name: key

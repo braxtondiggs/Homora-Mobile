@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { AlertController, LoadingController, Loading, ModalController, NavController, Platform, ToastController } from 'ionic-angular';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { DocumentReference } from '@firebase/firestore-types';
-import { Geolocation, Geoposition } from '@ionic-native/geolocation';
+import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { FilterComponent, MapsComponent } from '../../components';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Favorite, Listing, User } from '../../interface';
 import { GeoLocationProvider, ListingProvider, UserProvider } from '../../providers';
 import { ListingPage } from './listing/listing';
@@ -133,7 +134,7 @@ export class ListingsPage {
     }
 
     return new Promise((resolve) => {
-      return this.listings$.take(1).toPromise().then((listings: Listing[]) => {
+      return this.listings$.pipe(take(1)).toPromise().then((listings: Listing[]) => {
         const listingSize = _.size(this.listings);
         this.listings = !_.isEmpty(last) ? _.chain(this.listings).union(listings).uniqBy('$key').value() : listings;
         loader.dismiss();

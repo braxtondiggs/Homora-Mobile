@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
 import { MessagePage } from './message/message';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Observable } from 'rxjs/Rx';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Listing, Message, User } from '../../interface';
 import { UserProvider } from '../../providers';
 import { AppSettings } from '../../app/app.constants';
@@ -39,7 +40,7 @@ export class MessagesPage {
   ionViewDidLoad() {
     this.user = this.userProvider.get();
     this.messagesCollection = this.afs.collection<Message>('Messages', ref => ref.where(`users.${this.user.$key}`, '==', true));
-    this.messages$ = this.messagesCollection.snapshotChanges().map((actions: any) => {
+    this.messages$ = this.messagesCollection.snapshotChanges().pipe(map((actions: any) => {
       return actions.map((action: any) => {
         const data = action.payload.doc.data();
         const userRef = _.findKey(data.users, (o, key) => this.user.$key !== key);
@@ -47,6 +48,6 @@ export class MessagesPage {
         data.listing$ = this.afs.doc<Listing>(data.listing.path).valueChanges();
         return data;
       });
-    });
+    }));
   }
 }

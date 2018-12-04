@@ -1,14 +1,14 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
-import { Camera, CameraOptions } from '@ionic-native/camera';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { of, forkJoin, Observable } from 'rxjs';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
 import { AlertController, Content, LoadingController, NavController, Platform, ToastController, Slides } from 'ionic-angular';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { AngularFireStorage } from 'angularfire2/storage';
 import { GeoLocationProvider, ListingProvider, UserProvider } from '../../../providers';
 import { ListingPage } from '../listing/listing';
 import { Listing } from '../../../interface';
 import { Metro } from '../../../interface/listing/location.interface';
-import { Observable } from 'rxjs/Rx';
 import { DocumentReference, Timestamp } from '@firebase/firestore-types';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -172,7 +172,7 @@ export class NewListingPage {
     const loading = this.loading.create();
     loading.present();
     this.listing.images.splice(index, 1);
-    Observable.forkJoin([ref.delete(), this.listingDoc.update(this.listing)]).subscribe(() => {
+    forkJoin([ref.delete(), this.listingDoc.update(this.listing)]).subscribe(() => {
       loading.dismiss();
       this.slides.update();
       if (this.slides.isEnd()) this.slides.slideTo(this.slides.length());
@@ -235,7 +235,7 @@ export class NewListingPage {
     loading.present();
     const ref = this.storage.ref(`Listings/${this.listing.createdBy.id}/${this.key}/${key}`);
     const task = ref.putString(`data:${type};base64,${base64}`, 'data_url');
-    task.downloadURL().subscribe((url: string) => {
+    ref.getDownloadURL().subscribe((url: string) => {
       if (_.isEmpty(this.listing.images)) this.listing.images = [];
       this.listing.images.push({
         name: key,
@@ -259,7 +259,7 @@ export class NewListingPage {
       this.listingProvider.setActive(null);
     } else {
       this.listingDoc = null;
-      this.listing$ = Observable.of({
+      this.listing$ = of({
         $key: null,
         availability: null,
         amenities: {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, ToastController } from 'ionic-angular';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { AuthProvider } from '../../../providers/auth/auth';
 import { User } from '../../../interface'
@@ -35,7 +35,7 @@ export class SignupPage {
   doSignup(): void {
     if (this.signup.valid) {
       this.loading = true;
-      this.afAuth.auth.createUserWithEmailAndPassword(this.signup.value.email, this.signup.value.password).then((user) => {
+      this.afAuth.auth.createUserWithEmailAndPassword(this.signup.value.email, this.signup.value.password).then((user: any) => {
         let userDoc: AngularFirestoreDocument<User> = this.afs.collection<User>('Users').doc(user.uid);
         const userData: User = {
           $key: user.uid,

@@ -1,10 +1,11 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AlertController, Content, NavController, NavParams, Platform } from 'ionic-angular';
-import { Camera, CameraOptions } from '@ionic-native/camera';
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { Camera, CameraOptions } from '@ionic-native/camera/ngx';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { DocumentReference } from '@firebase/firestore-types';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { ListingPage } from '../../listings/listing/listing';
 import { ProfileViewPage, ProfileViewFakePage } from '../../profile/';
 import { Listing, Message, User } from '../../../interface';
@@ -172,7 +173,7 @@ export class MessagePage {
     if (this.key) {
       this.user = this.userProvider.get();
       this.messageDoc = this.afs.doc<Message>(`Messages/${this.key}`);
-      this.messageDoc.snapshotChanges().map((action: any) => {
+      this.messageDoc.snapshotChanges().pipe(map((action: any) => {
         const data = action.payload.data();
         let userRef: string;
         let listingRef: string;
@@ -188,7 +189,7 @@ export class MessagePage {
         this.listing$ = this.listingDoc.valueChanges();
         this.content.resize();
         return data;
-      }).subscribe((message) => {
+      })).subscribe((message) => {
         this.message = message;
         if (this.message && this.message.read && !this.message.read[this.user.$key]) {
           this.message.read[this.user.$key] = true;
