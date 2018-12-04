@@ -12,7 +12,7 @@ import { Metro } from '../../../interface/listing/location.interface';
 import { DocumentReference, Timestamp } from '@firebase/firestore-types';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import * as firebase from 'firebase/app'
+import firebase from 'firebase/app'
 
 @Component({
   selector: 'page-new-listing',
@@ -234,7 +234,7 @@ export class NewListingPage {
     const loading = this.loading.create();
     loading.present();
     const ref = this.storage.ref(`Listings/${this.listing.createdBy.id}/${this.key}/${key}`);
-    const task = ref.putString(`data:${type};base64,${base64}`, 'data_url');
+    ref.putString(`data:${type};base64,${base64}`, 'data_url');
     ref.getDownloadURL().subscribe((url: string) => {
       if (_.isEmpty(this.listing.images)) this.listing.images = [];
       this.listing.images.push({

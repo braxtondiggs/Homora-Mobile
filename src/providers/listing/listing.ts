@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { GeoPoint } from '@firebase/firestore-types';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Listing, User } from '../../interface';
@@ -7,7 +8,7 @@ import { ListingAmenities } from '../../interface/listing/amenities.interface';
 import { ListingRules } from '../../interface/listing/rules.interface';
 import { RoommateAge } from '../../interface/listing/roommate.interface';
 import * as _ from 'lodash';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 import * as moment from 'moment';
 import geolib from 'geolib';
 
@@ -78,7 +79,7 @@ export class ListingProvider {
     this.active = key;
   }
 
-  getListings(lastPoint: firebase.firestore.GeoPoint, filterList: boolean = false, limit: boolean = true, area: any = { center: { latitude: 38.8256989, longitude: -77.0306601 }, radius: 27 }): Observable<Listing[]> {
+  getListings(lastPoint: GeoPoint, filterList: boolean = false, limit: boolean = true, area: any = { center: { latitude: 38.8256989, longitude: -77.0306601 }, radius: 27 }): Observable<Listing[]> {
     const limitValue: number = limit ? 50 : 1000;
     const box = this.boundingBoxCoordinates(area.center, area.radius);
     const lesserGeopoint = new firebase.firestore.GeoPoint(box.swCorner.latitude, box.swCorner.longitude);

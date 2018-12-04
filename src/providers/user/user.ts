@@ -4,7 +4,7 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from '../../interface';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 
 @Injectable()
 export class UserProvider {
@@ -12,7 +12,8 @@ export class UserProvider {
   user: User;
   user$: Observable<User>;
   userDoc: AngularFirestoreDocument<User>;
-  constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore) { }
+  constructor(private afAuth: AngularFireAuth,
+    private afs: AngularFirestore) { }
 
   getAuth(): Observable<any> {
     return this.afAuth.authState;

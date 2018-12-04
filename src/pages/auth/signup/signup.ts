@@ -7,7 +7,6 @@ import { AuthProvider } from '../../../providers/auth/auth';
 import { User } from '../../../interface'
 import { MainPage } from '../../main';
 import * as  moment from 'moment';
-import * as firebase from 'firebase';
 
 @Component({
   selector: 'signup-page',
@@ -59,7 +58,7 @@ export class SignupPage {
         };
         userDoc.set(userData).then(() => {
           this.afAuth.auth.signInWithEmailAndPassword(this.signup.value.email, this.signup.value.password).then((user: any) => {
-            firebase.auth().currentUser.sendEmailVerification();
+            user.sendEmailVerification();
             // this.http.post('http://dev.homora.com/api/users/signup', merge(user, { image: AppSettings.DEFAULT_USER_IMAGE }));
             this.auth.skipIntro();
             this.nav.push(MainPage, {}, { animate: false }).then(() => {

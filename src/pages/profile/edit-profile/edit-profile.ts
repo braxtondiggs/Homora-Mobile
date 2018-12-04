@@ -9,7 +9,7 @@ import { UserProvider } from '../../../providers/user/user';
 import { User } from '../../../interface';
 import { UserImage } from '../../../interface/user/image.interface';
 import { AppSettings } from '../../../app/app.constants';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 import * as _ from 'lodash';
 import * as  moment from 'moment';
 
