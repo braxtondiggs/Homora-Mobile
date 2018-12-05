@@ -1,0 +1,39 @@
+<ion-tabs>
+	<ion-tab tab="home">
+		<ion-router-outlet name="home"></ion-router-outlet>
+	</ion-tab>
+	<ion-tab tab="favorites">
+		<ion-router-outlet name="favorites"></ion-router-outlet>
+	</ion-tab>
+	<ion-tab tab="messages">
+		<ion-router-outlet name="messages"></ion-router-outlet>
+	</ion-tab>
+	<ion-tab tab="new-listing">
+		<ion-router-outlet name="new-listing"></ion-router-outlet>
+	</ion-tab>
+	<ion-tab tab="profile">
+		<ion-router-outlet name="profile"></ion-router-outlet>
+	</ion-tab>
+	<ion-tab-bar slot="bottom">
+		<ion-tab-button tab="home" href="/tabs/(home:home)">
+			<ion-icon name="search"></ion-icon>
+			<ion-label>Explore</ion-label>
+		</ion-tab-button>
+		<ion-tab-button tab="favorites" href="/tabs/(favorites:favorites)">
+			<ion-icon name="heart-empty"></ion-icon>
+			<ion-label>Saved</ion-label>
+		</ion-tab-button>
+		<ion-tab-button tab="messages" href="/tabs/(messages:messages)">
+			<ion-icon name="chatbubbles"></ion-icon>
+			<ion-label>Inbox</ion-label>
+		</ion-tab-button>
+		<ion-tab-button tab="new-listing" href="/tabs/(new-listing:new-listing)">
+			<ion-icon name="add-circle"></ion-icon>
+			<ion-label>New Listing</ion-label>
+		</ion-tab-button>
+		<ion-tab-button tab="profile" href="/tabs/(profile:profile)">
+			<ion-icon name="person"></ion-icon>
+			<ion-label>Profile</ion-label>
+		</ion-tab-button>
+	</ion-tab-bar>
+</ion-tabs>

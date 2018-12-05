@@ -1,60 +1,31 @@
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { ErrorHandler, NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-import { Ionic2MaskDirective } from 'ionic2-mask-directive';
+import { RouteReuseStrategy } from '@angular/router';
 
-import { AngularFireModule } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireStorageModule } from '@angular/fire/storage';
-import { AngularFireAuthModule } from '@angular/fire/auth';
+import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { Facebook } from '@ionic-native/facebook/ngx';
-import { EmailComposer } from '@ionic-native/email-composer/ngx';
-import { Camera } from '@ionic-native/camera/ngx';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { Firebase } from '@ionic-native/firebase/ngx';
 
-import { MyApp } from './app.component';
-import { PagesModule } from '../pages/pages.module';
-import { ComponentsModule } from '../components/components.module';
-import { environment } from './app.environment';
-import { AuthProvider, FcmProvider, GeoLocationProvider, ListingProvider, UserProvider } from '../providers';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { environment } from '../environments/environment';
 
 @NgModule({
-  declarations: [MyApp, Ionic2MaskDirective],
+  declarations: [AppComponent],
   imports: [
-    PagesModule,
-    ComponentsModule,
-    ReactiveFormsModule,
     BrowserModule,
+    AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
-    AngularFireAuthModule,
-    AngularFireStorageModule,
-    HttpClientModule,
-    IonicModule.forRoot(MyApp, {
-      preloadModules: true
-    }),
-    AngularFireModule.initializeApp(environment.firebase)
+    IonicModule.forRoot(),
+    AppRoutingModule
   ],
-  bootstrap: [IonicApp],
-  entryComponents: [MyApp],
   providers: [
     SplashScreen,
     Geolocation,
-    Firebase,
-    Facebook,
-    EmailComposer,
-    Camera,
-    InAppBrowser,
-    { provide: ErrorHandler, useClass: IonicErrorHandler },
-    AuthProvider,
-    FcmProvider,
-    ListingProvider,
-    UserProvider,
-    GeoLocationProvider
-  ]
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+  ],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
