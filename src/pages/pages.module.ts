@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import { AgmCoreModule } from '@agm/core';
+import { AgmMarkerWithLabelModule } from '@ajqua/marker-with-label';
 import { MomentModule } from 'ngx-moment';
 import { IonicModule } from 'ionic-angular';
 import { LazyLoadImageModule } from 'ng-lazyload-image/dist';
@@ -11,9 +13,16 @@ import { MessagesPage, MessagePage } from './messages';
 import { AuthPage, SignupPage, LoginPage, ResetPage } from './auth';
 import { SettingsPage, NotificationsPage } from './settings';
 import { MessagePipe } from '../pipes';
+import { environment } from '../app/app.environment';
 
 @NgModule({
-  imports: [IonicModule, MomentModule, LazyLoadImageModule],
+  imports: [
+    IonicModule,
+    MomentModule,
+    LazyLoadImageModule,
+    AgmCoreModule.forRoot({ apiKey: environment.googleAPI, libraries: ['geometry'] }),
+    AgmMarkerWithLabelModule
+  ],
   declarations: [
     MainPage,
     ListingsPage,

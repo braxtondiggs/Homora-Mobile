@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { AlertController, NavController, Platform, Slides, ToastController, ViewController } from 'ionic-angular';
+import { Component } from '@angular/core';
+/*import { AlertController, NavController, Platform, Slides, ToastController, ViewController } from 'ionic-angular';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { GeoLocationProvider, ListingProvider } from '../../providers';
 import { ListingPage } from '../../pages/listings/listing/listing';
@@ -9,14 +9,14 @@ import { AppSettings } from '../../app/app.constants';
 import { } from '@types/googlemaps';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import geolib from 'geolib';
+import geolib from 'geolib';*/
 
 @Component({
   selector: 'maps',
   templateUrl: 'maps.html'
 })
 export class MapsComponent {
-  map: google.maps.Map;
+  /*map: google.maps.Map;
   markers: google.maps.Marker[] = [];
   isDrawerActive: boolean = true;
   showSearchBtn: boolean = false;
@@ -164,5 +164,5 @@ export class MapsComponent {
         }
       }
     });
-  }
+  }*/
 }

@@ -1,5 +1,6 @@
 export const environment = {
   production: false,
+  googleAPI: 'AIzaSyBzeUk8oXwjrV1HfG7wlIx_tTocekPb8SU',
   firebase: {
     apiKey: 'AIzaSyDPIeh9Gk24c2WWD8Bp3yXfyhpYL2aBCDI',
     authDomain: 'homora-483ba.firebaseapp.com',

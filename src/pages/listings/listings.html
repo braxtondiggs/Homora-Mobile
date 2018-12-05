@@ -1,5 +1,6 @@
 <ion-content>
-	<div *ngIf="listings && listings.length > 0; else empty_results">
+	{{listings$}}
+	<div *ngIf="(listings$ | async) as listings; else loading" style="height: 100%">
 		<ion-card *ngFor="let listing of listings" (click)="viewListing(listing.$key)">
 			<div class="slide-container">
 				<!--<ion-slides pager="true" #listingSlider>
@@ -36,18 +37,23 @@
 				<p class="sub-text" *ngIf="listing.duration">{{availability(listing.availability.toDate())}} &#183; {{duration(listing.duration.lower, listing.duration.upper)}}</p>
 			</ion-card-content>
 		</ion-card>
-		<ion-infinite-scroll (ionInfinite)="$event.waitFor(doInfinite())" [enabled]="isScrollEnabled">
+		<!--<ion-infinite-scroll (ionInfinite)="$event.waitFor(doInfinite())" [enabled]="isScrollEnabled">
 			<ion-infinite-scroll-content></ion-infinite-scroll-content>
-		</ion-infinite-scroll>
-	</div>
-	<ng-template #empty_results>
-		<ion-grid *ngIf="!isLoading" class="empty-listings">
+		</ion-infinite-scroll>-->
+		<ion-grid *ngIf="listings && listings.length <= 0" class="empty-listings">
 			<ion-row justify-content-center align-items-center>
 				<div>
 					<h1>No Results</h1>
 					<p>To get more results, try adjusting your search by changing your move-in date, removing your filters, or zooming out of the map.</p>
 					<button (click)="removeFilters()" ion-button rounded>Remove Filters</button>
 				</div>
+			</ion-row>
+		</ion-grid>
+	</div>
+	<ng-template #loading>
+		<ion-grid class="empty-favorite">
+			<ion-row justify-content-center align-items-center>
+				<ion-spinner></ion-spinner>
 			</ion-row>
 		</ion-grid>
 	</ng-template>

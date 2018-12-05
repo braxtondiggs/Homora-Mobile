@@ -3,7 +3,8 @@ import { Platform } from 'ionic-angular';
 import { UserProvider } from '../user/user';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { isEmpty } from 'lodash';
-import { auth } from 'firebase/app';
+import firebase from 'firebase/app';
+import authProvider = firebase.auth.AuthProvider;
 
 @Injectable()
 export class AuthProvider {
@@ -29,7 +30,7 @@ export class AuthProvider {
   }
 
   oAuthSignIn(action: string): Promise<any> {
-    const provider: auth.AuthProvider = (action === 'google') ? new auth.GoogleAuthProvider() : new auth.FacebookAuthProvider();
+    const provider: authProvider = (action === 'google') ? new firebase.auth.GoogleAuthProvider() : new firebase.auth.FacebookAuthProvider();
     if (!this.platform.is('cordova')) {
       return this.afAuth.auth.signInWithPopup(provider);
     } else {
@@ -38,7 +39,7 @@ export class AuthProvider {
   }
 
   oAuthLink(action: string): Promise<any> {
-    const provider: auth.AuthProvider = (action === 'google.com') ? new auth.GoogleAuthProvider() : new auth.FacebookAuthProvider();
+    const provider: authProvider = (action === 'google.com') ? new firebase.auth.GoogleAuthProvider() : new firebase.auth.FacebookAuthProvider();
     const auth = this.userProvider.getAuthData();
     if (!this.platform.is('cordova')) {
       return auth.linkWithPopup(provider);

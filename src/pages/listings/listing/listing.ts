@@ -27,8 +27,8 @@ export class ListingPage {
   listing: Listing;
   isMapClicked: boolean = false;
   metroTotal: number[] = [];
-  map: google.maps.Map;
-  markers: google.maps.Marker[] = [];
+  /*map: google.maps.Map;
+  markers: google.maps.Marker[] = [];*/
   DEFAULT_LISTING_IMAGE: string = AppSettings.DEFAULT_LISTING_IMAGE;
   DEFAULT_USER_IMAGE: string = AppSettings.DEFAULT_USER_IMAGE;
   listing$: Observable<Listing>;
@@ -200,8 +200,8 @@ export class ListingPage {
   }
 
   private loadMap() {
-    var mapProp = {
-      center: new google.maps.LatLng(this.listing.location.latlng.latitude, this.listing.location.latlng.longitude),
+    /*var mapProp = {
+      center: 10, // new google.maps.LatLng(this.listing.location.latlng.latitude, this.listing.location.latlng.longitude),
       zoom: 15,
       disableDefaultUI: true,
       style: [{
@@ -235,7 +235,7 @@ export class ListingPage {
       google.maps.event.addListener(this.map, 'click', function() {
         this.setOptions({ scrollwheel: true });
       });
-    });
+    });*/
   }
 }
 

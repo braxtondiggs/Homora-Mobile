@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AlertController, LoadingController, Loading, ModalController, NavController, Platform, ToastController } from 'ionic-angular';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { DocumentReference } from '@firebase/firestore-types';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation/ngx';
 import { FilterComponent, MapsComponent } from '../../components';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { Favorite, Listing, User } from '../../interface';
 import { GeoLocationProvider, ListingProvider, UserProvider } from '../../providers';
 import { ListingPage } from './listing/listing';
@@ -13,21 +13,34 @@ import { ProfileViewPage, ProfileViewFakePage } from '../profile';
 import { AppSettings } from '../../app/app.constants';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import geolib from 'geolib';
+import * as firebase from 'firebase/app';
+import * as geofirex from 'geofirex';
+import * as geolib from 'geolib';
 
 @Component({
   selector: 'listings',
   templateUrl: 'listings.html'
 })
-export class ListingsPage {
+export class ListingsPage implements OnInit {
   user: User;
   listings: Listing[];
-  location: Geoposition;
   filter: boolean = false;
   isLoading: boolean = true;
   isScrollEnabled: boolean = true;
   favorites: Favorite[];
-  listings$: Observable<Listing[]>;
+  listings$: Observable<any>;
+  loader: Loading = this.loading.create({ content: 'Finding Listings...' });
+  geo = geofirex.init(firebase);
+  bounds = new BehaviorSubject({
+    center: {
+      lat: 38.8256989,
+      lng: -77.0306601,
+    },
+    radius: 10.78,
+    zm: 13
+  })
+
+
   DEFAULT_LISTING_IMAGE: string = AppSettings.DEFAULT_LISTING_IMAGE;
   DEFAULT_USER_IMAGE: string = AppSettings.DEFAULT_USER_IMAGE;
   private favoriteCollection: AngularFirestoreCollection<Favorite>;
@@ -81,13 +94,13 @@ export class ListingsPage {
     this.modal.create(MapsComponent).present();
   }
 
-  openFilter(): void {
+  openFilter(listing): void {
     const modal = this.modal.create(FilterComponent, { listingTotal: _.size(this.listings) });
     modal.onDidDismiss(() => {
       this.filter = !this.listingProvider.pristine;
       if (this.filter) {
         this.listings = null;
-        this.ionViewDidLoad();
+        // this.ionViewDidLoad();
       }
     });
     modal.present();
@@ -96,7 +109,7 @@ export class ListingsPage {
   removeFilters(): void {
     this.listingProvider.resetFilter();
     this.filter = !this.listingProvider.pristine;
-    this.ionViewDidLoad();
+    // this.ionViewDidLoad();
   }
 
   duration(lower: number, upper: number): string {
@@ -111,8 +124,8 @@ export class ListingsPage {
     return moment(date).isSameOrBefore(moment(), 'day') ? 'Available Now' : moment(date).format('MM/DD');
   }
 
-  getListings(location: Geoposition, loader: Loading): Promise<void> {
-    const last: Listing = _.last(this.listings);
+  /*getListings() {
+    /*const last: Listing = _.last(this.listings);
     const lastPoint = (last) ? last.location.latlng : undefined;
     if (location && !this.hasPassedBoundaries(location)) {
       this.listings$ = this.listingProvider.getListings(lastPoint, false, false, {
@@ -149,47 +162,76 @@ export class ListingsPage {
         resolve();
       });
     });
-  }
+  }*/
 
   hasPassedBoundaries(location: Geoposition): boolean {
     return !geolib.isPointInside({ latitude: location.coords.latitude, longitude: location.coords.longitude }, AppSettings.MAP_BOUNDS)
+  }
+
+  showBoundaryAlert(): void {
+    this.alert.create({
+      title: 'Service Area',
+      subTitle: 'Homora currently operates in the Baltimore-Washington Metro Area. We plan to expand to other states shortly.',
+      buttons: ['Ok']
+    }).present();
   }
 
   doInfinite(): Promise<void> {
     return new Promise((resolve) => {
       const loader: Loading = this.loading.create({ content: 'Loading...' });
       loader.present();
-      this.getListings(this.location, loader).then(() => resolve());
+      // this.getListings(this.location, loader).then(() => resolve());
     });
   }
 
-  ionViewDidLoad() {
-    const loader: Loading = this.loading.create({ content: 'Finding Listings...' });
-    loader.present();
-    this.isLoading = true;
-    this.user = this.userProvider.get();
+  sortListing(listing): Listing[] {
+    return listing;
+  }
+
+  filterResults(listing): Listing[] {
+    return listing;
+  }
+
+  setMap(location: Geoposition, radius?: number, zm?: number): void {
+    // const bounds = this.bounds.getValue();
+    if (this.hasPassedBoundaries(location)) this.showBoundaryAlert();
+    this.listings$.subscribe((listings) => { this.listings = listings; });
+    /*this.bounds.next({
+      center: { lat: location.coords.latitude, lng: location.coords.longitude },
+      radius: radius ? radius : bounds.radius,
+      zm: zm ? zm : bounds.zm
+    });*/
+  }
+
+  getLocation() {
+    if (this.platform.is('cordova')) {
+      this.geolocation.getCurrentPosition({
+        maximumAge: 3000,
+        timeout: 5000,
+        enableHighAccuracy: true
+      }).then((location: Geoposition) => this.setMap(location)).catch((error: any) => {
+        this.toast.create({ message: error.message.toString(), duration: 3000 }).present();
+      });
+    } else {
+      this.locationProvider.getLocation().subscribe((location: Geoposition) => this.setMap(location), (error: any) => {
+        this.toast.create({ message: error.toString(), duration: 3000 }).present()
+      });
+    }
+  }
+
+  ngOnInit() {
     this.platform.ready().then(() => {
-      if (this.platform.is('cordova')) {
-        this.geolocation.getCurrentPosition({
-          maximumAge: 3000,
-          timeout: 5000,
-          enableHighAccuracy: true
-        }).then((location: Geoposition) => {
-          this.location = location;
-          this.getListings(location, loader);
-        }).catch((error: any) => {
-          this.toast.create({ message: error.message.toString(), duration: 3000 }).present();
-          this.getListings(this.location, loader);
-        });
-      } else {
-        this.locationProvider.getLocation().subscribe((location: Geoposition) => {
-          this.location = location;
-          this.getListings(location, loader);
-        }, (error: any) => {
-          this.toast.create({ message: error.toString(), duration: 3000 }).present();
-          this.getListings(this.location, loader);
-        });
-      }
+      this.getLocation();
+      this.user = this.userProvider.get();
+      this.listings$ = this.bounds.pipe(switchMap((bounds) => {
+        console.log(bounds);
+        const center = this.geo.point(bounds.center.lat, bounds.center.lng);
+        return this.geo.collection('Listings', (ref) => ref.where('status', '==', 'published').limit(1))
+          .within(center, bounds.radius, 'location').pipe(map((listings) => {
+            console.log('listings', listings);
+            return listings;
+          }));
+      }));
     });
   }
 }
