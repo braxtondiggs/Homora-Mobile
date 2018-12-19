@@ -30,7 +30,7 @@
 			<div item-end>{{listingProvider.price.upper | currency:'USD':'symbol':'1.0-3'}}</div>
 		</ion-list-header>
 		<ion-item>
-			<ion-range min="0" max="10000" debounce="500" step="50" dualKnobs="true" [(ngModel)]="listingProvider.price" (ionChange)="onChange()"></ion-range>
+			<ion-range min="0" max="5000" debounce="500" step="50" dualKnobs="true" [(ngModel)]="listingProvider.price" (ionChange)="onChange()"></ion-range>
 		</ion-item>
 		<ion-list-header class="range-header">
 			<ion-label>Lease duration</ion-label>
@@ -52,7 +52,7 @@
 		</ion-item>
 		<ion-item>
 			<ion-label>Move-In Date</ion-label>
-			<ion-datetime displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minAvailability" [(ngModel)]="listingProvider.availability" placeholder="Immediately" (ionChange)="onChange()"></ion-datetime>
+			<ion-datetime displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minAvailability" [max]="maxAvailability" [(ngModel)]="listingProvider.availability" placeholder="Immediately" (ionChange)="onChange()"></ion-datetime>
 		</ion-item>
 		<ion-list-header class="range-header">
 			<ion-label>Age</ion-label>

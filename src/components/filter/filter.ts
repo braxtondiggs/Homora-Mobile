@@ -13,6 +13,7 @@ export class FilterComponent {
   loading: boolean = false;
   listingTotal: number = 75;
   minAvailability: string = moment().format();
+  maxAvailability: string = moment().add(2, 'years').format();
   constructor(private listingProvider: ListingProvider,
     private view: ViewController,
     private params: NavParams) {

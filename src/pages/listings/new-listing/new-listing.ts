@@ -26,6 +26,7 @@ export class NewListingPage {
   listing: Listing;
   listing$: Observable<Listing>;
   minAvailability: string = moment().format();
+  maxAvailability: string = moment().add(2, 'years').format();
   rangeLabelLower: string;
   rangeLabelUpper: string;
   listingForm: FormGroup;
@@ -188,15 +189,17 @@ export class NewListingPage {
   }
 
   private save(force: boolean = false): Promise<any> {
+    const listing: Listing = _.omitBy(this.listing, _.isUndefined) as Listing;
+    listing.availability = moment(listing.availability as any).toDate();
     if (this.listingForm.dirty || force) {
       return this.formatListing().then(() => {
         if (this.listingDoc) {
-          return this.listingDoc.update(this.listing);
+          return this.listingDoc.update(listing);
         } else {
           this.key = this.afs.collection('Listings').ref.doc().id;
           this.listingDoc = this.afs.doc<Listing>(`Listings/${this.key}`);
           this.listing.$key = this.key;
-          return this.listingDoc.set(this.listing)
+          return this.listingDoc.set(listing);
         }
       }).catch((err) => {
         return Promise.reject(err);
@@ -316,6 +319,10 @@ export class NewListingPage {
           couplesOk: false
         },
         status: 'draft',
+        type: 'entire',
+        bedrooms: 1,
+        bathrooms: 1,
+        occupants: 1
       } as Listing)
     }
     this.listing$.subscribe((listing) => {
@@ -343,6 +350,10 @@ export class NewListingPage {
         availability: [this.listing.availability, Validators.required],
         duration: [this.listing.duration, Validators.required],
         craigslist: [this.listing.craigslist],
+        type: [this.listing.type, Validators.required],
+        bedrooms: [this.listing.bedrooms, Validators.required],
+        bathrooms: [this.listing.bathrooms, Validators.required],
+        occupants: [this.listing.occupants, Validators.required],
         washer: [this.listing.amenities.washer],
         wifi: [this.listing.amenities.wifi],
         water: [this.listing.amenities.water],
