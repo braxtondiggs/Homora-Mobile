@@ -123,7 +123,7 @@
 					<p *ngIf="!listingForm.controls.deposit.valid && (listingForm.controls.deposit.dirty || submitted)" class="danger error">Deposit is not valid. Must be between $0 - $10,000</p>
 					<ion-item>
 						<ion-label stacked>Start Date</ion-label>
-						<ion-datetime formControlName="availability" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minAvailability" [(ngModel)]="listing.availability" [class.invalid]="!listingForm.controls.availability.valid && (listingForm.controls.availability.dirty || submitted)"></ion-datetime>
+						<ion-datetime formControlName="availability" displayFormat="MMM DD, YYYY" pickerFormat="MMM DD YYYY" [min]="minAvailability" [max]="maxAvailability" [(ngModel)]="listing.availability" [class.invalid]="!listingForm.controls.availability.valid && (listingForm.controls.availability.dirty || submitted)"></ion-datetime>
 					</ion-item>
 					<p *ngIf="!listingForm.controls.availability.valid && (listingForm.controls.availability.dirty || submitted)" class="danger error">Availability date is not valid.</p>
 					<ion-list-header class="range-header">
@@ -143,7 +143,69 @@
 				</ion-list>
 			</ion-slide>
 			<ion-slide padding>
-				<h1>What are some of the amenities the room comes with?</h1>
+				<h1>Tell us more about the space you're renting?</h1>
+				<h2>Listing Type</h2>
+				<ion-segment formControlName="type" [(ngModel)]="listing.type" [class.invalid]="!listingForm.controls.type.valid && (listingForm.controls.type.dirty || submitted)">
+					<ion-segment-button value="entire">
+						<ion-icon name="home"></ion-icon>
+						<div class="segment-label">Entire Place</div>
+					</ion-segment-button>
+					<ion-segment-button value="private">
+						<ion-icon name="person"></ion-icon>
+						<div class="segment-label">Private Room</div>
+					</ion-segment-button>
+					<ion-segment-button value="shared">
+						<ion-icon name="people"></ion-icon>
+						<div class="segment-label">Shared Room</div>
+					</ion-segment-button>
+				</ion-segment>
+				<ion-list>
+					<ion-item>
+						<ion-label>Total Beds</ion-label>
+						<ion-select formControlName="bedrooms" [(ngModel)]="listing.bedrooms" [class.invalid]="!listingForm.controls.bedrooms.valid && (listingForm.controls.bedrooms.dirty || submitted)">
+							<ion-option [value]="0">Studio</ion-option>
+							<ion-option [value]="1">1</ion-option>
+							<ion-option [value]="2">2</ion-option>
+							<ion-option [value]="3">3</ion-option>
+							<ion-option [value]="4">4</ion-option>
+							<ion-option [value]="5">5</ion-option>
+							<ion-option [value]="6">6</ion-option>
+							<ion-option [value]="7">7</ion-option>
+							<ion-option [value]="8">8+</ion-option>
+						</ion-select>
+					</ion-item>
+					<ion-item>
+						<ion-label>Total Bathrooms</ion-label>
+						<ion-select formControlName="bathrooms" [(ngModel)]="listing.bathrooms" [class.invalid]="!listingForm.controls.bathrooms.valid && (listingForm.controls.bathrooms.dirty || submitted)">
+							<ion-option [value]="1">1</ion-option>
+							<ion-option [value]="2">2</ion-option>
+							<ion-option [value]="3">3</ion-option>
+							<ion-option [value]="4">4</ion-option>
+							<ion-option [value]="5">5</ion-option>
+							<ion-option [value]="6">6</ion-option>
+							<ion-option [value]="7">7</ion-option>
+							<ion-option [value]="8">8+</ion-option>
+						</ion-select>
+					</ion-item>
+					<ion-item>
+						<ion-label>Total Occupants Allowed</ion-label>
+						<ion-select formControlName="occupants" [(ngModel)]="listing.occupants" [class.invalid]="!listingForm.controls.occupants.valid && (listingForm.controls.occupants.dirty || submitted)">
+							<ion-option [value]="1">1</ion-option>
+							<ion-option [value]="2">2</ion-option>
+							<ion-option [value]="3">3</ion-option>
+							<ion-option [value]="4">4</ion-option>
+							<ion-option [value]="5">5</ion-option>
+							<ion-option [value]="6">6</ion-option>
+							<ion-option [value]="7">7</ion-option>
+							<ion-option [value]="8">8</ion-option>
+							<ion-option [value]="9">9</ion-option>
+							<ion-option [value]="10">10</ion-option>
+							<ion-option [value]="11">11</ion-option>
+							<ion-option [value]="12">12+</ion-option>
+						</ion-select>
+					</ion-item>
+				</ion-list>
+				<h2>Any amenities provided?</h2>
 				<ion-grid class="amenities">
 					<ion-row>
 						<ion-col (click)="select('amenities', 'washer')" col-3>
@@ -223,7 +285,7 @@
 						</ion-col>-->
 					</ion-row>
 				</ion-grid>
-				<h1>Any house rules?</h1>
+				<h2>Any house rules?</h2>
 				<ion-grid class="rules">
 					<ion-row>
 						<ion-col (click)="select('rules', 'smoking')" col-3>

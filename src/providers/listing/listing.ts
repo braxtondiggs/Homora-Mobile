@@ -5,6 +5,7 @@ import { Listing, User } from '../../interface';
 import { ListingAmenities } from '../../interface/listing/amenities.interface';
 import { ListingRules } from '../../interface/listing/rules.interface';
 import { RoommateAge } from '../../interface/listing/roommate.interface';
+import { Timestamp } from '@firebase/firestore-types';
 import * as _ from 'lodash';
 import * as firebase from 'firebase/app';
 import * as moment from 'moment';
@@ -31,7 +32,7 @@ export class ListingProvider {
     this.pristine = true;
     this.sort = 'Best Match';
     this.availability = null;
-    this.price = { lower: 0, upper: 10000 };
+    this.price = { lower: 0, upper: 5000 };
     this.duration = { lower: 0, upper: 12 };
     this.gender = 'all';
     this.age = {
@@ -143,8 +144,10 @@ export class ListingProvider {
   }
 
   filterAvailability(listing: Listing): boolean {
+    const listingAvailability = moment((listing.availability as Timestamp).toDate());
     if (_.isEmpty(this.availability) || moment(this.availability).isSame(moment(), 'day')) return true;
-    return moment(this.availability).isAfter(moment(listing.availability as any));
+    return moment(this.availability).isAfter(listingAvailability) ||
+      (listingAvailability.isAfter(moment().startOf('month')) && listingAvailability.isBefore(moment().endOf('month')));
   }
 
   private boundingBoxCoordinates(center, radius) {

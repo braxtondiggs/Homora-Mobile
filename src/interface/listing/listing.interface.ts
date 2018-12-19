@@ -22,4 +22,8 @@ export interface Listing {
   status: string;
   summary: string;
   title: string;
+  type: string;
+  bedrooms: number;
+  bathrooms: number;
+  occupants: number;
 }
