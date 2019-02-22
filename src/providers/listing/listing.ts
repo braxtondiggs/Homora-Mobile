@@ -144,7 +144,8 @@ export class ListingProvider {
   }
 
   filterAvailability(listing: Listing): boolean {
-    const listingAvailability = moment((listing.availability as Timestamp).toDate());
+    const listingAvailability = (typeof listing.availability === 'object') ? moment((listing.availability as Timestamp).toDate()) :
+      moment(listing.availability);
     if (_.isEmpty(this.availability) || moment(this.availability).isSame(moment(), 'day')) return true;
     return moment(this.availability).isAfter(listingAvailability) ||
       (listingAvailability.isAfter(moment().startOf('month')) && listingAvailability.isBefore(moment().endOf('month')));
