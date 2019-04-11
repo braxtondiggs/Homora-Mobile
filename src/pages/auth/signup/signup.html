@@ -23,7 +23,7 @@
 		</ion-item>
 		<ion-item>
 			<ion-label color="light" stacked text-uppercase>Birthday</ion-label>
-			<ion-datetime displayFormat="MM/DD/YYYY" [max]="maxBirthDate" formControlName="birthday" required></ion-datetime>
+			<ion-datetime displayFormat="MM/DD/YYYY" [max]="maxBirthDate" formControlName="birthday"></ion-datetime>
 		</ion-item>
 		<ion-fab right bottom>
 			<button type="submit" [disabled]="!signup.valid" ion-fab>

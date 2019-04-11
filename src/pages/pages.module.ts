@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { MomentModule } from 'angular2-moment';
 import { IonicModule } from 'ionic-angular';
-import { LazyLoadImageModule } from 'ng-lazyload-image/dist';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { MainPage } from './main';
 import { IntroPage } from './intro';
 import { ListingsPage, ListingPage, ListingReadMore, ListerPage, NewListingPage } from './listings';

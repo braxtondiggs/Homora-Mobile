@@ -28,7 +28,7 @@ export class SignupPage {
       lastName: ['', Validators.required],
       email: ['', Validators.required], // TODO: Add Custom Email Validators
       password: ['', Validators.compose([Validators.required, Validators.minLength(8)])],
-      birthday: ['', Validators.required]
+      birthday: ['']
     });
   }
 
