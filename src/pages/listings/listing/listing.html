@@ -34,14 +34,14 @@
 							<ion-avatar class="avatar">
 								<img [attr.src]="createdBy.images && createdBy.images[0] ? createdBy.images[0].src : DEFAULT_USER_IMAGE" alt="{{createdBy.firstName}} {{createdBy.lastName}}">
 							</ion-avatar>
-							<p class="listing-createdby md-subhead">{{createdBy.firstName}}, {{ today | amDifference: createdBy.birthdate.toDate() :'years'}}</p>
+							<p class="listing-createdby md-subhead" *ngIf="listing.user.birthdate">{{createdBy.firstName}}, {{ today | amDifference: createdBy.birthdate.toDate() :'years'}}</p>
 						</div>
 					</ion-col>
 					<ion-col (click)="viewProfileFake(listing.$key)" *ngIf="listing.scrape" col-auto>
 						<ion-avatar class="avatar">
 							<img [attr.src]="listing.user.images[0].src" alt="{{listing.user.firstName}} {{listing.user.lastName}}">
 						</ion-avatar>
-						<p class="listing-createdby md-subhead">{{listing.user.firstName}}, {{ today | amDifference: listing.user.birthdate.toDate() :'years'}}</p>
+						<p class="listing-createdby md-subhead" *ngIf="listing.user.birthdate">{{listing.user.firstName}}, {{ today | amDifference: listing.user.birthdate.toDate() :'years'}}</p>
 					</ion-col>
 				</ion-row>
 				<ion-row class="more-info" align-items-center>
