@@ -21,10 +21,10 @@
 			<ion-label color="light" stacked text-uppercase>Password</ion-label>
 			<ion-input formControlName="password" type="password" min="8" required></ion-input>
 		</ion-item>
-		<ion-item>
+		<!--<ion-item>
 			<ion-label color="light" stacked text-uppercase>Birthday</ion-label>
 			<ion-datetime displayFormat="MM/DD/YYYY" [max]="maxBirthDate" formControlName="birthday"></ion-datetime>
-		</ion-item>
+		</ion-item>-->
 		<ion-fab right bottom>
 			<button type="submit" [disabled]="!signup.valid" ion-fab>
 				<ion-icon name="arrow-forward" *ngIf="!loading"></ion-icon>
