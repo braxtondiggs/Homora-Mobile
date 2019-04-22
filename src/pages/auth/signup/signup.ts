@@ -27,8 +27,8 @@ export class SignupPage {
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       email: ['', Validators.required], // TODO: Add Custom Email Validators
-      password: ['', Validators.compose([Validators.required, Validators.minLength(8)])],
-      birthday: ['']
+      password: ['', Validators.compose([Validators.required, Validators.minLength(8)])]//,
+      //birthday: ['']
     });
   }
 
@@ -40,7 +40,7 @@ export class SignupPage {
         const userData: User = {
           $key: user.uid,
           created: moment().toDate(),
-          birthdate: moment(this.signup.value.birthday).toDate(),
+          // birthdate: moment(this.signup.value.birthday).toDate(),
           email: this.signup.value.email,
           firstName: this.signup.value.firstName,
           lastName: this.signup.value.lastName,
