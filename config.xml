@@ -48,15 +48,15 @@
         <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
     </platform>
     <platform name="ios">
-        <edit-config file="*-Info.plist" mode="merge" target="NSPhotoLibraryUsageDescription">
+        <config-file overwrite="true" parent="NSPhotoLibraryUsageDescription" platform="ios" target="*-Info.plist">
             <string>App would like to access your photo gallery for your profile photo upload. Your photos wont be shared without your permission.</string>
-        </edit-config>
-        <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
+        </config-file>
+        <config-file overwrite="true" parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
             <string>App would like to access your camera for your profile photo upload.</string>
-        </edit-config>
-        <edit-config file="*-Info.plist" mode="merge" target="NSLocationWhenInUseUsageDescription">
+        </config-file>
+        <config-file overwrite="true" parent="NSLocationWhenInUseUsageDescription" platform="ios" target="*-Info.plist">
             <string>App would like to access your location to find listings nearby</string>
-        </edit-config>
+        </config-file>
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         <icon height="57" src="resources/ios/icon/icon.png" width="57" />
@@ -115,6 +115,5 @@
     <plugin name="cordova-universal-links-plugin" spec="git+https://github.com/besport/cordova-universal-links-plugin.git" />
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
     <plugin name="cordova-plugin-ionic-webview" spec="^2.0.2" />
-    <engine name="ios" spec="4.5.5" />
     <engine name="android" spec="7.1.1" />
 </widget>
